@@ -1,113 +1,127 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Configurateur Tradi’home</title>
   <style>
-    body { margin:0; overflow:hidden; }
-    #canvas { display:block; width:100vw; height:100vh; }
+    body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
+    #canvas { display: block; width: 100vw; height: 100vh; }
     #ui {
-      position:absolute; top:10px; left:10px;
-      background:rgba(255,255,255,0.9);
-      padding:10px; border-radius:4px; max-width:200px;
-      font-family:Arial,sans-serif; font-size:14px;
+      position: absolute; top: 10px; left: 10px;
+      background: rgba(255,255,255,0.9);
+      padding: 10px; border-radius: 4px; max-width: 220px;
+      font-size: 14px;
     }
     #ui button {
-      width:100%; margin:4px 0; padding:8px;
-      border:1px solid #ccc; background:#f0f0f0; cursor:pointer;
+      width: 100%; margin: 4px 0; padding: 8px;
+      border: 1px solid #ccc; background: #f0f0f0;
+      cursor: pointer;
     }
   </style>
+  <!-- 1) Trois.js en global -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+  <!-- 2) GLTFLoader UMD (ne pas prendre jsm ici !) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 <body>
 
-  <canvas id="canvas"></canvas>
+<canvas id="canvas"></canvas>
 
-  <div id="ui">
-    <h3>Configurer Tradi’home</h3>
+<div id="ui">
+  <h3>Configurer Tradi’home</h3>
 
-    <strong>Bardage (poutres)</strong><br/>
-    <button onclick="setColor('poutrine01', 0x996633, 'bardage')">Chêne clair</button>
-    <button onclick="setColor('poutrine01', 0x402010, 'bardage')">Chêne foncé</button>
-    <button onclick="setColor('poutrine01', 0x33334D, 'bardage')">Gris orage</button>
+  <strong>Bardage (poutres)</strong><br>
+  <button onclick="setColor('poutrine01', 0x996633, 'bardage')">Chêne clair</button>
+  <button onclick="setColor('poutrine01', 0x402010, 'bardage')">Chêne foncé</button>
+  <button onclick="setColor('poutrine01', 0x33334D, 'bardage')">Gris orage</button>
 
-    <strong>Murs extérieurs</strong><br/>
-    <button onclick="setColor('Murs', 0xFFFFFF, 'murs')">Blanc</button>
-    <button onclick="setColor('Murs', 0xE0D6C3, 'murs')">Beige</button>
-    <button onclick="setColor('Murs', 0xD29B71, 'murs')">Ocre</button>
+  <strong>Murs extérieurs</strong><br>
+  <button onclick="setColor('Murs', 0xFFFFFF, 'murs')">Blanc</button>
+  <button onclick="setColor('Murs', 0xE0D6C3, 'murs')">Beige</button>
+  <button onclick="setColor('Murs', 0xD29B71, 'murs')">Ocre</button>
 
-    <strong>Pergola</strong><br/>
-    <button onclick="setColor('poutres', 0xFFFFFF, 'pergola')">Blanc</button>
-    <button onclick="setColor('poutres', 0x333333, 'pergola')">Anthracite</button>
+  <strong>Pergola</strong><br>
+  <button onclick="setColor('poutres', 0xFFFFFF, 'pergola')">Blanc</button>
+  <button onclick="setColor('poutres', 0x333333, 'pergola')">Anthracite</button>
 
-    <strong>Menuiserie</strong><br/>
-    <button onclick="setColor('cadre porte fenetre', 0xFFFFFF, 'menuiserie')">Blanc</button>
-    <button onclick="setColor('cadre porte fenetre', 0x333333, 'menuiserie')">Anthracite</button>
+  <strong>Menuiserie</strong><br>
+  <button onclick="setColor('cadre porte fenetre', 0xFFFFFF, 'menuiserie')">Blanc</button>
+  <button onclick="setColor('cadre porte fenetre', 0x333333, 'menuiserie')">Anthracite</button>
 
-    <strong>Toiture</strong><br/>
-    <button onclick="setColor('Toit1', 0x223344, 'toit')">Bleu ardoise</button>
-    <button onclick="setColor('Toit1', 0x888888, 'toit')">Gris acier</button>
-    <button onclick="setColor('Toit1', 0xCC3333, 'toit')">Rouge hibiscus</button>
+  <strong>Toiture</strong><br>
+  <button onclick="setColor('Toit1', 0x223344, 'toit')">Bleu ardoise</button>
+  <button onclick="setColor('Toit1', 0x888888, 'toit')">Gris acier</button>
+  <button onclick="setColor('Toit1', 0xCC3333, 'toit')">Rouge hibiscus</button>
 
-    <div id="summary">
-      <h4>Résumé :</h4>
-      Total : <span id="total">0</span> €
-    </div>
+  <div id="summary">
+    <h4>Résumé :</h4>
+    Total : <span id="total">0</span> €
   </div>
+</div>
 
-  <!-- ici on ouvre un module ES et on importe Three.js par URL absolue -->
-  <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
-    import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/GLTFLoader.js';
+<script>
+  // Instanciation du renderer / scène / caméra
+  const canvas   = document.getElementById('canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-    const canvas   = document.getElementById('canvas');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xdddddd);
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xdddddd);
+  const camera = new THREE.PerspectiveCamera(
+    45, window.innerWidth / window.innerHeight, 0.1, 1000
+  );
+  camera.position.set(7, 5, 7);
+  camera.lookAt(0, 0, 0);
 
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
-    camera.position.set(7,5,7);
-    camera.lookAt(0,0,0);
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(10, 15, 10);
+  scene.add(light);
 
-    const light = new THREE.DirectionalLight(0xffffff,1);
-    light.position.set(10,15,10);
-    scene.add(light);
+  // Chargement du modèle GLB
+  let model;
+  const loader = new THREE.GLTFLoader();
+  loader.load(
+    'model.glb',
+    gltf => {
+      model = gltf.scene;
+      scene.add(model);
+      console.log('Meshes in model:');
+      model.traverse(o => o.isMesh && console.log('-', o.name));
+      animate();
+    },
+    xhr => console.log(`Loading ${(xhr.loaded / xhr.total * 100).toFixed(0)}%`),
+    err => console.error('GLTFLoader error:', err)
+  );
 
-    let model;
-    new GLTFLoader().load(
-      'model.glb',
-      gltf => {
-        model = gltf.scene;
-        scene.add(model);
-        console.log('Meshes in model:');
-        model.traverse(o => o.isMesh && console.log('-', o.name));
-        animate();
-      },
-      xhr => console.log(`Loading ${(xhr.loaded/xhr.total*100).toFixed(0)}%`),
-      err => console.error('GLTFLoader error:', err)
-    );
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
 
-    function animate() {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    }
+  // Gestion des couleurs + résumé
+  const prices = { bardage: 0, murs: 0, pergola: 0, menuiserie: 0, toit: 0 };
+  const totalEl = document.getElementById('total');
+  const costMap = {
+    bardage:     0,
+    murs:        0,
+    pergola:   8500,
+    menuiserie: 2500,
+    toit:       1800
+  };
 
-    const prices = { bardage:0, murs:0, pergola:0, menuiserie:0, toit:0 };
-    const totalEl = document.getElementById('total');
-
-    window.setColor = (meshName, hex, category) => {
-      if (!model) return;
-      model.traverse(o => {
-        if (o.isMesh && o.name.includes(meshName)) {
-          o.material.color.setHex(hex);
-        }
-      });
-      const costMap = { bardage:0, murs:0, pergola:8500, menuiserie:2500, toit:1800 };
-      prices[category] = costMap[category]||0;
-      totalEl.textContent = Object.values(prices).reduce((a,b)=>a+b,0);
-    };
-  </script>
+  window.setColor = function(meshName, hexColor, category) {
+    if (!model) return;
+    model.traverse(o => {
+      if (o.isMesh && o.name.includes(meshName)) {
+        o.material.map   = null;           // On retire la texture si elle existe
+        o.material.color = new THREE.Color(hexColor);
+      }
+    });
+    prices[category] = costMap[category] || 0;
+    totalEl.textContent = Object.values(prices).reduce((a, b) => a + b, 0);
+  };
+</script>
 
 </body>
 </html>
