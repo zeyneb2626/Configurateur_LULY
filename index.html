@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Configurateur 3D Tradi'home</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #c { width: 100vw; height: 100vh; display: block; }
+    #ui {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(255,255,255,0.9);
+      padding: 15px;
+      border-radius: 8px;
+      font-family: Arial, sans-serif;
+      max-width: 300px;
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+    #ui h2 { margin-top: 0; font-size: 16px; }
+    .group { margin-bottom: 12px; }
+    .group strong { display: block; margin-bottom: 6px; }
+    .group button {
+      display: block;
+      margin: 4px 0;
+      padding: 6px 10px;
+      border: none;
+      background: #007BFF;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+    }
+    .group button:hover { background: #0056b3; }
+    #summary { font-size: 14px; margin-top: 10px; }
+    #summary ul { padding-left: 16px; }
+  </style>
+</head>
+<body>
+  <!-- Canvas Three.js -->
+  <canvas id="c"></canvas>
+  <!-- UI controls -->
+  <div id="ui">
+    <h2>Configurer Tradi'home</h2>
+    <!-- Contrôles insérés par JS -->
+    <div id="controls"></div>
+    <div id="summary">
+      <strong>Résumé :</strong>
+      <ul id="configList"></ul>
+      <div><strong>Total : <span id="totalPrice">0</span> €</strong></div>
+      <button onclick="exportConfig()">Exporter la configuration</button>
+    </div>
+  </div>
+
+  <!-- Three.js & GLTFLoader -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
+
+  <script>
+    // Init scene, camera, renderer
+    const canvas = document.getElementById('c');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xcccccc);
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(5, 4, 6);
+    camera.lookAt(0, 1, 0);
+
+    // Lights
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x444444));
+    const light = new THREE.DirectionalLight(0xffffff, 0.8);
+    light.position.set(5, 10, 7);
+    scene.add(light);
+
+    // Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Load GLB model
+    let model;
+    const loader = new THREE.GLTFLoader();
+    loader.load(
+      'model.glb', // <--- Remplace par le nom de ton fichier .glb
+      gltf => {
+        model = gltf.scene;
+        scene.add(model);
+        extractMeshNames();
+        animate();
+      },
+      xhr => console.log(`Chargement: ${ (xhr.loaded / xhr.total * 100).toFixed(1) }%`),
+      err => console.error('Erreur GLTFLoader:', err)
+    );
+
+    // Récupérer tous les noms de mesh pour debug
+    function extractMeshNames() {
+      console.log('Meshes in model:');
+      model.traverse(o => {
+        if (o.isMesh) console.log('-', o.name);
+      });
+      buildControls();
+    }
+
+    // Options de configuration
+    const configOptions = {
+      bardage: [
+        { label: 'Chêne clair', key: 'poutrine01', color: 0x996633, price: 1000 },
+        { label: 'Chêne foncé', key: 'poutrine01', color: 0x402010, price: 1100 },
+        { label: 'Gris orage', key: 'poutrine01', color: 0x33334D, price: 1050 }
+      ],
+      murs: [
+        { label: 'Blanc', key: 'Murs', color: 0xFFFFFF, price: 0 },
+        { label: 'Beige', key: 'Murs', color: 0xD9CCB0, price: 100 },
+        { label: 'Ocre', key: 'Murs', color: 0xCC8C6F, price: 200 }
+      ],
+      pergola: [
+        { label: 'Blanc', key: 'poutres', color: 0xFFFFFF, price: 0 },
+        { label: 'Noir', key: 'poutres', color: 0x333333, price: 300 }
+      ],
+      menuiserie: [
+        { label: 'Blanc', key: 'cadre porte fenetre', color: 0xFFFFFF, price: 0 },
+        { label: 'Anthracite', key: 'cadre porte fenetre', color: 0x222222, price: 400 }
+      ],
+      toit: [
+        { label: 'Bleu ardoise', key: 'Toit1', color: 0x334466, price: 0 },
+        { label: 'Gris acier', key: 'toit_contour', color: 0x999999, price: 250 },
+        { label: 'Rouge hibiscus', key: 'Toit1', color: 0xCC3322, price: 300 }
+      ]
+    };
+
+    // Stockage de la config
+    const currentConfig = { bardage:'', murs:'', pergola:'', menuiserie:'', toit:'' };
+    const prices = { bardage:0, murs:0, pergola:0, menuiserie:0, toit:0 };
+
+    // Génération dynamique des contrôles
+    function buildControls() {
+      const container = document.getElementById('controls');
+      container.innerHTML = '';
+      for (let cat in configOptions) {
+        const group = document.createElement('div');
+        group.classList.add('group');
+        const title = document.createElement('strong');
+        title.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+        group.appendChild(title);
+        configOptions[cat].forEach(opt => {
+          const btn = document.createElement('button');
+          btn.textContent = opt.label;
+          btn.onclick = () => setColor(opt.key, opt.color, cat, opt.label, opt.price);
+          group.appendChild(btn);
+        });
+        container.appendChild(group);
+      }
+    }
+
+    // Appliquer la couleur sur les meshes matching 'key'
+    function setColor(key, hex, category, label, price) {
+      if (!model) return;
+      model.traverse(o => {
+        if (o.isMesh && o.name.includes(key)) {
+          o.material.color.setHex(hex);
+          // pour retirer texture si besoin : o.material.map = null;
+        }
+      });
+      currentConfig[category] = label;
+      prices[category] = price;
+      updateSummary();
+    }
+
+    // Mise à jour du résumé
+    function updateSummary() {
+      const list = document.getElementById('configList');
+      list.innerHTML = '';
+      let total = 0;
+      for (let cat in currentConfig) {
+        if (currentConfig[cat]) {
+          const li = document.createElement('li');
+          li.textContent = `${cat}: ${currentConfig[cat]} (${prices[cat]} €)`;
+          list.appendChild(li);
+          total += prices[cat];
+        }
+      }
+      document.getElementById('totalPrice').textContent = total;
+    }
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+
+    // Export configuration
+    function exportConfig() {
+      let text = 'Configuration Tradi\'home:\n\n';
+      let total = 0;
+      for (let cat in currentConfig) {
+        if (currentConfig[cat]) {
+          text += `${cat}: ${currentConfig[cat]} (${prices[cat]} €)\n`;
+          total += prices[cat];
+        }
+      }
+      text += `\nPrix total: ${total} €`;
+      const blob = new Blob([text], { type: 'text/plain' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+      a.download = 'configuration_tradihome.txt'; a.click();
+    }
+  </script>
+</body>
+</html>
