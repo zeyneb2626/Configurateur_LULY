@@ -2,129 +2,122 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Configurateur Tradi'home</title>
+  <title>Configurateur Tradi’home</title>
   <style>
-    body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
+    body { margin:0; overflow:hidden; font-family:Arial,sans-serif; }
+    #canvas { display:block; width:100vw; height:100vh; }
     #ui {
-      position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.9);
-      padding: 10px; border-radius: 8px; max-width: 250px;
+      position:absolute; top:10px; left:10px;
+      background:rgba(255,255,255,0.9);
+      padding:10px; border-radius:4px;
+      max-width:200px;
+      font-size:14px;
     }
-    #ui h3 { margin: 0 0 10px; font-size: 1.1em; }
-    #ui button { display: block; margin: 5px 0; padding: 5px; width: 100%; cursor: pointer; }
-    #summary { margin-top: 10px; font-size: 0.9em; }
+    #ui h3 { margin:0 0 8px; }
+    #ui button {
+      width:100%; margin:4px 0; padding:8px;
+      border:1px solid #ccc; background:#f0f0f0;
+      cursor:pointer;
+    }
+    #summary { margin-top:12px; }
   </style>
 </head>
 <body>
-  <canvas id="c"></canvas>
-  <div id="ui">
-    <h3>Configurer Tradi'home</h3>
-    <div id="bardage">
-      <strong>Bardage (poutres)</strong>
-      <button onclick="setColor('poutrine01', 0xD2A679, 'bardage','Chêne clair',0)">Chêne clair</button>
-      <button onclick="setColor('poutrine01', 0x8B5A2B, 'bardage','Chêne foncé',799)">Chêne foncé</button>
-      <button onclick="setColor('poutrine01', 0x4F4F76, 'bardage','Gris orage',899)">Gris orage</button>
-    </div>
-    <div id="murs">
-      <strong>Murs extérieurs</strong>
-      <button onclick="setColor('Murs', 0xFFFFFF,'murs','Blanc',0)">Blanc</button>
-      <button onclick="setColor('Murs', 0xC2B280,'murs','Beige',999)">Beige</button>
-      <button onclick="setColor('Murs', 0xE0A070,'murs','Ocre',1499)">Ocre</button>
-    </div>
-    <div id="pergola">
-      <strong>Pergola</strong>
-      <button onclick="setColor('poutres', 0xFFFFFF,'pergola','Blanc',8500)">Blanc</button>
-      <button onclick="setColor('poutres', 0x2F2F2F,'pergola','Anthracite',9500)">Anthracite</button>
-    </div>
-    <div id="menuiserie">
-      <strong>Menuiserie</strong>
-      <button onclick="setColor('cadre porte fenetre', 0xFFFFFF,'menuiserie','Blanc',0)">Blanc</button>
-      <button onclick="setColor('cadre porte fenetre', 0x202020,'menuiserie','Anthracite',2499)">Anthracite</button>
-    </div>
-    <div id="toit">
-      <strong>Toiture</strong>
-      <button onclick="setColor('Toit1', 0x2F2F2F,'toit','Bleu ardoise',0)">Bleu ardoise</button>
-      <button onclick="setColor('toit_contour', 0xA0A0A0,'toit','Gris acier',0)">Gris acier</button>
-      <button onclick="setColor('Toit1', 0xB22222,'toit','Rouge hibiscus',1800)">Rouge hibiscus</button>
-    </div>
-    <div id="summary">
-      <p><strong>Résumé :</strong></p>
-      <ul id="configList"></ul>
-      <p><strong>Total : <span id="totalPrice">0</span> €</strong></p>
-      <button onclick="exportConfig()">Exporter la configuration</button>
-    </div>
+
+<canvas id="canvas"></canvas>
+
+<div id="ui">
+  <h3>Configurer Tradi’home</h3>
+
+  <strong>Bardage (poutres)</strong>
+  <button onclick="setColor('poutrine01', 0x996633, 'bardage')">Chêne clair</button>
+  <button onclick="setColor('poutrine01', 0x402010, 'bardage')">Chêne foncé</button>
+  <button onclick="setColor('poutrine01', 0x33334D, 'bardage')">Gris orage</button>
+
+  <strong>Murs extérieurs</strong>
+  <button onclick="setColor('Murs', 0xFFFFFF, 'murs')">Blanc</button>
+  <button onclick="setColor('Murs', 0xE0D6C3, 'murs')">Beige</button>
+  <button onclick="setColor('Murs', 0xD29B71, 'murs')">Ocre</button>
+
+  <strong>Pergola</strong>
+  <button onclick="setColor('poutres', 0xFFFFFF, 'pergola')">Blanc</button>
+  <button onclick="setColor('poutres', 0x333333, 'pergola')">Anthracite</button>
+
+  <strong>Menuiserie</strong>
+  <button onclick="setColor('cadre porte fenetre', 0xFFFFFF, 'menuiserie')">Blanc</button>
+  <button onclick="setColor('cadre porte fenetre', 0x333333, 'menuiserie')">Anthracite</button>
+
+  <strong>Toiture</strong>
+  <button onclick="setColor('Toit1', 0x223344, 'toit')">Bleu ardoise</button>
+  <button onclick="setColor('Toit1', 0x888888, 'toit')">Gris acier</button>
+  <button onclick="setColor('Toit1', 0xCC3333, 'toit')">Rouge hibiscus</button>
+
+  <div id="summary">
+    <h4>Résumé :</h4>
+    <div>Total : <span id="total">0</span> €</div>
   </div>
+</div>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
-  <script>
-    const canvas = document.getElementById('c');
-    const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
-    renderer.setSize(window.innerWidth, window.innerHeight);
+<script type="module">
+  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
+  import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/GLTFLoader.js';
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xdddddd);
+  const canvas = document.getElementById('canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
-    camera.position.set(7,5,7);
-    camera.lookAt(0,0,0);
+  const scene  = new THREE.Scene();
+  scene.background = new THREE.Color(0xdddddd);
 
-    const light = new THREE.DirectionalLight(0xffffff,1);
-    light.position.set(5,10,7);
-    scene.add(light);
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+  camera.position.set(7, 5, 7);
+  camera.lookAt(0, 0, 0);
 
-    let model;
-    const loader = new THREE.GLTFLoader();
-    loader.load('model.glb', gltf => {
-      model = gltf.scene;
-      scene.add(model);
-      model.traverse(o => { if (o.isMesh) console.log('Mesh:', o.name); });
-      animate();
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(10, 15, 10);
+  scene.add(light);
+
+  let model;
+  const loader = new GLTFLoader();
+  loader.load('model.glb', gltf => {
+    model = gltf.scene;
+    scene.add(model);
+
+    // Log de tous les noms de mesh (vérifie bien que ça correspond à ce qu'on utilise)
+    console.log('Meshes in model:');
+    model.traverse(o => {
+      if (o.isMesh) console.log('-', o.name);
     });
 
-    function animate() {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    }
+    animate();
+  },
+  xhr => console.log(`Loading ${(xhr.loaded/xhr.total*100).toFixed(0)}%`),
+  err => console.error('Erreur GLTFLoader:', err)
+  );
 
-    const currentConfig = {};
-    const currentPrices = {};
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
 
-    function setColor(meshName, hexColor, category, label, price) {
-      if (!model) return;
-      model.traverse(o => {
-        if (o.isMesh && o.name.includes(meshName)) {
-          o.material.map = null;
-          o.material.color.setHex(hexColor);
-        }
-      });
-      currentConfig[category] = label;
-      currentPrices[category] = price;
-      updateSummary();
-    }
+  // Tracking de la config + prix (tu peux ajuster les tarifs comme tu veux)
+  const prices = { bardage:0, murs:0, pergola:0, menuiserie:0, toit:0 };
+  let totalEl = document.getElementById('total');
 
-    function updateSummary() {
-      const list = document.getElementById('configList');
-      const totalEl = document.getElementById('totalPrice');
-      list.innerHTML = '';
-      let sum = 0;
-      for (const cat in currentConfig) {
-        const li = document.createElement('li');
-        li.textContent = cat + ': ' + currentConfig[cat] + ' (' + currentPrices[cat] + '€)';
-        list.appendChild(li);
-        sum += currentPrices[cat] || 0;
+  window.setColor = function(meshName, hex, category) {
+    if (!model) return;
+    model.traverse(o => {
+      if (o.isMesh && o.name.includes(meshName)) {
+        o.material.color.setHex(hex);
+        // o.material.map = null; // décommenter si tu veux retirer la texture
       }
-      totalEl.textContent = sum;
-    }
+    });
+    // Exemple de mise à jour prix
+    const costMap = { bardage:0, murs:0, pergola:8500, menuiserie:2500, toit:1800 };
+    prices[category] = costMap[category] || 0;
+    totalEl.textContent = Object.values(prices).reduce((a,b)=>a+b,0);
+  };
+</script>
 
-    function exportConfig() {
-      const lines = Object.entries(currentConfig).map(([cat, lbl]) => `${cat}: ${lbl} (${currentPrices[cat]}€)`);
-      const text = 'Configuration Tradi\'home :\n' + lines.join('\n') + '\nTotal: ' + Object.values(currentPrices).reduce((a,b)=>a+b,0) + '€';
-      const blob = new Blob([text],{type:'text/plain'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'config.txt'; a.click();
-      URL.revokeObjectURL(url);
-    }
-  </script>
 </body>
 </html>
