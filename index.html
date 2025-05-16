@@ -14,114 +14,103 @@
     }
     #ui button {
       width: 100%; margin: 4px 0; padding: 8px;
-      border: 1px solid #ccc; background: #f0f0f0;
-      cursor: pointer;
+      border: 1px solid #ccc; background: #f0f0f0; cursor: pointer;
     }
   </style>
-  <!-- 1) Trois.js en global -->
+
+  <!-- 1) Three.js UMD -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
-  <!-- 2) GLTFLoader UMD (ne pas prendre jsm ici !) -->
+  <!-- 2) GLTFLoader UMD (OBLIGATOIRE : examples/js et non jsm) -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
 </head>
 <body>
 
-<canvas id="canvas"></canvas>
+  <canvas id="canvas"></canvas>
+  <div id="ui">
+    <h3>Configurer Tradi’home</h3>
 
-<div id="ui">
-  <h3>Configurer Tradi’home</h3>
+    <strong>Bardage (poutres)</strong><br>
+    <button onclick="setColor('poutrine01', 0x996633, 'bardage')">Chêne clair</button>
+    <button onclick="setColor('poutrine01', 0x402010, 'bardage')">Chêne foncé</button>
+    <button onclick="setColor('poutrine01', 0x33334D, 'bardage')">Gris orage</button>
 
-  <strong>Bardage (poutres)</strong><br>
-  <button onclick="setColor('poutrine01', 0x996633, 'bardage')">Chêne clair</button>
-  <button onclick="setColor('poutrine01', 0x402010, 'bardage')">Chêne foncé</button>
-  <button onclick="setColor('poutrine01', 0x33334D, 'bardage')">Gris orage</button>
+    <strong>Murs extérieurs</strong><br>
+    <button onclick="setColor('Murs', 0xFFFFFF, 'murs')">Blanc</button>
+    <button onclick="setColor('Murs', 0xE0D6C3, 'murs')">Beige</button>
+    <button onclick="setColor('Murs', 0xD29B71, 'murs')">Ocre</button>
 
-  <strong>Murs extérieurs</strong><br>
-  <button onclick="setColor('Murs', 0xFFFFFF, 'murs')">Blanc</button>
-  <button onclick="setColor('Murs', 0xE0D6C3, 'murs')">Beige</button>
-  <button onclick="setColor('Murs', 0xD29B71, 'murs')">Ocre</button>
+    <strong>Pergola</strong><br>
+    <button onclick="setColor('poutres', 0xFFFFFF, 'pergola')">Blanc</button>
+    <button onclick="setColor('poutres', 0x333333, 'pergola')">Anthracite</button>
 
-  <strong>Pergola</strong><br>
-  <button onclick="setColor('poutres', 0xFFFFFF, 'pergola')">Blanc</button>
-  <button onclick="setColor('poutres', 0x333333, 'pergola')">Anthracite</button>
+    <strong>Menuiserie</strong><br>
+    <button onclick="setColor('cadre porte fenetre', 0xFFFFFF, 'menuiserie')">Blanc</button>
+    <button onclick="setColor('cadre porte fenetre', 0x333333, 'menuiserie')">Anthracite</button>
 
-  <strong>Menuiserie</strong><br>
-  <button onclick="setColor('cadre porte fenetre', 0xFFFFFF, 'menuiserie')">Blanc</button>
-  <button onclick="setColor('cadre porte fenetre', 0x333333, 'menuiserie')">Anthracite</button>
+    <strong>Toiture</strong><br>
+    <button onclick="setColor('Toit1', 0x223344, 'toit')">Bleu ardoise</button>
+    <button onclick="setColor('Toit1', 0x888888, 'toit')">Gris acier</button>
+    <button onclick="setColor('Toit1', 0xCC3333, 'toit')">Rouge hibiscus</button>
 
-  <strong>Toiture</strong><br>
-  <button onclick="setColor('Toit1', 0x223344, 'toit')">Bleu ardoise</button>
-  <button onclick="setColor('Toit1', 0x888888, 'toit')">Gris acier</button>
-  <button onclick="setColor('Toit1', 0xCC3333, 'toit')">Rouge hibiscus</button>
-
-  <div id="summary">
-    <h4>Résumé :</h4>
-    Total : <span id="total">0</span> €
+    <div id="summary">
+      <h4>Résumé :</h4>
+      Total : <span id="total">0</span> €
+    </div>
   </div>
-</div>
 
-<script>
-  // Instanciation du renderer / scène / caméra
-  const canvas   = document.getElementById('canvas');
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  <script>
+    // 3) Initialisation Three.js
+    const canvas   = document.getElementById('canvas');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
 
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xdddddd);
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xdddddd);
 
-  const camera = new THREE.PerspectiveCamera(
-    45, window.innerWidth / window.innerHeight, 0.1, 1000
-  );
-  camera.position.set(7, 5, 7);
-  camera.lookAt(0, 0, 0);
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+    camera.position.set(7,5,7);
+    camera.lookAt(0,0,0);
 
-  const light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(10, 15, 10);
-  scene.add(light);
+    const light = new THREE.DirectionalLight(0xffffff,1);
+    light.position.set(10,15,10);
+    scene.add(light);
 
-  // Chargement du modèle GLB
-  let model;
-  const loader = new THREE.GLTFLoader();
-  loader.load(
-    'model.glb',
-    gltf => {
-      model = gltf.scene;
-      scene.add(model);
-      console.log('Meshes in model:');
-      model.traverse(o => o.isMesh && console.log('-', o.name));
-      animate();
-    },
-    xhr => console.log(`Loading ${(xhr.loaded / xhr.total * 100).toFixed(0)}%`),
-    err => console.error('GLTFLoader error:', err)
-  );
+    // 4) Charge le modèle
+    let model;
+    const loader = new THREE.GLTFLoader();
+    loader.load('model.glb',
+      gltf => {
+        model = gltf.scene;
+        scene.add(model);
+        console.log('Meshes in model:');
+        model.traverse(o => o.isMesh && console.log('-', o.name));
+        animate();
+      },
+      xhr => console.log(`Loading ${(xhr.loaded/xhr.total*100).toFixed(0)}%`),
+      err => console.error('GLTFLoader error:', err)
+    );
 
-  function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-  }
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
 
-  // Gestion des couleurs + résumé
-  const prices = { bardage: 0, murs: 0, pergola: 0, menuiserie: 0, toit: 0 };
-  const totalEl = document.getElementById('total');
-  const costMap = {
-    bardage:     0,
-    murs:        0,
-    pergola:   8500,
-    menuiserie: 2500,
-    toit:       1800
-  };
+    // 5) Fonction setColor + résumé
+    const prices  = { bardage:0, murs:0, pergola:0, menuiserie:0, toit:0 };
+    const costs   = { bardage:0, murs:0, pergola:8500, menuiserie:2500, toit:1800 };
+    const totalEl = document.getElementById('total');
 
-  window.setColor = function(meshName, hexColor, category) {
-    if (!model) return;
-    model.traverse(o => {
-      if (o.isMesh && o.name.includes(meshName)) {
-        o.material.map   = null;           // On retire la texture si elle existe
-        o.material.color = new THREE.Color(hexColor);
-      }
-    });
-    prices[category] = costMap[category] || 0;
-    totalEl.textContent = Object.values(prices).reduce((a, b) => a + b, 0);
-  };
-</script>
-
+    window.setColor = (meshName, hex, category) => {
+      if (!model) return;
+      model.traverse(o => {
+        if (o.isMesh && o.name.includes(meshName)) {
+          o.material.map   = null;
+          o.material.color = new THREE.Color(hex);
+        }
+      });
+      prices[category] = costs[category];
+      totalEl.textContent = Object.values(prices).reduce((a,b)=>a+b,0);
+    };
+  </script>
 </body>
 </html>
