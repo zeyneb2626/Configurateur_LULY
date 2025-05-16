@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Configurateur Tradi’home</title>
   <style>
     body { margin:0; overflow:hidden; font-family:Arial,sans-serif; }
@@ -18,10 +18,12 @@
     }
   </style>
 
-  <!-- 1) Three.js global UMD -->
+  <!-- 1) Three.js UMD -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
-  <!-- 2) GLTFLoader UMD (attention au chemin "examples/js", pas "examples/jsm") -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
+  <!-- 2) GLTFLoader officiel -->
+  <script src="https://threejs.org/examples/js/loaders/GLTFLoader.js"></script>
+  <!-- 3) Vérif rapide -->
+  <script>console.log('> THREE.GLTFLoader =', THREE.GLTFLoader);</script>
 </head>
 <body>
 
@@ -29,7 +31,7 @@
 
 <div id="ui">
   <h3>Configurer Tradi’home</h3>
-
+  <!-- Tes boutons ici… identiques à avant -->
   <strong>Bardage (poutres)</strong><br>
   <button onclick="setColor('poutrine01', 0x996633, 'bardage')">Chêne clair</button>
   <button onclick="setColor('poutrine01', 0x402010, 'bardage')">Chêne foncé</button>
@@ -60,7 +62,7 @@
 </div>
 
 <script>
-  // Initialisation de Three.js
+  // → Init Three.js
   const canvas   = document.getElementById('canvas');
   const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -78,7 +80,7 @@
   light.position.set(10,15,10);
   scene.add(light);
 
-  // Chargement du modèle "model2.glb"
+  // → Charge "model2.glb"
   let model;
   const loader = new THREE.GLTFLoader();
   loader.load(
@@ -99,7 +101,7 @@
     renderer.render(scene, camera);
   }
 
-  // Configuration des couleurs + résumé
+  // → setColor + résumé
   const prices = { bardage:0, murs:0, pergola:0, menuiserie:0, toit:0 };
   const costs  = { bardage:0, murs:0, pergola:8500, menuiserie:2500, toit:1800 };
   const totalEl = document.getElementById('total');
@@ -108,15 +110,15 @@
     if (!model) return;
     model.traverse(o => {
       if (o.isMesh && o.name.includes(meshName)) {
-        // retire la texture pour ne garder que la couleur
         o.material.map   = null;
         o.material.color = new THREE.Color(hex);
       }
     });
-    prices[category] = costs[category] || 0;
+    prices[category] = costs[category]||0;
     totalEl.textContent = Object.values(prices).reduce((a,b)=>a+b,0);
   };
 </script>
 
 </body>
 </html>
+
