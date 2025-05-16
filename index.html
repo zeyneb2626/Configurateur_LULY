@@ -1,131 +1,91 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Configurateur Tradi’home</title>
   <style>
     body { margin:0; overflow:hidden; font-family:Arial,sans-serif; }
-    #canvas { display:block; width:100vw; height:100vh; }
-    #ui {
-      position:absolute; top:10px; left:10px;
-      background:rgba(255,255,255,0.9);
-      padding:10px; border-radius:4px; max-width:220px;
-      font-size:14px;
-    }
-    #ui button {
-      width:100%; margin:4px 0; padding:8px;
-      border:1px solid #ccc; background:#f0f0f0; cursor:pointer;
-    }
+    #ui { position: fixed; top:0; left:0; padding:20px; background:rgba(255,255,255,0.8); max-width:300px; }
+    button { display:block; width:100%; margin:5px 0; padding:8px; }
   </style>
-
-  <!-- 1) Three.js UMD -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
-  <!-- 2) GLTFLoader UMD via JSDelivr -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
-  <!-- 3) Fallback si le loader n'existe pas -->
-  <script>
-    // Si le CDN n'a pas chargé le loader, on injecte un fichier local GLTFLoader.js
-    if (typeof THREE.GLTFLoader === 'undefined') {
-      const s = document.createElement('script');
-      s.src = 'GLTFLoader.js';
-      document.head.appendChild(s);
-      console.warn('Fallback: injection de GLTFLoader.js local');
-    }
-    console.log('> THREE.GLTFLoader =', THREE.GLTFLoader);
-  </script>
 </head>
 <body>
 
   <canvas id="canvas"></canvas>
-
   <div id="ui">
-    <h3>Configurer Tradi’home</h3>
-
-    <strong>Bardage (poutres)</strong><br>
-    <button onclick="setColor('poutrine01', 0x996633, 'bardage')">Chêne clair</button>
-    <button onclick="setColor('poutrine01', 0x402010, 'bardage')">Chêne foncé</button>
-    <button onclick="setColor('poutrine01', 0x33334D, 'bardage')">Gris orage</button>
-
-    <strong>Murs extérieurs</strong><br>
-    <button onclick="setColor('Murs', 0xFFFFFF, 'murs')">Blanc</button>
-    <button onclick="setColor('Murs', 0xE0D6C3, 'murs')">Beige</button>
-    <button onclick="setColor('Murs', 0xD29B71, 'murs')">Ocre</button>
-
-    <strong>Pergola</strong><br>
-    <button onclick="setColor('poutres', 0xFFFFFF, 'pergola')">Blanc</button>
-    <button onclick="setColor('poutres', 0x333333, 'pergola')">Anthracite</button>
-
-    <strong>Menuiserie</strong><br>
-    <button onclick="setColor('cadre porte fenetre', 0xFFFFFF, 'menuiserie')">Blanc</button>
-    <button onclick="setColor('cadre porte fenetre', 0x333333, 'menuiserie')">Anthracite</button>
-
-    <strong>Toiture</strong><br>
-    <button onclick="setColor('Toit1', 0x223344, 'toit')">Bleu ardoise</button>
-    <button onclick="setColor('Toit1', 0x888888, 'toit')">Gris acier</button>
-    <button onclick="setColor('Toit1', 0xCC3333, 'toit')">Rouge hibiscus</button>
-
-    <div id="summary">
-      <h4>Résumé :</h4>
-      Total : <span id="total">0</span> €
-    </div>
+    <h2>Configurer Tradi’home</h2>
+    <!-- Exemple : Bardage -->
+    <h3>Bardage (poutres)</h3>
+    <button id="bardage_clair">Chêne clair</button>
+    <button id="bardage_fonce">Chêne foncé</button>
+    <button id="bardage_gris">Gris orage</button>
+    <!-- … ajoute tes autres catégories de la même façon … -->
   </div>
 
-  <script>
-    // —— Initialisation Three.js ——
+  <script type="module">
+    import * as THREE      from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
+    import { GLTFLoader }  from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js';
+
+    // 1) Scène, cam, renderer
     const canvas   = document.getElementById('canvas');
     const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-
-    const scene = new THREE.Scene();
+    const scene    = new THREE.Scene();
     scene.background = new THREE.Color(0xdddddd);
 
-    const camera = new THREE.PerspectiveCamera(
-      45, window.innerWidth/window.innerHeight, 0.1, 1000
-    );
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
     camera.position.set(7,5,7);
     camera.lookAt(0,0,0);
 
-    const light = new THREE.DirectionalLight(0xffffff,1);
+    const controls = new OrbitControls(camera, renderer.domElement);
+
+    const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(10,15,10);
     scene.add(light);
 
-    // —— Chargement du modèle “model2.glb” ——
-    let model;
-    const loader = new THREE.GLTFLoader();
-    loader.load(
+    // 2) Charger le modèle
+    let model; 
+    new GLTFLoader().load(
       'model2.glb',
       gltf => {
         model = gltf.scene;
         scene.add(model);
-        console.log('Meshes in model:');
-        model.traverse(o => o.isMesh && console.log('-', o.name));
+        console.log('Meshes:',);
+        model.traverse(o => o.isMesh && console.log(' -', o.name));
         animate();
       },
-      xhr => console.log(`Loading ${(xhr.loaded/xhr.total*100).toFixed(0)}%`),
-      err => console.error('GLTFLoader error:', err)
+      xhr => console.log(`Loading ${ (xhr.loaded/xhr.total*100).toFixed(0) }%`),
+      e   => console.error('GLTFLoader error:', e)
     );
 
+    // 3) Fonction animate
     function animate() {
       requestAnimationFrame(animate);
+      controls.update();
       renderer.render(scene, camera);
     }
 
-    // —— Fonction setColor + résumé ——  
-    const prices = { bardage:0, murs:0, pergola:0, menuiserie:0, toit:0 };
-    const costs  = { bardage:0, murs:0, pergola:8500, menuiserie:2500, toit:1800 };
-    const totalEl = document.getElementById('total');
-
-    window.setColor = (meshName, hex, category) => {
+    // 4) Exemple d’interaction — changer la baseColor de certains Meshes
+    function setColor(names, hexColor) {
       if (!model) return;
       model.traverse(o => {
-        if (o.isMesh && o.name.includes(meshName)) {
-          o.material.map   = null;
-          o.material.color = new THREE.Color(hex);
+        if (o.isMesh && names.includes(o.name)) {
+          o.material.color.set(hexColor);
         }
       });
-      prices[category] = costs[category]||0;
-      totalEl.textContent = Object.values(prices).reduce((a,b)=>a+b,0);
-    };
+    }
+
+    document.getElementById('bardage_clair')
+      .addEventListener('click', () => setColor([ 'poutrine01','poutrine02' ], 0xCEA660));
+
+    document.getElementById('bardage_fonce')
+      .addEventListener('click', () => setColor([ 'poutrine01','poutrine02' ], 0x8B5E3C));
+
+    document.getElementById('bardage_gris')
+      .addEventListener('click', () => setColor([ 'poutrine01','poutrine02' ], 0x2F2F2F));
+
+    // … fais pareil pour tes murs, pergola, menuiserie, toit, etc. …
   </script>
 
 </body>
