@@ -1,32 +1,30 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Configurateur Tradi’home</title>
   <style>
-    body { margin:0; overflow:hidden; font-family:Arial,sans-serif; }
+    body { margin:0; overflow:hidden; }
     #canvas { display:block; width:100vw; height:100vh; }
     #ui {
       position:absolute; top:10px; left:10px;
       background:rgba(255,255,255,0.9);
-      padding:10px; border-radius:4px;
-      max-width:200px;
-      font-size:14px;
+      padding:10px; border-radius:4px; max-width:200px;
+      font-family:Arial,sans-serif; font-size:14px;
     }
-    #ui h3 { margin:0 0 8px; }
     #ui button {
       width:100%; margin:4px 0; padding:8px;
-      border:1px solid #ccc; background:#f0f0f0;
-      cursor:pointer;
+      border:1px solid #ccc; background:#f0f0f0; cursor:pointer;
     }
     #summary { margin-top:12px; }
   </style>
 </head>
 <body>
 
-  <!-- Note l’ID ici : "canvas" -->
+  <!-- Canvas pour Three.js -->
   <canvas id="canvas"></canvas>
 
+  <!-- Interface -->
   <div id="ui">
     <h3>Configurer Tradi’home</h3>
 
@@ -59,7 +57,7 @@
     </div>
   </div>
 
-  <!-- On utilise enfin ES Modules -->
+  <!-- Code Three.js en ES Modules -->
   <script type="module">
     import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
     import { GLTFLoader } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/GLTFLoader.js';
@@ -68,7 +66,7 @@
     const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    const scene  = new THREE.Scene();
+    const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xdddddd);
 
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
@@ -80,16 +78,16 @@
     scene.add(light);
 
     let model;
-    const loader = new GLTFLoader();
-    loader.load('model.glb', gltf => {
-      model = gltf.scene;
-      scene.add(model);
-      console.log('Meshes in model:');
-      model.traverse(o => o.isMesh && console.log('-', o.name));
-      animate();
-    },
-    xhr => console.log(`Loading ${ (xhr.loaded/xhr.total*100).toFixed(0) }%`),
-    err => console.error('GLTFLoader error:', err)
+    new GLTFLoader().load('model.glb',
+      gltf => {
+        model = gltf.scene;
+        scene.add(model);
+        console.log('Meshes in model:');
+        model.traverse(o=> o.isMesh && console.log('-', o.name));
+        animate();
+      },
+      xhr => console.log(`Loading ${ (xhr.loaded/xhr.total*100).toFixed(0) }%`),
+      err => console.error('GLTFLoader error:', err)
     );
 
     function animate() {
@@ -100,7 +98,7 @@
     const prices = { bardage:0, murs:0, pergola:0, menuiserie:0, toit:0 };
     const totalEl = document.getElementById('total');
 
-    window.setColor = function(meshName, hex, category) {
+    window.setColor = (meshName, hex, category) => {
       if (!model) return;
       model.traverse(o => {
         if (o.isMesh && o.name.includes(meshName)) {
