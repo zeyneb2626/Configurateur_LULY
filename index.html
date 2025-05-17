@@ -152,13 +152,14 @@
     <div class="viewer">
       <div id="loading" class="loading">
         <div class="spinner"></div>
+        <p style="margin-top: 1rem; color: #666;">Chargement du modèle 3D...</p>
       </div>
       <model-viewer
         id="model"
-        src="model2.glb"
+        src="./model2.glb"
+        alt="Modèle 3D de maison LULY"
         camera-controls
         auto-rotate
-        ar
         shadow-intensity="1"
         environment-image="neutral"
         exposure="0.8"
@@ -340,14 +341,21 @@
             
             // Application de la couleur
             const rgba = hexToRGBA(btn.dataset.color);
+            let applied = false;
             
             // Appliquer la couleur à tous les matériaux correspondant à cette catégorie
             materials.forEach(material => {
               if (isMaterialInCategory(material.name, materialTargets)) {
                 console.log(`Changement de couleur pour ${material.name} (catégorie: ${category})`);
                 material.pbrMetallicRoughness.setBaseColorFactor(rgba);
+                applied = true;
               }
             });
+            
+            if (!applied) {
+              console.warn(`Aucun matériau trouvé pour la catégorie: ${category}`);
+              console.warn(`Noms recherchés: ${materialTargets.join(', ')}`);
+            }
           });
         });
         
@@ -362,9 +370,48 @@
       loadingEl.innerHTML = `
         <div style="text-align: center;">
           <p style="color: #e74c3c; font-weight: bold;">Erreur de chargement du modèle 3D</p>
-          <p>Veuillez vérifier que le fichier model2.glb existe et est accessible.</p>
+          <p>Vérifiez que le fichier model2.glb existe dans le même dossier que index.html.</p>
+          <pre style="text-align: left; background: #f8f8f8; padding: 1rem; border-radius: 4px; max-width: 500px; margin: 1rem auto; overflow: auto;">
+Assurez-vous que:
+1. Le fichier model2.glb est bien présent sur GitHub
+2. Le nom du fichier correspond exactement à "model2.glb"
+3. La structure du dépôt est correcte:
+   - index.html
+   - model2.glb
+</pre>
+          <button id="troubleshoot" style="padding: 0.5rem 1rem; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">Afficher les détails techniques</button>
         </div>
       `;
+      
+      // Ajouter un gestionnaire pour afficher plus d'informations de débogage
+      document.getElementById('troubleshoot')?.addEventListener('click', () => {
+        // Tester si le fichier existe en essayant de le charger via fetch
+        fetch('./model2.glb')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`Erreur HTTP: ${response.status}`);
+            }
+            return response.blob();
+          })
+          .then(blob => {
+            loadingEl.innerHTML += `
+              <div style="margin-top: 1rem; text-align: left; background: #f0f0f0; padding: 1rem; border-radius: 4px; max-width: 500px; margin: 1rem auto;">
+                <p style="color: #27ae60; font-weight: bold;">✅ Le fichier model2.glb a été trouvé!</p>
+                <p>Taille: ${(blob.size / 1024 / 1024).toFixed(2)} MB</p>
+                <p>Le problème pourrait être lié au format du fichier ou à sa compatibilité avec model-viewer.</p>
+              </div>
+            `;
+          })
+          .catch(error => {
+            loadingEl.innerHTML += `
+              <div style="margin-top: 1rem; text-align: left; background: #f0f0f0; padding: 1rem; border-radius: 4px; max-width: 500px; margin: 1rem auto;">
+                <p style="color: #e74c3c; font-weight: bold;">❌ Le fichier model2.glb n'a pas été trouvé!</p>
+                <p>Erreur: ${error.message}</p>
+                <p>Vérifiez que le fichier a bien été téléchargé sur GitHub avec le nom exact.</p>
+              </div>
+            `;
+          });
+      });
     });
   </script>
 </body>
