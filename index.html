@@ -2,91 +2,370 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Configurateur Tradi’home</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Configurateur LULY</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <style>
-    body { margin:0; overflow:hidden; font-family:Arial,sans-serif; }
-    #ui { position: fixed; top:0; left:0; padding:20px; background:rgba(255,255,255,0.8); max-width:300px; }
-    button { display:block; width:100%; margin:5px 0; padding:8px; }
+    body { 
+      margin: 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: #f5f5f5; 
+      color: #333; 
+    }
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    #configurator { 
+      display: flex; 
+      flex-direction: column;
+      max-width: 1200px; 
+      margin: auto; 
+      padding: 1rem; 
+    }
+    @media (min-width: 768px) {
+      #configurator {
+        flex-direction: row;
+        gap: 2rem;
+        padding: 2rem;
+      }
+    }
+    .viewer { 
+      flex: 2; 
+      margin-bottom: 2rem;
+    }
+    model-viewer { 
+      width: 100%; 
+      height: 500px; 
+      background: #fff; 
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    #features { 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 1rem; 
+    }
+    .group { 
+      background: #fff; 
+      border-radius: 8px; 
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .group h4 { 
+      margin: 0 0 1rem; 
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #eee;
+      color: #2c3e50;
+    }
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .group button {
+      flex: 1 0 120px;
+      min-width: 120px;
+      margin: 0.25rem 0; 
+      padding: 0.75rem;
+      border: 2px solid #eee; 
+      border-radius: 6px; 
+      background: #fafafa;
+      cursor: pointer; 
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    .group button:hover {
+      border-color: #ddd;
+      background: #f0f0f0;
+    }
+    .group button.selected { 
+      border-color: #3377ff;
+      background: #f0f7ff;
+    }
+    .color-preview {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      margin-bottom: 0.5rem;
+      border: 1px solid #ddd;
+    }
+    .price-tag {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: #666;
+    }
+    #price-container {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    #price { 
+      font-size: 1.5rem; 
+      font-weight: bold;
+      color: #2c3e50;
+      text-align: right;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 500px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+    .spinner {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #3377ff;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Configurateur LULY</h1>
+  </header>
 
-  <canvas id="canvas"></canvas>
-  <div id="ui">
-    <h2>Configurer Tradi’home</h2>
-    <!-- Exemple : Bardage -->
-    <h3>Bardage (poutres)</h3>
-    <button id="bardage_clair">Chêne clair</button>
-    <button id="bardage_fonce">Chêne foncé</button>
-    <button id="bardage_gris">Gris orage</button>
-    <!-- … ajoute tes autres catégories de la même façon … -->
+  <div id="configurator">
+    <div class="viewer">
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+      </div>
+      <model-viewer
+        id="model"
+        src="model2.glb"
+        camera-controls
+        auto-rotate
+        ar
+        shadow-intensity="1"
+        environment-image="neutral"
+        exposure="0.8"
+        camera-orbit="-30deg 75deg 4m"
+        style="display: none;"
+      ></model-viewer>
+    </div>
+    <div id="features">
+      <div class="group" data-cat="bardage">
+        <h4>Bardage extérieur</h4>
+        <div class="options">
+          <button data-color="#ffffff" data-cost="0">
+            <div class="color-preview" style="background-color: #ffffff;"></div>
+            Blanc
+            <span class="price-tag">inclus</span>
+          </button>
+          <button data-color="#8c6a4f" data-cost="799">
+            <div class="color-preview" style="background-color: #8c6a4f;"></div>
+            Chêne foncé
+            <span class="price-tag">+799 €</span>
+          </button>
+          <button data-color="#343a40" data-cost="899">
+            <div class="color-preview" style="background-color: #343a40;"></div>
+            Gris orage
+            <span class="price-tag">+899 €</span>
+          </button>
+        </div>
+      </div>
+      <div class="group" data-cat="menuiserie">
+        <h4>Menuiserie alu</h4>
+        <div class="options">
+          <button data-color="#ffffff" data-cost="0">
+            <div class="color-preview" style="background-color: #ffffff;"></div>
+            Blanc
+            <span class="price-tag">inclus</span>
+          </button>
+          <button data-color="#2e2e2e" data-cost="2499">
+            <div class="color-preview" style="background-color: #2e2e2e;"></div>
+            Anthracite
+            <span class="price-tag">+2499 €</span>
+          </button>
+        </div>
+      </div>
+      <div class="group" data-cat="murs">
+        <h4>Peinture murs</h4>
+        <div class="options">
+          <button data-color="#ffffff" data-cost="0">
+            <div class="color-preview" style="background-color: #ffffff;"></div>
+            Blanc
+            <span class="price-tag">inclus</span>
+          </button>
+          <button data-color="#d6c9b1" data-cost="999">
+            <div class="color-preview" style="background-color: #d6c9b1;"></div>
+            Beige Ares
+            <span class="price-tag">+999 €</span>
+          </button>
+          <button data-color="#e5b79c" data-cost="1499">
+            <div class="color-preview" style="background-color: #e5b79c;"></div>
+            Ocre Mojave
+            <span class="price-tag">+1499 €</span>
+          </button>
+        </div>
+      </div>
+      <div class="group" data-cat="pergola">
+        <h4>Pergola bioclimatique</h4>
+        <div class="options">
+          <button data-color="#ffffff" data-cost="8500">
+            <div class="color-preview" style="background-color: #ffffff;"></div>
+            Blanc
+            <span class="price-tag">+8500 €</span>
+          </button>
+          <button data-color="#2e2e2e" data-cost="9500">
+            <div class="color-preview" style="background-color: #2e2e2e;"></div>
+            Anthracite
+            <span class="price-tag">+9500 €</span>
+          </button>
+        </div>
+      </div>
+      <div class="group" data-cat="toiture">
+        <h4>Toiture tôle</h4>
+        <div class="options">
+          <button data-color="#243241" data-cost="0">
+            <div class="color-preview" style="background-color: #243241;"></div>
+            Bleu ardoise
+            <span class="price-tag">inclus</span>
+          </button>
+          <button data-color="#b0b0b0" data-cost="0">
+            <div class="color-preview" style="background-color: #b0b0b0;"></div>
+            Gris acier
+            <span class="price-tag">inclus</span>
+          </button>
+          <button data-color="#c0392b" data-cost="1800">
+            <div class="color-preview" style="background-color: #c0392b;"></div>
+            Rouge hibiscus
+            <span class="price-tag">+1800 €</span>
+          </button>
+        </div>
+      </div>
+      <div id="price-container">
+        <p id="price">Prix total : 170 000 €</p>
+      </div>
+    </div>
   </div>
 
+  <footer>
+    <p>© 2025 LULY - Configurateur de maisons • Tous droits réservés</p>
+  </footer>
+
   <script type="module">
-    import * as THREE      from 'https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.module.js';
-    import { GLTFLoader }  from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/loaders/GLTFLoader.js';
-    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.158.0/examples/jsm/controls/OrbitControls.js';
+    const basePrice = 170000;
+    const modelViewer = document.getElementById('model');
+    const priceEl = document.getElementById('price');
+    const loadingEl = document.getElementById('loading');
 
-    // 1) Scène, cam, renderer
-    const canvas   = document.getElementById('canvas');
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    const scene    = new THREE.Scene();
-    scene.background = new THREE.Color(0xdddddd);
+    // Mapping des matériaux selon les IDs exacts du modèle
+    const materialMapping = {
+      // Bardage extérieur
+      bardage: ['poutrine02', 'poutrine01'],
+      
+      // Menuiserie alu (portes, cadres, volets)
+      menuiserie: ['porte', 'portes internes', 'cadre porte fenetre', 'Volets', 'Voiets'],
+      
+      // Murs intérieurs et extérieurs
+      murs: ['murs interne', 'Murs'],
+      
+      // Pergola bioclimatique
+      pergola: ['poutres', 'volet pergola', 'sol pergola'],
+      
+      // Toiture (toit et éléments associés)
+      toiture: ['toit1', 'toit contour']
+    };
 
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
-    camera.position.set(7,5,7);
-    camera.lookAt(0,0,0);
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(10,15,10);
-    scene.add(light);
-
-    // 2) Charger le modèle
-    let model; 
-    new GLTFLoader().load(
-      'model2.glb',
-      gltf => {
-        model = gltf.scene;
-        scene.add(model);
-        console.log('Meshes:',);
-        model.traverse(o => o.isMesh && console.log(' -', o.name));
-        animate();
-      },
-      xhr => console.log(`Loading ${ (xhr.loaded/xhr.total*100).toFixed(0) }%`),
-      e   => console.error('GLTFLoader error:', e)
-    );
-
-    // 3) Fonction animate
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
+    function hexToRGBA(hex) {
+      const v = parseInt(hex.slice(1), 16);
+      return [(v>>16&255)/255, (v>>8&255)/255, (v&255)/255, 1];
     }
 
-    // 4) Exemple d’interaction — changer la baseColor de certains Meshes
-    function setColor(names, hexColor) {
-      if (!model) return;
-      model.traverse(o => {
-        if (o.isMesh && names.includes(o.name)) {
-          o.material.color.set(hexColor);
-        }
+    const selection = {};
+    
+    // Fonction pour rechercher un matériau par son nom exact
+    function findMaterialByName(materials, targetName) {
+      return materials.find(mat => mat.name === targetName);
+    }
+    
+    // Fonction pour vérifier si un matériau appartient à une catégorie
+    function isMaterialInCategory(materialName, categoryNames) {
+      return categoryNames.some(targetName => 
+        materialName.toLowerCase().includes(targetName.toLowerCase())
+      );
+    }
+
+    modelViewer.addEventListener('load', () => {
+      console.log('Modèle 3D chargé avec succès');
+      
+      // Cacher le chargement et afficher le modèle
+      loadingEl.style.display = 'none';
+      modelViewer.style.display = 'block';
+      
+      const materials = modelViewer.model.materials;
+      
+      // Afficher les noms des matériaux disponibles pour le débogage
+      console.log('Matériaux disponibles dans le modèle:');
+      materials.forEach(mat => console.log(`${mat.name}`));
+      
+      document.querySelectorAll('.group').forEach(group => {
+        const category = group.dataset.cat;
+        const materialTargets = materialMapping[category] || [];
+        
+        group.querySelectorAll('button').forEach(btn => {
+          btn.addEventListener('click', () => {
+            // Mise à jour visuelle
+            group.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            
+            // Mise à jour du prix
+            selection[category] = Number(btn.dataset.cost);
+            const total = Object.values(selection).reduce((a, b) => a + b, basePrice);
+            priceEl.textContent = `Prix total : ${total.toLocaleString()} €`;
+            
+            // Application de la couleur
+            const rgba = hexToRGBA(btn.dataset.color);
+            
+            // Appliquer la couleur à tous les matériaux correspondant à cette catégorie
+            materials.forEach(material => {
+              if (isMaterialInCategory(material.name, materialTargets)) {
+                console.log(`Changement de couleur pour ${material.name} (catégorie: ${category})`);
+                material.pbrMetallicRoughness.setBaseColorFactor(rgba);
+              }
+            });
+          });
+        });
+        
+        // Sélectionner la première option par défaut pour chaque groupe
+        group.querySelector('button').click();
       });
-    }
-
-    document.getElementById('bardage_clair')
-      .addEventListener('click', () => setColor([ 'poutrine01','poutrine02' ], 0xCEA660));
-
-    document.getElementById('bardage_fonce')
-      .addEventListener('click', () => setColor([ 'poutrine01','poutrine02' ], 0x8B5E3C));
-
-    document.getElementById('bardage_gris')
-      .addEventListener('click', () => setColor([ 'poutrine01','poutrine02' ], 0x2F2F2F));
-
-    // … fais pareil pour tes murs, pergola, menuiserie, toit, etc. …
+    });
+    
+    // Gestion des erreurs de chargement
+    modelViewer.addEventListener('error', (error) => {
+      console.error('Erreur de chargement du modèle:', error);
+      loadingEl.innerHTML = `
+        <div style="text-align: center;">
+          <p style="color: #e74c3c; font-weight: bold;">Erreur de chargement du modèle 3D</p>
+          <p>Veuillez vérifier que le fichier model2.glb existe et est accessible.</p>
+        </div>
+      `;
+    });
   </script>
-
 </body>
 </html>
