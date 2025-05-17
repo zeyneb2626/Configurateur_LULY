@@ -156,7 +156,7 @@
       </div>
       <model-viewer
         id="model"
-        src="./model4.glb"
+        src="https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/model4.glb"
         alt="Modèle 3D de maison LULY"
         camera-controls
         auto-rotate
@@ -408,23 +408,29 @@
       loadingEl.innerHTML = `
         <div style="text-align: center;">
           <p style="color: #e74c3c; font-weight: bold;">Erreur de chargement du modèle 3D</p>
-          <p>Vérifiez que le fichier model4.glb existe dans le même dossier que index.html.</p>
+          <p>Vérifiez que le fichier model4.glb existe et est accessible.</p>
           <pre style="text-align: left; background: #f8f8f8; padding: 1rem; border-radius: 4px; max-width: 500px; margin: 1rem auto; overflow: auto;">
 Assurez-vous que:
-1. Le fichier model4.glb est bien présent sur GitHub
-2. Le nom du fichier correspond exactement à "model4.glb"
-3. La structure du dépôt est correcte:
-   - index.html
-   - model4.glb
+1. Le fichier model4.glb est bien présent sur GitHub dans la branche main
+2. Le fichier n'est pas trop volumineux (idéalement < 50 Mo)
+3. Essayer la version avec l'URL GitHub Raw:
+   https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/model4.glb
 </pre>
-          <button id="troubleshoot" style="padding: 0.5rem 1rem; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">Afficher les détails techniques</button>
+          <button id="troubleshoot" style="padding: 0.5rem 1rem; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">Tester l'URL GitHub Raw</button>
         </div>
       `;
       
       // Ajouter un gestionnaire pour afficher plus d'informations de débogage
       document.getElementById('troubleshoot')?.addEventListener('click', () => {
-        // Tester si le fichier existe en essayant de le charger via fetch
-        fetch('./model4.glb')
+        // Tester si le fichier existe en essayant de le charger via fetch sur l'URL GitHub Raw
+        const rawUrl = 'https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/model4.glb';
+        loadingEl.innerHTML += `
+          <div style="margin-top: 1rem; text-align: left; background: #f0f0f0; padding: 1rem; border-radius: 4px; max-width: 500px; margin: 1rem auto;">
+            <p>Tentative d'accès au fichier via GitHub Raw URL...</p>
+          </div>
+        `;
+        
+        fetch(rawUrl)
           .then(response => {
             if (!response.ok) {
               throw new Error(`Erreur HTTP: ${response.status}`);
@@ -434,18 +440,28 @@ Assurez-vous que:
           .then(blob => {
             loadingEl.innerHTML += `
               <div style="margin-top: 1rem; text-align: left; background: #f0f0f0; padding: 1rem; border-radius: 4px; max-width: 500px; margin: 1rem auto;">
-                <p style="color: #27ae60; font-weight: bold;">✅ Le fichier model4.glb a été trouvé!</p>
+                <p style="color: #27ae60; font-weight: bold;">✅ Le fichier est accessible via GitHub Raw!</p>
                 <p>Taille: ${(blob.size / 1024 / 1024).toFixed(2)} MB</p>
-                <p>Le problème pourrait être lié au format du fichier ou à sa compatibilité avec model-viewer.</p>
+                <p>Essayons de charger le modèle avec cette URL...</p>
+                <button id="tryRawUrl" style="padding: 0.5rem 1rem; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">Charger avec URL GitHub Raw</button>
               </div>
             `;
+            
+            document.getElementById('tryRawUrl')?.addEventListener('click', () => {
+              modelViewer.src = rawUrl;
+            });
           })
           .catch(error => {
             loadingEl.innerHTML += `
               <div style="margin-top: 1rem; text-align: left; background: #f0f0f0; padding: 1rem; border-radius: 4px; max-width: 500px; margin: 1rem auto;">
-                <p style="color: #e74c3c; font-weight: bold;">❌ Le fichier model4.glb n'a pas été trouvé!</p>
+                <p style="color: #e74c3c; font-weight: bold;">❌ Le fichier n'est pas accessible via GitHub Raw!</p>
                 <p>Erreur: ${error.message}</p>
-                <p>Vérifiez que le fichier a bien été téléchargé sur GitHub avec le nom exact.</p>
+                <p>Suggestions:</p>
+                <ul>
+                  <li>Vérifiez que le nom du fichier est correct</li>
+                  <li>Vérifiez que le fichier est dans la branche principale</li>
+                  <li>Essayez avec un fichier GLB plus petit ou un fichier de test</li>
+                </ul>
               </div>
             `;
           });
@@ -463,4 +479,3 @@ Assurez-vous que:
   </script>
 </body>
 </html>
-
