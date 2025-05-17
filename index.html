@@ -156,8 +156,8 @@
       </div>
       <model-viewer
         id="model"
-        src="https://models.babylonjs.com/Duck.glb"
-        alt="Modèle 3D test - Canard"
+        src="./model4%20(1).glb"
+        alt="Modèle 3D de maison LULY"
         camera-controls
         auto-rotate
         shadow-intensity="1"
@@ -277,16 +277,20 @@
     // Mapping des matériaux selon les noms usuels dans le modèle test
     // Ces noms seront comparés de manière insensible à la casse pour plus de flexibilité
     const materialMapping = {
-      // Bardage extérieur (corps du canard dans le modèle de test)
-      bardage: ['duck'],
+      // Bardage extérieur
+      bardage: ['bardage', 'poutrine', 'Toit1'],
       
-      // Menuiserie alu (yeux/bec du canard dans le modèle de test)
-      menuiserie: ['bec', 'yeux'],
+      // Menuiserie alu (portes, cadres, volets)
+      menuiserie: ['porte', 'cadre', 'volet', 'menuiserie', 'fenetre'],
       
-      // Utilisation de tous les matériaux disponibles pour test
-      murs: ['all'],
-      pergola: ['all'],
-      toiture: ['all']
+      // Murs intérieurs et extérieurs
+      murs: ['mur', 'Murs', 'murs'],
+      
+      // Pergola bioclimatique
+      pergola: ['poutres', 'pergola', 'sol pergola'],
+      
+      // Toiture (toit et éléments associés)
+      toiture: ['toit', 'toiture']
     };
 
     function hexToRGBA(hex) {
@@ -406,40 +410,38 @@
       loadingEl.innerHTML = `
         <div style="text-align: center;">
           <p style="color: #e74c3c; font-weight: bold;">Erreur de chargement du modèle 3D</p>
-          <p>Utilisation du modèle 3D de test...</p>
+          <p>Problème avec le fichier "model4 (1).glb"</p>
           
           <div style="margin-top: 2rem; border: 1px solid #ddd; padding: 1rem; border-radius: 8px; max-width: 600px; margin: 1rem auto; text-align: left;">
-            <h3>Pourquoi nous utilisons un modèle de test</h3>
-            <p>Nous avons détecté des problèmes avec le chargement de votre fichier GLB. GitHub a des limitations pour les fichiers volumineux :</p>
+            <h3>Problèmes potentiels :</h3>
             <ul>
-              <li>GitHub limite les fichiers à 100 Mo sans Git LFS</li>
-              <li>GitHub Pages peut avoir des difficultés à servir des fichiers binaires volumineux</li>
-              <li>Les chemins d'accès et les délais de déploiement peuvent causer des erreurs</li>
+              <li>Le nom du fichier contient des parenthèses et un espace, ce qui peut causer des problèmes d'URL</li>
+              <li>Le fichier peut ne pas être encore déployé sur GitHub Pages</li>
+              <li>GitHub Pages peut avoir du mal à servir des fichiers binaires comme les GLB</li>
             </ul>
             
-            <h4>Solutions recommandées :</h4>
+            <h4>Solutions à essayer :</h4>
             <ol>
-              <li>Utiliser Git LFS pour gérer votre fichier GLB (voir <a href="https://git-lfs.github.com/" target="_blank">git-lfs.github.com</a>)</li>
-              <li>Héberger votre modèle 3D sur un service dédié comme Sketchfab ou Poly Haven</li>
-              <li>Réduire la taille de votre modèle 3D (compression, optimisation)</li>
-              <li>Utiliser un CDN comme jsDelivr pour accéder aux fichiers GitHub : <code>https://cdn.jsdelivr.net/gh/zeyneb2626/Configurateur_LULY@main/model4.glb</code></li>
+              <li>Renommer le fichier sans espaces ni caractères spéciaux (par exemple: "model4.glb")</li>
+              <li>Utiliser une URL encodée ou des CDN spécialisés</li>
+              <li>Essayer un modèle plus petit pour tester</li>
             </ol>
           </div>
           
-          <button id="troubleshoot" style="padding: 0.5rem 1rem; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 1rem;">Essayer d'autres options</button>
+          <button id="tryOtherUrls" style="padding: 0.5rem 1rem; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 1rem;">Essayer d'autres URLs</button>
+          <button id="tryDuckModel" style="padding: 0.5rem 1rem; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 1rem; margin-left: 0.5rem;">Utiliser modèle canard de test</button>
         </div>
       `;
       
-      // Ajouter un gestionnaire pour afficher plus d'options
-      document.getElementById('troubleshoot')?.addEventListener('click', () => {
+      // Gestionnaire pour le bouton d'essai d'autres URLs
+      document.getElementById('tryOtherUrls')?.addEventListener('click', () => {
         loadingEl.innerHTML += `
           <div style="margin-top: 1rem; text-align: left; background: #f0f0f0; padding: 1rem; border-radius: 4px; max-width: 600px; margin: 1rem auto;">
             <h4>Autres URLs à essayer :</h4>
             <ul style="text-align: left;">
-              <li><button class="try-url" data-url="https://cdn.jsdelivr.net/gh/zeyneb2626/Configurateur_LULY@main/model4.glb" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">CDN jsDelivr</button></li>
-              <li><button class="try-url" data-url="https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/model4.glb" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">GitHub Raw</button></li>
-              <li><button class="try-url" data-url="./model4.glb" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">Chemin relatif local</button></li>
-              <li><button class="try-url" data-url="https://models.babylonjs.com/Duck.glb" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">Modèle de test (Canard)</button></li>
+              <li><button class="try-url" data-url="https://cdn.jsdelivr.net/gh/zeyneb2626/Configurateur_LULY@main/model4%20(1).glb" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">CDN jsDelivr (avec espace encodé)</button></li>
+              <li><button class="try-url" data-url="https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/model4%20(1).glb" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">GitHub Raw (avec espace encodé)</button></li>
+              <li><button class="try-url" data-url="./model4.glb" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">Ancien nom de fichier (model4.glb)</button></li>
             </ul>
           </div>
         `;
@@ -452,6 +454,12 @@
             modelViewer.src = url;
           });
         });
+      });
+      
+      // Gestionnaire pour le bouton modèle de canard
+      document.getElementById('tryDuckModel')?.addEventListener('click', () => {
+        console.log('Essai avec le modèle de canard de test');
+        modelViewer.src = 'https://models.babylonjs.com/Duck.glb';
       });
     });
   </script>
