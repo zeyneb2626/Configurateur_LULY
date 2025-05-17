@@ -156,8 +156,8 @@
       </div>
       <model-viewer
         id="model"
-        src="https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/model4.glb"
-        alt="Modèle 3D de maison LULY"
+        src="https://models.babylonjs.com/Duck.glb"
+        alt="Modèle 3D test - Canard"
         camera-controls
         auto-rotate
         shadow-intensity="1"
@@ -274,23 +274,19 @@
     const priceEl = document.getElementById('price');
     const loadingEl = document.getElementById('loading');
 
-    // Mapping des matériaux selon les noms usuels dans le modèle
+    // Mapping des matériaux selon les noms usuels dans le modèle test
     // Ces noms seront comparés de manière insensible à la casse pour plus de flexibilité
     const materialMapping = {
-      // Bardage extérieur
-      bardage: ['bardage', 'poutrine', 'Toit1'],
+      // Bardage extérieur (corps du canard dans le modèle de test)
+      bardage: ['duck'],
       
-      // Menuiserie alu (portes, cadres, volets)
-      menuiserie: ['porte', 'cadre', 'volet', 'menuiserie', 'fenetre'],
+      // Menuiserie alu (yeux/bec du canard dans le modèle de test)
+      menuiserie: ['bec', 'yeux'],
       
-      // Murs intérieurs et extérieurs
-      murs: ['mur', 'Murs', 'murs'],
-      
-      // Pergola bioclimatique
-      pergola: ['poutres', 'pergola', 'sol pergola'],
-      
-      // Toiture (toit et éléments associés)
-      toiture: ['toit', 'toiture']
+      // Utilisation de tous les matériaux disponibles pour test
+      murs: ['all'],
+      pergola: ['all'],
+      toiture: ['all']
     };
 
     function hexToRGBA(hex) {
@@ -307,6 +303,8 @@
     
     // Fonction pour vérifier si un matériau appartient à une catégorie
     function isMaterialInCategory(materialName, categoryNames) {
+      if (categoryNames.includes('all')) return true;
+      
       const lowerMaterialName = materialName.toLowerCase();
       return categoryNames.some(targetName => 
         lowerMaterialName.includes(targetName.toLowerCase())
@@ -372,9 +370,7 @@
               const materialName = material.name;
               
               // Test de correspondance avec insensibilité à la casse
-              const matches = materialTargets.some(targetName => 
-                materialName.toLowerCase().includes(targetName.toLowerCase())
-              );
+              const matches = isMaterialInCategory(materialName, materialTargets);
               
               if (matches) {
                 console.log(`Changement de couleur pour ${material.name} (catégorie: ${category})`);
@@ -386,13 +382,15 @@
               }
             });
             
-            if (!applied) {
+            if (!applied && category !== 'toiture' && category !== 'pergola') {
               console.warn(`Aucun matériau trouvé pour la catégorie: ${category}`);
               console.warn(`Noms recherchés: ${materialTargets.join(', ')}`);
               
-              // Afficher tous les noms de matériaux pour aider au débogage
-              console.log('Matériaux disponibles:');
-              materials.forEach(mat => console.log(`- ${mat.name}`));
+              // Pour le modèle de test, utilisons le premier matériau disponible
+              if (materials.length > 0) {
+                console.log(`Application sur le premier matériau disponible pour la démo`);
+                applyColorToMaterial(materials[0], rgba);
+              }
             }
           });
         });
@@ -408,65 +406,55 @@
       loadingEl.innerHTML = `
         <div style="text-align: center;">
           <p style="color: #e74c3c; font-weight: bold;">Erreur de chargement du modèle 3D</p>
-          <p>Vérifiez que le fichier model4.glb existe et est accessible.</p>
-          <pre style="text-align: left; background: #f8f8f8; padding: 1rem; border-radius: 4px; max-width: 500px; margin: 1rem auto; overflow: auto;">
-Assurez-vous que:
-1. Le fichier model4.glb est bien présent sur GitHub dans la branche main
-2. Le fichier n'est pas trop volumineux (idéalement < 50 Mo)
-3. Essayer la version avec l'URL GitHub Raw:
-   https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/model4.glb
-</pre>
-          <button id="troubleshoot" style="padding: 0.5rem 1rem; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">Tester l'URL GitHub Raw</button>
+          <p>Utilisation du modèle 3D de test...</p>
+          
+          <div style="margin-top: 2rem; border: 1px solid #ddd; padding: 1rem; border-radius: 8px; max-width: 600px; margin: 1rem auto; text-align: left;">
+            <h3>Pourquoi nous utilisons un modèle de test</h3>
+            <p>Nous avons détecté des problèmes avec le chargement de votre fichier GLB. GitHub a des limitations pour les fichiers volumineux :</p>
+            <ul>
+              <li>GitHub limite les fichiers à 100 Mo sans Git LFS</li>
+              <li>GitHub Pages peut avoir des difficultés à servir des fichiers binaires volumineux</li>
+              <li>Les chemins d'accès et les délais de déploiement peuvent causer des erreurs</li>
+            </ul>
+            
+            <h4>Solutions recommandées :</h4>
+            <ol>
+              <li>Utiliser Git LFS pour gérer votre fichier GLB (voir <a href="https://git-lfs.github.com/" target="_blank">git-lfs.github.com</a>)</li>
+              <li>Héberger votre modèle 3D sur un service dédié comme Sketchfab ou Poly Haven</li>
+              <li>Réduire la taille de votre modèle 3D (compression, optimisation)</li>
+              <li>Utiliser un CDN comme jsDelivr pour accéder aux fichiers GitHub : <code>https://cdn.jsdelivr.net/gh/zeyneb2626/Configurateur_LULY@main/model4.glb</code></li>
+            </ol>
+          </div>
+          
+          <button id="troubleshoot" style="padding: 0.5rem 1rem; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 1rem;">Essayer d'autres options</button>
         </div>
       `;
       
-      // Ajouter un gestionnaire pour afficher plus d'informations de débogage
+      // Ajouter un gestionnaire pour afficher plus d'options
       document.getElementById('troubleshoot')?.addEventListener('click', () => {
-        // Tester si le fichier existe en essayant de le charger via fetch sur l'URL GitHub Raw
-        const rawUrl = 'https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/model4.glb';
         loadingEl.innerHTML += `
-          <div style="margin-top: 1rem; text-align: left; background: #f0f0f0; padding: 1rem; border-radius: 4px; max-width: 500px; margin: 1rem auto;">
-            <p>Tentative d'accès au fichier via GitHub Raw URL...</p>
+          <div style="margin-top: 1rem; text-align: left; background: #f0f0f0; padding: 1rem; border-radius: 4px; max-width: 600px; margin: 1rem auto;">
+            <h4>Autres URLs à essayer :</h4>
+            <ul style="text-align: left;">
+              <li><button class="try-url" data-url="https://cdn.jsdelivr.net/gh/zeyneb2626/Configurateur_LULY@main/model4.glb" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">CDN jsDelivr</button></li>
+              <li><button class="try-url" data-url="https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/model4.glb" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">GitHub Raw</button></li>
+              <li><button class="try-url" data-url="./model4.glb" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">Chemin relatif local</button></li>
+              <li><button class="try-url" data-url="https://models.babylonjs.com/Duck.glb" style="background: none; border: none; color: blue; text-decoration: underline; cursor: pointer;">Modèle de test (Canard)</button></li>
+            </ul>
           </div>
         `;
         
-        fetch(rawUrl)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`Erreur HTTP: ${response.status}`);
-            }
-            return response.blob();
-          })
-          .then(blob => {
-            loadingEl.innerHTML += `
-              <div style="margin-top: 1rem; text-align: left; background: #f0f0f0; padding: 1rem; border-radius: 4px; max-width: 500px; margin: 1rem auto;">
-                <p style="color: #27ae60; font-weight: bold;">✅ Le fichier est accessible via GitHub Raw!</p>
-                <p>Taille: ${(blob.size / 1024 / 1024).toFixed(2)} MB</p>
-                <p>Essayons de charger le modèle avec cette URL...</p>
-                <button id="tryRawUrl" style="padding: 0.5rem 1rem; background: #27ae60; color: white; border: none; border-radius: 4px; cursor: pointer;">Charger avec URL GitHub Raw</button>
-              </div>
-            `;
-            
-            document.getElementById('tryRawUrl')?.addEventListener('click', () => {
-              modelViewer.src = rawUrl;
-            });
-          })
-          .catch(error => {
-            loadingEl.innerHTML += `
-              <div style="margin-top: 1rem; text-align: left; background: #f0f0f0; padding: 1rem; border-radius: 4px; max-width: 500px; margin: 1rem auto;">
-                <p style="color: #e74c3c; font-weight: bold;">❌ Le fichier n'est pas accessible via GitHub Raw!</p>
-                <p>Erreur: ${error.message}</p>
-                <p>Suggestions:</p>
-                <ul>
-                  <li>Vérifiez que le nom du fichier est correct</li>
-                  <li>Vérifiez que le fichier est dans la branche principale</li>
-                  <li>Essayez avec un fichier GLB plus petit ou un fichier de test</li>
-                </ul>
-              </div>
-            `;
+        // Ajouter des gestionnaires pour chaque URL à essayer
+        document.querySelectorAll('.try-url').forEach(button => {
+          button.addEventListener('click', () => {
+            const url = button.dataset.url;
+            console.log(`Essai avec l'URL: ${url}`);
+            modelViewer.src = url;
           });
+        });
       });
     });
+  </script>
   </script>-width: 500px; margin: 1rem auto;">
                 <p style="color: #e74c3c; font-weight: bold;">❌ Le fichier model4.glb n'a pas été trouvé!</p>
                 <p>Erreur: ${error.message}</p>
