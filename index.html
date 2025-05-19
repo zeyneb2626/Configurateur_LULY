@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Configurateur TRADIHOME</title>
 
-  <!-- Chargement du web-component model-viewer -->
+  <!-- Web component model-viewer -->
   <script type="module"
           src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
@@ -34,9 +34,18 @@
     alt="Maison TRADIHOME"
     camera-controls
     auto-rotate
+
+    /* anti-aliasing pour lisser les arêtes */
+    antialias
+
+    /* forcer la résolution interne entre 1× et 2× le DPR */
+    min-pixel-ratio="1"
+    max-pixel-ratio="2"
+
     shadow-intensity="1"
     exposure="1.2"
     loading="eager">
   </model-viewer>
 </body>
 </html>
+
