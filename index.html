@@ -1,14 +1,54 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Configurateur TRADIHOME</title>
   <script type="module"
     src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
   <style>
-    /* ... (votre CSS inchangé) ... */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width:100%; height:100%; font-family:sans-serif; }
+    #container {
+      display: grid;
+      grid-template-columns: 3fr 1fr;   /* élargit le viewer */
+      height: 100vh;                   /* plein écran hauteur */
+    }
+    #viewer-container {
+      position: relative; z-index:1;
+      background: #fafafa;
+    }
+    model-viewer {
+      width:100%; height:100%;
+      background: #fff;
+      /* HD + antialias */
+      antialias
+      min-pixel-ratio="1"
+      max-pixel-ratio="2";
+      display: block;
+    }
+    #controls {
+      position: relative; z-index:2;
+      background: #f6f6f6; padding:1rem;
+      border-left:1px solid #ddd; overflow-y:auto;
+    }
+    #controls h2 { margin-bottom:1rem; font-size:1.2rem; }
+    .category { margin-bottom:1.5rem; }
+    .category h3 { margin-bottom:.5rem; }
+    .swatches { display:flex; flex-wrap:wrap; gap:.5rem; }
+    .swatch {
+      width:40px; height:40px; border:2px solid #ccc;
+      border-radius:4px; cursor:pointer; position:relative;
+      background:transparent;
+    }
+    .swatch.selected { outline:3px solid #007aff; }
+    .swatch::after {
+      content: attr(data-label);
+      position:absolute; bottom:-1.5rem; left:50%;
+      transform:translateX(-50%); font-size:.6rem; color:#333;
+      white-space:nowrap;
+    }
   </style>
 </head>
 <body>
@@ -26,7 +66,55 @@
       </model-viewer>
     </div>
     <div id="controls">
-      <!-- ... vos swatches inchangés ... -->
+      <h2>Personnalisez votre maison</h2>
+
+      <!-- Bardage -->
+      <div class="category" data-category="Bardage">
+        <h3>Bardage extérieur</h3>
+        <div class="swatches">
+          <button class="swatch" data-label="Chêne Clair" data-color="#C49A6C" data-category="Bardage"></button>
+          <button class="swatch" data-label="Chêne Foncé" data-color="#8C5E2B" data-category="Bardage"></button>
+          <button class="swatch" data-label="Gris Orage"  data-color="#334257" data-category="Bardage"></button>
+        </div>
+      </div>
+
+      <!-- Menuiserie -->
+      <div class="category" data-category="Menuiserie">
+        <h3>Menuiserie alu</h3>
+        <div class="swatches">
+          <button class="swatch" data-label="Blanc"      data-color="#FFFFFF" data-category="Menuiserie"></button>
+          <button class="swatch" data-label="Anthracite" data-color="#333333" data-category="Menuiserie"></button>
+        </div>
+      </div>
+
+      <!-- Pergola -->
+      <div class="category" data-category="Pergola">
+        <h3>Pergola bioclimatique</h3>
+        <div class="swatches">
+          <button class="swatch" data-label="Blanc"      data-color="#FFFFFF" data-category="Pergola"></button>
+          <button class="swatch" data-label="Anthracite" data-color="#333333" data-category="Pergola"></button>
+        </div>
+      </div>
+
+      <!-- Murs -->
+      <div class="category" data-category="Murs">
+        <h3>Peinture (murs extérieurs)</h3>
+        <div class="swatches">
+          <button class="swatch" data-label="Blanc"       data-color="#FFFFFF" data-category="Murs"></button>
+          <button class="swatch" data-label="Beige WES"   data-color="#CDB79C" data-category="Murs"></button>
+          <button class="swatch" data-label="Ocre Mojave" data-color="#E8AD99" data-category="Murs"></button>
+        </div>
+      </div>
+
+      <!-- Toit -->
+      <div class="category" data-category="Toit">
+        <h3>Tôle ondulée</h3>
+        <div class="swatches">
+          <button class="swatch" data-label="Bleu Ardoise"   data-color="#2F4155" data-category="Toit"></button>
+          <button class="swatch" data-label="Gris Acier"     data-color="#BCC0C0" data-category="Toit"></button>
+          <button class="swatch" data-label="Rouge Hibiscus" data-color="#C44133" data-category="Toit"></button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -34,26 +122,37 @@
     window.addEventListener('DOMContentLoaded', () => {
       const mv = document.querySelector('#mv');
 
-      // ➊ // Après inspection, remplacez ces chaînes par VOS vrais fragments de node.name
-      const substrMap = {
-        Bardage:    ['poutrine01', 'poutrine02'],
-        Menuiserie: ['cadre porte','portes internes','volets'],
-        Pergola:    ['poutres','volet pergola'],
-        Murs:       ['geometry21_murs_0'],     // <-- exemple
-        Toit:       ['geometry133_toit1_0']   // <-- exemple
-      };
-
+      // → Étape 1 : Capter les vrais noms de Mesh/material
+      const mapping = {}; 
       mv.addEventListener('load', ({ detail }) => {
         const scene = detail.model.scene;
 
-        // ➋ // DEBUG : lister tous les nodes
+        // Affiche la liste complète (copier-coller dans votre éditeur)
         scene.traverse(node => {
           if (node.isMesh) {
-            console.log(`Mesh name: "${node.name}" — material: "${node.material.name}"`);
+            console.log(`Mesh: "${node.name}" — Material: "${node.material.name}"`);
           }
         });
 
-        // ➌ // Attacher les clics
+        // → Étape 2 : quand vous connaissez les noms EXACTS,
+        //    remplissez ce mapping ainsi :
+        //
+        // mapping['Bardage']    = ['Geometry273_poutrine01_0', 'Geometry274_poutrine02_0'];
+        // mapping['Menuiserie'] = ['Geometry21_Cadre_0', 'Geometry22_PortesInternes_0', 'Geometry23_Volets_0'];
+        // mapping['Pergola']    = ['Geometry30_Poutres_0', 'Geometry31_VoletPergola_0'];
+        // mapping['Murs']       = ['Geometry21_Murs_0'];
+        // mapping['Toit']       = ['Geometry133_Toit1_0'];
+        //
+        // (ajustez les chaînes _exactes_ repérées dans la console)
+
+        // Exemple temporaire :
+        mapping['Bardage']    = ['poutrine01','poutrine02'];
+        mapping['Menuiserie'] = ['cadre','portes','volets'];
+        mapping['Pergola']    = ['poutres','volet'];
+        mapping['Murs']       = ['murs'];
+        mapping['Toit']       = ['toit1'];
+
+        // → Étape 3 : coloration au clic
         document.querySelectorAll('.swatch').forEach(btn => {
           btn.addEventListener('click', () => {
             const cat   = btn.dataset.category;
@@ -62,18 +161,18 @@
             document.querySelectorAll(`.swatch[data-category="${cat}"]`)
                     .forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            // Appliquer la couleur
+            // Appliquer la couleur sur chaque Mesh dont le name contient un item de mapping[cat]
             scene.traverse(node => {
               if (!node.isMesh) return;
               const name = node.name.toLowerCase();
-              if (substrMap[cat].some(sub => name.includes(sub))) {
+              if (mapping[cat].some(key => name.includes(key.toLowerCase()))) {
                 node.material.color.set(color);
               }
             });
           });
         });
 
-        // Par défaut, on clique sur la première option de chaque catégorie
+        // auto-select premier swatch de chaque catégorie
         document.querySelectorAll('.category').forEach(catDiv => {
           const first = catDiv.querySelector('.swatch');
           if (first) first.click();
