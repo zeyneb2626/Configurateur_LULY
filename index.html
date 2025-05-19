@@ -13,6 +13,7 @@
     #container { display:flex; height:100vh }
     model-viewer {
       flex:3;
+      width:100%;
       height:100%;
       background:#fff;
     }
@@ -74,7 +75,7 @@
     <div id="controls">
       <h2>Personnalisez votre maison</h2>
 
-      <!-- 1. Bardage -->
+      <!-- 1. Bardage extérieur -->
       <div class="category" data-cat="Bardage">
         <h3>Bardage extérieur</h3>
         <div class="swatches">
@@ -93,7 +94,7 @@
         </div>
       </div>
 
-      <!-- 3. Gouttière & descente -->
+      <!-- 3. Gouttière et descente -->
       <div class="category" data-cat="Gouttiere">
         <h3>Gouttière et descente</h3>
         <div class="swatches">
@@ -110,13 +111,13 @@
         </div>
       </div>
 
-      <!-- 5. Peinture murs -->
+      <!-- 5. Peinture (mur extérieur) -->
       <div class="category" data-cat="Murs">
         <h3>Peinture (mur extérieur)</h3>
         <div class="swatches">
-          <button class="swatch" data-cat="Murs" data-label="Blanc"            data-color="#FFFFFF" data-cost="0"></button>
-          <button class="swatch" data-cat="Murs" data-label="Beige Ares"        data-color="#CCC0AF" data-cost="399"></button>
-          <button class="swatch" data-cat="Murs" data-label="Ocre Mojave"      data-color="#E6C7B1" data-cost="1499"></button>
+          <button class="swatch" data-cat="Murs" data-label="Blanc"       data-color="#FFFFFF" data-cost="0"></button>
+          <button class="swatch" data-cat="Murs" data-label="Beige Ares"   data-color="#CCC0AF" data-cost="399"></button>
+          <button class="swatch" data-cat="Murs" data-label="Ocre Mojave" data-color="#E6C7B1" data-cost="1499"></button>
         </div>
       </div>
 
@@ -175,18 +176,16 @@
           catDiv.querySelectorAll('.swatch').forEach(btn => {
             btn.addEventListener('click', () => {
               // UI
-              catDiv.querySelectorAll('.swatch').forEach(b=>b.classList.remove('selected'));
+              catDiv.querySelectorAll('.swatch').forEach(b => b.classList.remove('selected'));
               btn.classList.add('selected');
 
               // Met à jour le prix
               selection[cat] = Number(btn.dataset.cost);
-              const total = Object.values(selection).reduce((sum, v)=> sum+v, basePrice);
+              const total = Object.values(selection).reduce((sum, v) => sum + v, basePrice);
               priceEl.textContent = total.toLocaleString('fr-FR') + ' €';
 
-              // Convertit la couleur
+              // Convertit la couleur et applique
               const rgba = hex2rgba(btn.dataset.color);
-
-              // Applique à tous les matériaux matching
               materials.forEach(mat => {
                 const lname = mat.name.toLowerCase();
                 if (frags.some(f => lname.includes(f))) {
@@ -196,7 +195,7 @@
             });
           });
 
-          // Sélection par défaut
+          // sélection par défaut (premier bouton)
           const first = catDiv.querySelector('.swatch');
           if (first) first.click();
         });
@@ -205,5 +204,4 @@
   </script>
 </body>
 </html>
-
 
