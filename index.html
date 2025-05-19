@@ -4,48 +4,187 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Configurateur TRADIHOME</title>
-
-  <!-- Web component model-viewer -->
   <script type="module"
           src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
-
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, html {
+      height: 100%; width: 100%;
+      font-family: sans-serif;
+    }
+    #container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
       height: 100%;
-      overflow: hidden;
-      background-color: #ffffff;
+    }
+    #viewer-container {
+      background: #fafafa;
     }
     model-viewer {
       width: 100%;
       height: 100%;
-      /* active l’interaction souris/tactile */
+      background: #ffffff;
       pointer-events: all;
+    }
+    #controls {
+      overflow-y: auto;
+      padding: 1rem;
+      background: #f6f6f6;
+      border-left: 1px solid #ddd;
+    }
+    #controls h2 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    .category {
+      margin-bottom: 1.5rem;
+    }
+    .category h3 {
+      font-size: 1rem;
+      margin-bottom: .5rem;
+    }
+    .swatches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .swatch {
+      width: 40px; height: 40px;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      position: relative;
+    }
+    .swatch.selected {
+      outline: 3px solid #007aff;
+    }
+    .swatch::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: -1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 0.6rem;
+      color: #333;
     }
   </style>
 </head>
-
 <body>
-  <model-viewer
-    src="TRADIHOME3.glb"
-    alt="Maison TRADIHOME"
-    camera-controls
-    auto-rotate
 
-    /* anti-aliasing pour lisser les arêtes */
-    antialias
+<div id="container">
+  <!-- 3D Viewer -->
+  <div id="viewer-container">
+    <model-viewer
+      id="mv"
+      src="TRADIHOME3.glb"
+      alt="Maison TRADIHOME"
+      camera-controls
+      auto-rotate
+      shadow-intensity="1"
+      exposure="1.2"
+      loading="eager">
+    </model-viewer>
+  </div>
 
-    /* forcer la résolution interne entre 1× et 2× le DPR */
-    min-pixel-ratio="1"
-    max-pixel-ratio="2"
+  <!-- Panneau de configuration -->
+  <div id="controls">
+    <h2>Personnalisez votre maison</h2>
 
-    shadow-intensity="1"
-    exposure="1.2"
-    loading="eager">
-  </model-viewer>
+    <!-- Bardage -->
+    <div class="category" data-category="Bardage">
+      <h3>Bardage extérieur</h3>
+      <div class="swatches">
+        <button class="swatch" data-label="Chêne Clair" data-color="#C49A6C" data-category="Bardage"></button>
+        <button class="swatch" data-label="Chêne Foncé" data-color="#8C5E2B" data-category="Bardage"></button>
+        <button class="swatch" data-label="Gris Orage" data-color="#334257" data-category="Bardage"></button>
+      </div>
+    </div>
+
+    <!-- Menuiserie -->
+    <div class="category" data-category="Menuiserie">
+      <h3>Menuiserie alu</h3>
+      <div class="swatches">
+        <button class="swatch" data-label="Blanc" data-color="#FFFFFF" data-category="Menuiserie"></button>
+        <button class="swatch" data-label="Anthracite" data-color="#333333" data-category="Menuiserie"></button>
+      </div>
+    </div>
+
+    <!-- Pergola -->
+    <div class="category" data-category="Pergola">
+      <h3>Pergola bioclimatique</h3>
+      <div class="swatches">
+        <button class="swatch" data-label="Blanc" data-color="#FFFFFF" data-category="Pergola"></button>
+        <button class="swatch" data-label="Anthracite" data-color="#333333" data-category="Pergola"></button>
+      </div>
+    </div>
+
+    <!-- Murs -->
+    <div class="category" data-category="Murs">
+      <h3>Peinture (murs extérieurs)</h3>
+      <div class="swatches">
+        <button class="swatch" data-label="Blanc" data-color="#FFFFFF" data-category="Murs"></button>
+        <button class="swatch" data-label="Beige WES" data-color="#CDB79C" data-category="Murs"></button>
+        <button class="swatch" data-label="Ocre Mojave" data-color="#E8AD99" data-category="Murs"></button>
+      </div>
+    </div>
+
+    <!-- Toit -->
+    <div class="category" data-category="Toit">
+      <h3>Tôle ondulée</h3>
+      <div class="swatches">
+        <button class="swatch" data-label="Bleu Ardoise" data-color="#2F4155" data-category="Toit"></button>
+        <button class="swatch" data-label="Gris Acier" data-color="#BCC0C0" data-category="Toit"></button>
+        <button class="swatch" data-label="Rouge Hibiscus" data-color="#C44133" data-category="Toit"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const mv = document.querySelector('#mv');
+    // mapping catégorie → noms de mesh dans la scène
+    const meshMap = {
+      Bardage: ['poutrine01', 'poutrine02'],
+      Menuiserie: ['portes internes', 'cadre porte fenetre', 'Volets'],
+      Pergola: ['poutres', 'volet pergola'],
+      Murs: ['Murs'],
+      Toit: ['toit1']
+    };
+
+    mv.addEventListener('load', e => {
+      const model = e.detail.model;
+
+      document.querySelectorAll('.swatch').forEach(btn => {
+        btn.addEventListener('click', () => {
+          // styling actif
+          const cat = btn.dataset.category;
+          document
+            .querySelectorAll(`.swatch[data-category="${cat}"]`)
+            .forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+
+          // application de la couleur sur tous les meshes de la catégorie
+          const color = btn.dataset.color;
+          meshMap[cat].forEach(name => {
+            const mesh = model.getObjectByName(name);
+            if (mesh && mesh.material) {
+              mesh.material.color.set(color);
+            }
+          });
+        });
+      });
+
+      // facultatif : pré-sélectionner le premier swatch de chaque catégorie
+      document.querySelectorAll('.category').forEach(catDiv => {
+        const first = catDiv.querySelector('.swatch');
+        if (first) first.click();
+      });
+    });
+  });
+</script>
+
 </body>
 </html>
-
