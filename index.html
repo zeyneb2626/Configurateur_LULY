@@ -4,21 +4,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Configurateur TRADIHOME</title>
+
+  <!-- 1️⃣ On charge le web component AVANT toute balise <model-viewer> -->
   <script type="module"
-    src="https://unpkg.com/@google/model-viewer@1.10.1/dist/model-viewer.min.js">
+    src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
+
   <style>
-    html, body { margin:0; padding:0; height:100%; overflow:hidden; }
-    model-viewer { width:100%; height:100%; background:#f0f0f0; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #f0f0f0;
+    }
+    /* 2️⃣ On donne un contexte interactif */
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      background-color: #f0f0f0;
+      /* assure que le viewer capte bien les clics/souris */
+      pointer-events: all;
+    }
   </style>
 </head>
+
 <body>
+  <!-- 3️⃣ Le composant, bien fermé, avec camera-controls -->
   <model-viewer
-    src="TRADIHOME1.glb"           <!-- ← ici -->
+    src="TRADIHOME1.glb"
     alt="Maison TRADIHOME"
-    camera-controls auto-rotate
+    camera-controls
+    auto-rotate
     environment-image="https://modelviewer.dev/shared-assets/environments/venice_sunset_1k.hdr"
-    shadow-intensity="1" exposure="1.3"
+    shadow-intensity="1"
+    exposure="1.3"
     loading="eager">
   </model-viewer>
 </body>
