@@ -4,59 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Configurateur TRADIHOME</title>
-  <!-- model-viewer web component -->
-  <script type="module" 
-    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+
+  <!-- Model-Viewer : on fixe la version pour éviter les breaking changes -->
+  <script type="module"
+          src="https://unpkg.com/@google/model-viewer@1.10.1/dist/model-viewer.min.js">
   </script>
+
   <style>
     html, body {
-      margin: 0; padding: 0; height: 100%;
-      background: #eee; overflow: hidden;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #f0f0f0;
+      overflow: hidden;
     }
     model-viewer {
-      width: 100%; height: 100%;
+      width: 100%;
+      height: 100%;
+      /* optional : un fond clair pour voir vos textures si transparences */
       background-color: #f0f0f0;
     }
   </style>
 </head>
 <body>
 
+  <!-- Notez : chemin RELATIF vers votre fichier local TRADIHOME.glb -->
   <model-viewer
-    id="mv"
-    src="https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/TRADIHOME1.glb"
-    alt="Maison TRADIHOME texturée"
+    src="TRADIHOME.glb"
+    alt="Maison TRADIHOME"
     camera-controls
     auto-rotate
+
+    <!-- Pour un éclairage réaliste PBR, CORRIGEZ cette URL : -->
     environment-image="https://modelviewer.dev/shared-assets/environments/venice_sunset_1k.hdr"
+
     shadow-intensity="1"
     exposure="1.3"
     loading="eager">
   </model-viewer>
-
-  <script type="module">
-    // On attend que model-viewer ait fini de charger son ThreeJS interne
-    const mv = document.getElementById('mv');
-    mv.addEventListener('load', (e) => {
-      const model = e.detail.model;
-
-      /**
-       * Teinte un mesh existant dans la scène.
-       * @param {string} meshName - Nom exact du mesh (voir Blender Outliner).
-       * @param {string} hexColor - Couleur CSS (ex: '#ff6600').
-       */
-      window.setMeshColor = (meshName, hexColor) => {
-        const mesh = model.getObjectByName(meshName);
-        if (!mesh || !mesh.material) {
-          console.warn(`Mesh "${meshName}" introuvable !`);
-          return;
-        }
-        mesh.material.color.set(hexColor);
-      };
-
-      // Exemple : colorer les murs en bleu clair
-      // setMeshColor('Murs', '#87ceeb');
-    });
-  </script>
 
 </body>
 </html>
