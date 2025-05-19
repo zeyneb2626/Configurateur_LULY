@@ -3,26 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Configurateur TRADIHOME</title>
-
+  <title>Configurateur Tradi'home P4</title>
   <script type="module"
           src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
-
   <style>
     * { box-sizing:border-box; margin:0; padding:0 }
     html, body { height:100%; font-family:sans-serif }
     #container { display:flex; height:100vh }
-
     model-viewer {
       flex:3;
       height:100%;
       background:#fff;
-      /* ces directives CSS n'ont pas d'effet ici :
-         antialias, min-pixel-ratio, max-pixel-ratio, ...
-         elles doivent impérativement être passées en attribut HTML */
     }
-
     #controls {
       flex:1;
       background:#f6f6f6;
@@ -48,6 +41,16 @@
       transform:translateX(-50%); font-size:.6rem; color:#333;
       white-space:nowrap;
     }
+    #price-box {
+      margin-top:2rem;
+      padding:1rem;
+      background:#fff;
+      border:1px solid #ddd;
+      border-radius:4px;
+      text-align:right;
+      font-size:1.2rem;
+      font-weight:bold;
+    }
   </style>
 </head>
 <body>
@@ -56,7 +59,7 @@
     <model-viewer
       id="mv"
       src="TRADIHOME4.glb"
-      alt="Maison TRADIHOME"
+      alt="Maison Tradi'home P4"
       environment-image="neutral"
       loading="eager"
       camera-controls
@@ -64,54 +67,71 @@
       shadow-intensity="1"
       exposure="1.2"
       min-pixel-ratio="1"
-      max-pixel-ratio="2"
-    ></model-viewer>
+      max-pixel-ratio="2">
+    </model-viewer>
 
     <!-- PANNEAU DE CONTROLES -->
     <div id="controls">
       <h2>Personnalisez votre maison</h2>
 
+      <!-- 1. Bardage -->
       <div class="category" data-cat="Bardage">
         <h3>Bardage extérieur</h3>
         <div class="swatches">
-          <button class="swatch" data-cat="Bardage" data-label="Chêne Clair" data-color="#C49A6C"></button>
-          <button class="swatch" data-cat="Bardage" data-label="Chêne Foncé" data-color="#8C5E2B"></button>
-          <button class="swatch" data-cat="Bardage" data-label="Gris Orage"  data-color="#334257"></button>
+          <button class="swatch" data-cat="Bardage" data-label="Chêne clair" data-color="#C19A6B" data-cost="520"></button>
+          <button class="swatch" data-cat="Bardage" data-label="Chêne foncé" data-color="#8B5A2B" data-cost="790"></button>
+          <button class="swatch" data-cat="Bardage" data-label="Gris oragé" data-color="#3D4C5C" data-cost="895"></button>
         </div>
       </div>
 
+      <!-- 2. Menuiserie ALU -->
       <div class="category" data-cat="Menuiserie">
-        <h3>Menuiserie alu</h3>
+        <h3>Menuiserie ALU</h3>
         <div class="swatches">
-          <button class="swatch" data-cat="Menuiserie" data-label="Blanc"      data-color="#FFFFFF"></button>
-          <button class="swatch" data-cat="Menuiserie" data-label="Anthracite" data-color="#333333"></button>
+          <button class="swatch" data-cat="Menuiserie" data-label="Blanc"      data-color="#FFFFFF" data-cost="0"></button>
+          <button class="swatch" data-cat="Menuiserie" data-label="Anthracite" data-color="#293133" data-cost="1480"></button>
         </div>
       </div>
 
+      <!-- 3. Gouttière & descente -->
+      <div class="category" data-cat="Gouttiere">
+        <h3>Gouttière et descente</h3>
+        <div class="swatches">
+          <button class="swatch" data-cat="Gouttiere" data-label="Blanc" data-color="#FFFFFF" data-cost="0"></button>
+        </div>
+      </div>
+
+      <!-- 4. Pergola bioclimatique -->
       <div class="category" data-cat="Pergola">
         <h3>Pergola bioclimatique</h3>
         <div class="swatches">
-          <button class="swatch" data-cat="Pergola" data-label="Blanc"      data-color="#FFFFFF"></button>
-          <button class="swatch" data-cat="Pergola" data-label="Anthracite" data-color="#333333"></button>
+          <button class="swatch" data-cat="Pergola" data-label="Blanc"      data-color="#FFFFFF" data-cost="3500"></button>
+          <button class="swatch" data-cat="Pergola" data-label="Anthracite" data-color="#293133" data-cost="3500"></button>
         </div>
       </div>
 
+      <!-- 5. Peinture murs -->
       <div class="category" data-cat="Murs">
-        <h3>Peinture murs extérieurs</h3>
+        <h3>Peinture (mur extérieur)</h3>
         <div class="swatches">
-          <button class="swatch" data-cat="Murs" data-label="Blanc"       data-color="#FFFFFF"></button>
-          <button class="swatch" data-cat="Murs" data-label="Beige WES"   data-color="#CDB79C"></button>
-          <button class="swatch" data-cat="Murs" data-label="Ocre Mojave" data-color="#E8AD99"></button>
+          <button class="swatch" data-cat="Murs" data-label="Blanc"            data-color="#FFFFFF" data-cost="0"></button>
+          <button class="swatch" data-cat="Murs" data-label="Beige Ares"        data-color="#CCC0AF" data-cost="399"></button>
+          <button class="swatch" data-cat="Murs" data-label="Ocre Mojave"      data-color="#E6C7B1" data-cost="1499"></button>
         </div>
       </div>
 
+      <!-- 6. Tôle ondulée -->
       <div class="category" data-cat="Toit">
         <h3>Tôle ondulée</h3>
         <div class="swatches">
-          <button class="swatch" data-cat="Toit" data-label="Bleu Ardoise"   data-color="#2F4155"></button>
-          <button class="swatch" data-cat="Toit" data-label="Gris Acier"     data-color="#BCC0C0"></button>
-          <button class="swatch" data-cat="Toit" data-label="Rouge Hibiscus" data-color="#C44133"></button>
+          <button class="swatch" data-cat="Toit" data-label="Bleu Ardoise"   data-color="#133654" data-cost="0"></button>
+          <button class="swatch" data-cat="Toit" data-label="Gris Acier"     data-color="#777777" data-cost="0"></button>
+          <button class="swatch" data-cat="Toit" data-label="Rouge Hibiscus" data-color="#CC3333" data-cost="1500"></button>
         </div>
+      </div>
+
+      <div id="price-box">
+        Prix total : <span id="price">170 000 €</span>
       </div>
     </div>
   </div>
@@ -119,11 +139,14 @@
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       const mv = document.querySelector('#mv');
+      const basePrice = 170000;
+      const priceEl = document.querySelector('#price');
 
-      // Fragments EXACTS des noms de matériaux
+      // Fragments EXACTS des noms de matériaux dans le GLB
       const targets = {
         Bardage:    ['poutrine01','poutrine02'],
         Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
+        Gouttiere:  ['goutieres'],
         Pergola:    ['poutres','volet pergola'],
         Murs:       ['murs'],
         Toit:       ['toit1','toit contour']
@@ -135,13 +158,15 @@
           console.error('❌ mv.model est undefined');
           return;
         }
-
         const materials = model.materials;
-        // Conversion HEX → [0..1] RGBA
+
         function hex2rgba(h) {
-          const v = parseInt(h.slice(1),16);
+          const v = parseInt(h.slice(1), 16);
           return [(v>>16&255)/255, (v>>8&255)/255, (v&255)/255, 1];
         }
+
+        // Stocke les choix pour le calcul de prix
+        const selection = {};
 
         document.querySelectorAll('.category').forEach(catDiv => {
           const cat   = catDiv.dataset.cat;
@@ -153,19 +178,25 @@
               catDiv.querySelectorAll('.swatch').forEach(b=>b.classList.remove('selected'));
               btn.classList.add('selected');
 
+              // Met à jour le prix
+              selection[cat] = Number(btn.dataset.cost);
+              const total = Object.values(selection).reduce((sum, v)=> sum+v, basePrice);
+              priceEl.textContent = total.toLocaleString('fr-FR') + ' €';
+
+              // Convertit la couleur
               const rgba = hex2rgba(btn.dataset.color);
 
-              // Appliquer à tous les mats matching
+              // Applique à tous les matériaux matching
               materials.forEach(mat => {
                 const lname = mat.name.toLowerCase();
-                if (frags.some(f=>lname.includes(f))) {
+                if (frags.some(f => lname.includes(f))) {
                   mat.pbrMetallicRoughness.setBaseColorFactor(rgba);
                 }
               });
             });
           });
 
-          // choix par défaut
+          // Sélection par défaut
           const first = catDiv.querySelector('.swatch');
           if (first) first.click();
         });
@@ -174,4 +205,5 @@
   </script>
 </body>
 </html>
+
 
