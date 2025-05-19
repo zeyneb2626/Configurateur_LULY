@@ -1,155 +1,174 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Configurateur TRADIHOME</title>
+
+  <!-- Model-Viewer -->
   <script type="module"
-    src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
+          src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
+
   <style>
     * { box-sizing:border-box; margin:0; padding:0 }
     html, body { width:100%; height:100%; font-family:sans-serif }
-    #container { display:grid; grid-template-columns:3fr 1fr; height:100vh }
-    model-viewer { width:100%; height:100%; background:#fff; display:block }
-    #controls { padding:1rem; overflow:auto; background:#f6f6f6; border-left:1px solid #ddd }
+    #container { display:grid; grid-template-columns:2fr 1fr; height:100vh }
+    model-viewer {
+      width:100%; height:100%;
+      background:#fff;
+      antialias
+      min-pixel-ratio="1"
+      max-pixel-ratio="2"
+    }
+    #controls {
+      background:#f6f6f6; padding:1rem;
+      overflow-y:auto; border-left:1px solid #ddd
+    }
+    h2 { margin-bottom:1rem; }
     .category { margin-bottom:1.5rem }
     .category h3 { margin-bottom:.5rem }
-    .swatches { display:flex; flex-wrap:wrap; gap:.5rem }
+    .swatches { display:flex; gap:.5rem; flex-wrap:wrap }
     .swatch {
-      width:40px; height:40px; border:2px solid #ccc;
-      border-radius:4px; cursor:pointer; position:relative;
+      width:40px; height:40px;
+      border:2px solid #ccc; border-radius:4px;
+      cursor:pointer; position:relative;
+      transition:border .2s
     }
+    .swatch:hover { border-color:#888 }
     .swatch.selected { outline:3px solid #007aff }
     .swatch::after {
       content: attr(data-label);
       position:absolute; bottom:-1.4rem; left:50%;
-      transform:translateX(-50%); font-size:.65rem; color:#333;
-      white-space:nowrap;
+      transform:translateX(-50%);
+      font-size:.6rem; color:#333; white-space:nowrap
     }
   </style>
 </head>
+
 <body>
+  <div id="container">
+    <!-- 3D VIEWER -->
+    <model-viewer
+      id="mv"
+      src="TRADIHOME4.glb"
+      alt="Maison TRADIHOME"
+      camera-controls
+      auto-rotate
+      shadow-intensity="1"
+      exposure="1.2"
+      environment-image="neutral"
+      loading="eager"
+    ></model-viewer>
 
-<div id="container">
-  <!-- 3D viewer -->
-  <model-viewer
-    id="mv"
-    src="TRADIHOME4.glb"
-    alt="Maison TRADIHOME"
-    camera-controls auto-rotate
-    shadow-intensity="1" exposure="1.2"
-    loading="eager">
-  </model-viewer>
+    <!-- CONTROLS -->
+    <div id="controls">
+      <h2>Personnalisez votre maison</h2>
 
-  <!-- Sidebar controls -->
-  <div id="controls">
-    <h2>Personnalisez votre maison</h2>
+      <div class="category" data-category="Bardage">
+        <h3>Bardage extérieur</h3>
+        <div class="swatches">
+          <button class="swatch" data-label="Chêne Clair" data-color="#C49A6C"></button>
+          <button class="swatch" data-label="Chêne Foncé" data-color="#8C5E2B"></button>
+          <button class="swatch" data-label="Gris Orage"  data-color="#334257"></button>
+        </div>
+      </div>
 
-    <div class="category" data-cat="Bardage">
-      <h3>Bardage extérieur</h3>
-      <div class="swatches">
-        <button class="swatch" data-label="Chêne clair"  data-color="#C49A6C"></button>
-        <button class="swatch" data-label="Chêne foncé"  data-color="#8C5E2B"></button>
-        <button class="swatch" data-label="Gris orage"   data-color="#334257"></button>
+      <div class="category" data-category="Menuiserie">
+        <h3>Menuiserie alu</h3>
+        <div class="swatches">
+          <button class="swatch" data-label="Blanc"      data-color="#FFFFFF"></button>
+          <button class="swatch" data-label="Anthracite" data-color="#333333"></button>
+        </div>
+      </div>
+
+      <div class="category" data-category="Pergola">
+        <h3>Pergola bioclimatique</h3>
+        <div class="swatches">
+          <button class="swatch" data-label="Blanc"      data-color="#FFFFFF"></button>
+          <button class="swatch" data-label="Anthracite" data-color="#333333"></button>
+        </div>
+      </div>
+
+      <div class="category" data-category="Murs">
+        <h3>Peinture murs extérieurs</h3>
+        <div class="swatches">
+          <button class="swatch" data-label="Blanc"       data-color="#FFFFFF"></button>
+          <button class="swatch" data-label="Beige WES"   data-color="#CDB79C"></button>
+          <button class="swatch" data-label="Ocre Mojave" data-color="#E8AD99"></button>
+        </div>
+      </div>
+
+      <div class="category" data-category="Toit">
+        <h3>Tôle ondulée</h3>
+        <div class="swatches">
+          <button class="swatch" data-label="Bleu Ardoise"   data-color="#2F4155"></button>
+          <button class="swatch" data-label="Gris Acier"     data-color="#BCC0C0"></button>
+          <button class="swatch" data-label="Rouge Hibiscus" data-color="#C44133"></button>
+        </div>
       </div>
     </div>
-
-    <div class="category" data-cat="Menuiserie">
-      <h3>Menuiserie alu</h3>
-      <div class="swatches">
-        <button class="swatch" data-label="Blanc"      data-color="#FFFFFF"></button>
-        <button class="swatch" data-label="Anthracite" data-color="#333333"></button>
-      </div>
-    </div>
-
-    <div class="category" data-cat="Pergola">
-      <h3>Pergola bioclimatique</h3>
-      <div class="swatches">
-        <button class="swatch" data-label="Blanc"      data-color="#FFFFFF"></button>
-        <button class="swatch" data-label="Anthracite" data-color="#333333"></button>
-      </div>
-    </div>
-
-    <div class="category" data-cat="Murs">
-      <h3>Peinture murs extérieurs</h3>
-      <div class="swatches">
-        <button class="swatch" data-label="Blanc"       data-color="#FFFFFF"></button>
-        <button class="swatch" data-label="Beige WES"   data-color="#CDB79C"></button>
-        <button class="swatch" data-label="Ocre Mojave" data-color="#E8AD99"></button>
-      </div>
-    </div>
-
-    <div class="category" data-cat="Toit">
-      <h3>Tôle ondulée</h3>
-      <div class="swatches">
-        <button class="swatch" data-label="Bleu ardoise"   data-color="#2F4155"></button>
-        <button class="swatch" data-label="Gris acier"     data-color="#BCC0C0"></button>
-        <button class="swatch" data-label="Rouge hibiscus" data-color="#C44133"></button>
-      </div>
-    </div>
-
   </div>
-</div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const mv = document.getElementById('mv');
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const mv = document.getElementById('mv');
 
-    // → Après avoir chargé, on liste tous les matériaux (copier/coller ces noms)
-    mv.addEventListener('load', ({ detail })=>{
-      const mats = detail.model.materials;
-      console.log('--- Liste des matériaux du GLB ---');
-      mats.forEach(m=> console.log(m.name));
-      console.log('----------------------------------');
-
-      // → Remplacez ces fragments par vos vrais noms EXACTS récupérés ci-dessous
-      const mapping = {
+      // FRAGMENTS EXACTS TEL QUE VUS EN CONSOLE
+      const substrMap = {
         Bardage:    ['poutrine01','poutrine02'],
-        Menuiserie: ['porte','cadre','volets'],
-        Pergola:    ['poutres','voletpergola'],
-        Murs:       ['murs'],
+        Menuiserie: ['portes internes','cadre porte fenetre','volets'],
+        Pergola:    ['poutres','volet pergola'],
+        Murs:       ['murs'],         // prend 'Murs' et 'murs interne'
         Toit:       ['toit1']
       };
 
-      // convertit "#rrggbb" → [r,g,b,a]
-      function hexToRGBA(hex){
-        return [
-          parseInt(hex.substr(1,2),16)/255,
-          parseInt(hex.substr(3,2),16)/255,
-          parseInt(hex.substr(5,2),16)/255,
-          1
-        ];
-      }
+      mv.addEventListener('load', () => {
+        // On récupère la scène trois.js
+        const scene = mv.model?.scene;
+        if (!scene) {
+          console.error('❌ mv.model.scene est undefined');
+          return;
+        }
 
-      // lie les boutons
-      document.querySelectorAll('.category').forEach(catDiv=>{
-        const cat = catDiv.dataset.cat;
-        catDiv.querySelectorAll('.swatch').forEach(btn=>{
-          btn.addEventListener('click', ()=>{
-            // UI
-            catDiv.querySelectorAll('.swatch')
-              .forEach(b=>b.classList.remove('selected'));
-            btn.classList.add('selected');
-            // applique couleur
-            const rgba = hexToRGBA(btn.dataset.color);
-            mats.forEach(mat=>{
-              const name = mat.name.toLowerCase();
-              if(mapping[cat].some(key => name.includes(key.toLowerCase()))){
-                mat.pbrMetallicRoughness.setBaseColorFactor(rgba);
-              }
+        // DEBUG : lister les meshes
+        console.log('*** Liste des Mesh.names dans votre GLB :');
+        scene.traverse(node => {
+          if (node.isMesh) console.log(' •', node.name);
+        });
+
+        // BIND DES BOUTONS
+        document.querySelectorAll('.category').forEach(catDiv => {
+          const cat = catDiv.dataset.category;
+          const fragments = substrMap[cat];
+
+          catDiv.querySelectorAll('.swatch').forEach(btn => {
+            btn.addEventListener('click', () => {
+              // UI
+              catDiv.querySelectorAll('.swatch').forEach(b=>b.classList.remove('selected'));
+              btn.classList.add('selected');
+
+              // couleur choisie
+              const color = btn.dataset.color;
+
+              // on parcourt TOUS les mesh, on applique si name contient un fragment
+              scene.traverse(node => {
+                if (!node.isMesh) return;
+                const nm = node.name.toLowerCase();
+                if (fragments.some(sub => nm.includes(sub))) {
+                  node.material.color.set(color);
+                  node.material.needsUpdate = true;
+                }
+              });
             });
           });
+
+          // sélection par défaut du premier bouton
+          const first = catDiv.querySelector('.swatch');
+          if (first) first.click();
         });
-        // auto-select premier
-        const first = catDiv.querySelector('.swatch');
-        if(first) first.click();
       });
     });
-  });
-</script>
-
+  </script>
 </body>
 </html>
-
-
