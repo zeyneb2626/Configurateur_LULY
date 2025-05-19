@@ -12,16 +12,12 @@
     html, body { height:100%; font-family:sans-serif }
     #container { display:flex; height:100vh }
 
-    /* ======== VIEWER ======== */
     model-viewer {
       flex:3;
       width:100%; height:100%;
       background:#fff;
-      /* boost textures */
-      filter: contrast(1.3) saturate(1.2);
     }
 
-    /* ======== CONTROLS ======== */
     #controls {
       flex:1;
       background:#f6f6f6;
@@ -67,13 +63,12 @@
       id="mv"
       src="TRADIHOME4.glb"
       alt="Maison Tradi'home P4"
-      environment-image="studio_small"
+      environment-image="neutral"
       loading="eager"
       camera-controls
       auto-rotate
       shadow-intensity="1"
-      shadow-softness="1.5"
-      exposure="0.6"
+      exposure="1.5"
       min-pixel-ratio="1"
       max-pixel-ratio="3">
     </model-viewer>
@@ -182,14 +177,14 @@
                 .forEach(b=>b.classList.remove('selected'));
               btn.classList.add('selected');
 
-              // Mise à jour du prix
+              // Prix
               selection[cat] = Number(btn.dataset.cost);
               const total = Object.values(selection)
                                    .reduce((s,v)=>s+v, basePrice);
               priceEl.textContent = new Intl.NumberFormat('fr-FR')
                                          .format(total) + ' €';
 
-              // Application couleur
+              // Couleur
               const rgba = hex2rgba(btn.dataset.color);
               materials.forEach(mat => {
                 const lname = mat.name.toLowerCase();
@@ -200,7 +195,7 @@
             });
           });
 
-          // clic par défaut
+          // Par défaut
           const first = catDiv.querySelector('.swatch');
           if (first) first.click();
         });
