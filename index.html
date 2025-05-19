@@ -4,32 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Configurateur TRADIHOME</title>
-  <!-- Charger le web component model-viewer -->
+
+  <!-- model-viewer web component -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
   <style>
-    body {
-      margin: 0;
-      padding: 0;
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      background-color: #ddd;
       overflow: hidden;
     }
-    /* Plein écran pour le viewer */
     model-viewer {
-      width: 100vw;
-      height: 100vh;
-      background-color: #f0f0f0;
+      width: 100%; height: 100%;
+      /* Si vous voulez un fond uni, changez ici */
     }
   </style>
 </head>
 <body>
-  <!-- Remplacez l’URL par le chemin où votre TRADIHOME.glb est servi -->
+
   <model-viewer
     src="https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/TRADIHOME.glb"
-    alt="Configurateur 3D de la maison TRADIHOME"
-    auto-rotate
+    alt="Maison TRADIHOME 3D"
+    
+    /* contrôles utilisateur */
     camera-controls
-    ar
-    ar-modes="webxr scene-viewer quick-look"
+    auto-rotate
+
+    /* éclairage HDR pour PBR + ombres */
+    environment-image="https://modelviewer.dev/shared-assets/environments/venice_sunset_1k.hdr"
+    shadow-intensity="1"
+    shadow-softness="0.5"
+
+    /* ajustement de l'exposition (0.5 à 2) */
+    exposure="1.2"
+
+    /* chargement rapide */
     loading="eager">
   </model-viewer>
+
 </body>
 </html>
+
