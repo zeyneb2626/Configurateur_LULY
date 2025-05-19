@@ -9,72 +9,32 @@
   </script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body, html {
-      height: 100%; width: 100%;
-      font-family: sans-serif;
-    }
-    #container {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      height: 100%;
-    }
-    #viewer-container {
-      background: #fafafa;
-    }
-    model-viewer {
-      width: 100%;
-      height: 100%;
-      background: #ffffff;
-      pointer-events: all;
-    }
+    body, html { height:100%; width:100%; font-family:sans-serif; }
+    #container { display:grid; grid-template-columns:2fr 1fr; height:100%; }
+    #viewer-container { background:#fafafa; }
+    model-viewer { width:100%; height:100%; background:#fff; pointer-events:all; }
     #controls {
-      overflow-y: auto;
-      padding: 1rem;
-      background: #f6f6f6;
-      border-left: 1px solid #ddd;
+      overflow-y:auto; padding:1rem; background:#f6f6f6; border-left:1px solid #ddd;
     }
-    #controls h2 {
-      margin-bottom: 1rem;
-      font-size: 1.2rem;
-    }
-    .category {
-      margin-bottom: 1.5rem;
-    }
-    .category h3 {
-      font-size: 1rem;
-      margin-bottom: .5rem;
-    }
-    .swatches {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .5rem;
-    }
+    #controls h2 { margin-bottom:1rem; font-size:1.2rem; }
+    .category { margin-bottom:1.5rem; }
+    .category h3 { margin-bottom:.5rem; font-size:1rem; }
+    .swatches { display:flex; flex-wrap:wrap; gap:.5rem; }
     .swatch {
-      width: 40px; height: 40px;
-      border: 2px solid #ccc;
-      border-radius: 4px;
-      cursor: pointer;
-      position: relative;
+      width:40px; height:40px; border:2px solid #ccc; border-radius:4px;
+      cursor:pointer; position:relative;
     }
-    .swatch.selected {
-      outline: 3px solid #007aff;
-    }
+    .swatch.selected { outline:3px solid #007aff; }
     .swatch::after {
       content: attr(data-label);
-      position: absolute;
-      bottom: -1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      white-space: nowrap;
-      font-size: 0.6rem;
-      color: #333;
+      position:absolute; bottom:-1.5rem; left:50%;
+      transform:translateX(-50%); font-size:.6rem; color:#333; white-space:nowrap;
     }
   </style>
 </head>
 <body>
 
 <div id="container">
-  <!-- 3D Viewer -->
   <div id="viewer-container">
     <model-viewer
       id="mv"
@@ -88,11 +48,9 @@
     </model-viewer>
   </div>
 
-  <!-- Panneau de configuration -->
   <div id="controls">
     <h2>Personnalisez votre maison</h2>
 
-    <!-- Bardage -->
     <div class="category" data-category="Bardage">
       <h3>Bardage extérieur</h3>
       <div class="swatches">
@@ -102,7 +60,6 @@
       </div>
     </div>
 
-    <!-- Menuiserie -->
     <div class="category" data-category="Menuiserie">
       <h3>Menuiserie alu</h3>
       <div class="swatches">
@@ -111,7 +68,6 @@
       </div>
     </div>
 
-    <!-- Pergola -->
     <div class="category" data-category="Pergola">
       <h3>Pergola bioclimatique</h3>
       <div class="swatches">
@@ -120,7 +76,6 @@
       </div>
     </div>
 
-    <!-- Murs -->
     <div class="category" data-category="Murs">
       <h3>Peinture (murs extérieurs)</h3>
       <div class="swatches">
@@ -130,7 +85,6 @@
       </div>
     </div>
 
-    <!-- Toit -->
     <div class="category" data-category="Toit">
       <h3>Tôle ondulée</h3>
       <div class="swatches">
@@ -144,30 +98,37 @@
 
 <script>
   window.addEventListener('DOMContentLoaded', () => {
-    const mv = document.querySelector('#mv');
-    // mapping catégorie → noms de mesh dans la scène
-    const meshMap = {
-      Bardage: ['poutrine01', 'poutrine02'],
-      Menuiserie: ['portes internes', 'cadre porte fenetre', 'Volets'],
-      Pergola: ['poutres', 'volet pergola'],
-      Murs: ['Murs'],
-      Toit: ['toit1']
-    };
+    const mv = document.getElementById('mv');
 
     mv.addEventListener('load', e => {
       const model = e.detail.model;
 
+      // → DEBUG : lister tous les noms de meshes
+      console.log('--- Liste des meshes dans le GLB ---');
+      model.traverse(node => {
+        if (node.isMesh) console.log(node.name);
+      });
+
+      // mapping à ajuster selon les noms EXACTS issus du debug
+      const meshMap = {
+        Bardage:   ['Geometry273_poutrine01_0', 'Geometry274_poutrine02_0'],
+        Menuiserie:['Geometry300_portes_internes_0','Geometry305_cadre_porte_fenetre_0','Geometry310_Volets_0'],
+        Pergola:   ['Geometry320_poutres_0',           'Geometry330_volet_pergola_0'],
+        Murs:      ['Geometry280_Murs_0'],
+        Toit:      ['Geometry290_toit1_0']
+      };
+
       document.querySelectorAll('.swatch').forEach(btn => {
         btn.addEventListener('click', () => {
-          // styling actif
-          const cat = btn.dataset.category;
-          document
-            .querySelectorAll(`.swatch[data-category="${cat}"]`)
-            .forEach(b => b.classList.remove('selected'));
+          const cat   = btn.dataset.category;
+          const color = btn.dataset.color;
+
+          // UI select
+          document.querySelectorAll(`.swatch[data-category="${cat}"]`)
+                  .forEach(b => b.classList.remove('selected'));
           btn.classList.add('selected');
 
-          // application de la couleur sur tous les meshes de la catégorie
-          const color = btn.dataset.color;
+          // appliquer la couleur sur chaque mesh
           meshMap[cat].forEach(name => {
             const mesh = model.getObjectByName(name);
             if (mesh && mesh.material) {
@@ -177,7 +138,7 @@
         });
       });
 
-      // facultatif : pré-sélectionner le premier swatch de chaque catégorie
+      // pré-sélection du 1er swatch de chaque catégorie
       document.querySelectorAll('.category').forEach(catDiv => {
         const first = catDiv.querySelector('.swatch');
         if (first) first.click();
