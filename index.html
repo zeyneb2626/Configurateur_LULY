@@ -1,181 +1,344 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Configurateur TRADIHOME</title>
-
-  <!-- Model-Viewer Web Component -->
-  <script type="module"
-          src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
-  </script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Configurateur LULY</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js"></script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { width:100%; height:100%; font-family:sans-serif; }
-    #container {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      height: 100%;
+    body { 
+      margin: 0; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: #f5f5f5; 
+      color: #333; 
     }
-    #viewer-container {
-      position: relative; z-index: 1;
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    #configurator { 
+      display: flex; 
+      flex-direction: column;
+      max-width: 1200px; 
+      margin: auto; 
+      padding: 1rem; 
+    }
+    @media (min-width: 768px) {
+      #configurator {
+        flex-direction: row;
+        gap: 2rem;
+        padding: 2rem;
+      }
+    }
+    .viewer { 
+      flex: 2; 
+      margin-bottom: 2rem;
+    }
+    model-viewer { 
+      width: 100%; 
+      height: 500px; 
+      background: #fff; 
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: block;
+    }
+    #features { 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 1rem; 
+    }
+    .group { 
+      background: #fff; 
+      border-radius: 8px; 
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .group h4 { 
+      margin: 0 0 1rem; 
+      padding-bottom: .5rem;
+      border-bottom: 1px solid #eee;
+      color: #2c3e50;
+    }
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .group button {
+      flex: 1 0 120px;
+      min-width: 120px;
+      margin: .25rem 0; 
+      padding: .75rem;
+      border: 2px solid #eee; 
+      border-radius: 6px; 
       background: #fafafa;
+      cursor: pointer; 
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all .2s ease;
     }
-    model-viewer {
-      width:100%; height:100%;
+    .group button:hover {
+      border-color: #ddd;
+      background: #f0f0f0;
+    }
+    .group button.selected { 
+      border-color: #3377ff;
+      background: #f0f7ff;
+    }
+    .color-preview {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      margin-bottom: .5rem;
+      border: 1px solid #ddd;
+    }
+    .price-tag {
+      margin-top: .5rem;
+      font-size: .8rem;
+      color: #666;
+    }
+    #price-container {
       background: #fff;
-      /* Qualité HD et antialiasing */
-      antialias
-      min-pixel-ratio="1"
-      max-pixel-ratio="2"
-      pointer-events: all;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
-    #controls {
-      position: relative; z-index: 2;
-      background: #f6f6f6; padding:1rem;
-      border-left:1px solid #ddd; overflow-y:auto;
+    #price { 
+      font-size: 1.5rem; 
+      font-weight: bold;
+      color: #2c3e50;
+      text-align: right;
     }
-    #controls h2 { margin-bottom:1rem; font-size:1.2rem; }
-    .category { margin-bottom:1.5rem; }
-    .category h3 { margin-bottom:.5rem; }
-    .swatches { display:flex; flex-wrap:wrap; gap:.5rem; }
-    .swatch {
-      width:40px; height:40px; border:2px solid #ccc;
-      border-radius:4px; cursor:pointer; position:relative;
-      background:transparent;
+    footer {
+      text-align: center;
+      padding: 2rem;
+      margin-top: 2rem;
+      font-size: .9rem;
+      color: #666;
     }
-    .swatch.selected { outline:3px solid #007aff; }
-    .swatch::after {
-      content: attr(data-label);
-      position:absolute; bottom:-1.5rem; left:50%;
-      transform:translateX(-50%); font-size:.6rem; color:#333;
-      white-space:nowrap;
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 500px;
+      background: #f5f5f5;
+      border-radius: 8px;
     }
+    .spinner {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #3377ff;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 
 <body>
-  <div id="container">
-    <!-- Viewer -->
-    <div id="viewer-container">
+  <header>
+    <h1>Configurateur LULY</h1>
+  </header>
+
+  <div id="configurator">
+    <div class="viewer">
+      <div id="loading" class="loading">
+        <div class="spinner"></div>
+        <p style="margin-top:1rem; color:#666;">Chargement du modèle 3D…</p>
+      </div>
+
+      <!-- Votre model-viewer avec TRADIHOME4.glb -->
       <model-viewer
-        id="mv"
+        id="model"
         src="TRADIHOME4.glb"
-        alt="Maison TRADIHOME"
+        alt="Modèle 3D de maison LULY"
         camera-controls
         auto-rotate
         shadow-intensity="1"
-        exposure="1.2"
-        loading="eager">
+        environment-image="neutral"
+        exposure="0.8"
+        camera-orbit="-30deg 75deg 4m"
+        style="display:none;">
       </model-viewer>
     </div>
 
-    <!-- Contrôles -->
-    <div id="controls">
-      <h2>Personnalisez votre maison</h2>
-
+    <div id="features">
       <!-- Bardage -->
-      <div class="category" data-category="Bardage">
-        <h3>Bardage extérieur</h3>
-        <div class="swatches">
-          <button class="swatch" data-label="Chêne Clair" data-color="#C49A6C" data-category="Bardage"></button>
-          <button class="swatch" data-label="Chêne Foncé" data-color="#8C5E2B" data-category="Bardage"></button>
-          <button class="swatch" data-label="Gris Orage"  data-color="#334257" data-category="Bardage"></button>
+      <div class="group" data-cat="bardage">
+        <h4>Bardage extérieur</h4>
+        <div class="options">
+          <button data-color="#ffffff" data-cost="0">
+            <div class="color-preview" style="background:#fff"></div>Blanc
+            <span class="price-tag">inclus</span>
+          </button>
+          <button data-color="#8c6a4f" data-cost="799">
+            <div class="color-preview" style="background:#8c6a4f"></div>Chêne foncé
+            <span class="price-tag">+799 €</span>
+          </button>
+          <button data-color="#343a40" data-cost="899">
+            <div class="color-preview" style="background:#343a40"></div>Gris orage
+            <span class="price-tag">+899 €</span>
+          </button>
         </div>
       </div>
 
       <!-- Menuiserie -->
-      <div class="category" data-category="Menuiserie">
-        <h3>Menuiserie alu</h3>
-        <div class="swatches">
-          <button class="swatch" data-label="Blanc"      data-color="#FFFFFF" data-category="Menuiserie"></button>
-          <button class="swatch" data-label="Anthracite" data-color="#333333" data-category="Menuiserie"></button>
-        </div>
-      </div>
-
-      <!-- Pergola -->
-      <div class="category" data-category="Pergola">
-        <h3>Pergola bioclimatique</h3>
-        <div class="swatches">
-          <button class="swatch" data-label="Blanc"      data-color="#FFFFFF" data-category="Pergola"></button>
-          <button class="swatch" data-label="Anthracite" data-color="#333333" data-category="Pergola"></button>
+      <div class="group" data-cat="menuiserie">
+        <h4>Menuiserie alu</h4>
+        <div class="options">
+          <button data-color="#ffffff" data-cost="0">
+            <div class="color-preview" style="background:#fff"></div>Blanc
+            <span class="price-tag">inclus</span>
+          </button>
+          <button data-color="#2e2e2e" data-cost="2499">
+            <div class="color-preview" style="background:#2e2e2e"></div>Anthracite
+            <span class="price-tag">+2499 €</span>
+          </button>
         </div>
       </div>
 
       <!-- Murs -->
-      <div class="category" data-category="Murs">
-        <h3>Peinture (murs extérieurs)</h3>
-        <div class="swatches">
-          <button class="swatch" data-label="Blanc"       data-color="#FFFFFF" data-category="Murs"></button>
-          <button class="swatch" data-label="Beige WES"   data-color="#CDB79C" data-category="Murs"></button>
-          <button class="swatch" data-label="Ocre Mojave" data-color="#E8AD99" data-category="Murs"></button>
+      <div class="group" data-cat="murs">
+        <h4>Peinture murs</h4>
+        <div class="options">
+          <button data-color="#ffffff" data-cost="0">
+            <div class="color-preview" style="background:#fff"></div>Blanc
+            <span class="price-tag">inclus</span>
+          </button>
+          <button data-color="#d6c9b1" data-cost="999">
+            <div class="color-preview" style="background:#d6c9b1"></div>Beige Ares
+            <span class="price-tag">+999 €</span>
+          </button>
+          <button data-color="#e5b79c" data-cost="1499">
+            <div class="color-preview" style="background:#e5b79c"></div>Ocre Mojave
+            <span class="price-tag">+1499 €</span>
+          </button>
         </div>
       </div>
 
-      <!-- Toit -->
-      <div class="category" data-category="Toit">
-        <h3>Tôle ondulée</h3>
-        <div class="swatches">
-          <button class="swatch" data-label="Bleu Ardoise"   data-color="#2F4155" data-category="Toit"></button>
-          <button class="swatch" data-label="Gris Acier"     data-color="#BCC0C0" data-category="Toit"></button>
-          <button class="swatch" data-label="Rouge Hibiscus" data-color="#C44133" data-category="Toit"></button>
+      <!-- Pergola -->
+      <div class="group" data-cat="pergola">
+        <h4>Pergola bioclimatique</h4>
+        <div class="options">
+          <button data-color="#ffffff" data-cost="8500">
+            <div class="color-preview" style="background:#fff"></div>Blanc
+            <span class="price-tag">+8500 €</span>
+          </button>
+          <button data-color="#2e2e2e" data-cost="9500">
+            <div class="color-preview" style="background:#2e2e2e"></div>Anthracite
+            <span class="price-tag">+9500 €</span>
+          </button>
         </div>
+      </div>
+
+      <!-- Toiture -->
+      <div class="group" data-cat="toiture">
+        <h4>Toiture tôle</h4>
+        <div class="options">
+          <button data-color="#243241" data-cost="0">
+            <div class="color-preview" style="background:#243241"></div>Bleu ardoise
+            <span class="price-tag">inclus</span>
+          </button>
+          <button data-color="#b0b0b0" data-cost="0">
+            <div class="color-preview" style="background:#b0b0b0"></div>Gris acier
+            <span class="price-tag">inclus</span>
+          </button>
+          <button data-color="#c0392b" data-cost="1800">
+            <div class="color-preview" style="background:#c0392b"></div>Rouge hibiscus
+            <span class="price-tag">+1800 €</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="price-container">
+        <p id="price">Prix total : 170 000 €</p>
       </div>
     </div>
   </div>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const mv = document.querySelector('#mv');
+  <footer>
+    <p>© 2025 LULY – Configurateur de maisons • Tous droits réservés</p>
+  </footer>
 
-      // fragments de nom par catégorie
-      const substrMap = {
-        Bardage:    ['poutrine01','poutrine02'],
-        Menuiserie: ['portes','cadre','volets'],
-        Pergola:    ['poutres','volet pergola'],
-        Murs:       ['murs'],
-        Toit:       ['toit1']
-      };
+  <script type="module">
+    const basePrice = 170000;
+    const viewer   = document.getElementById('model');
+    const loading  = document.getElementById('loading');
+    const priceEl  = document.getElementById('price');
+    const selection = {};
+    // mapping par mot-clé (minuscule)
+    const materialMapping = {
+      bardage:    ['poutrine01','poutrine02'],
+      menuiserie: ['porte','cadre','volet','fenetre'],
+      murs:       ['mur'],
+      pergola:    ['pergola','poutres'],
+      toiture:    ['toit']
+    };
 
-      mv.addEventListener('load', () => {
-        // Three.js scene wrapper
-        const scene = mv.model.scene;
+    function hexToRGBA(hex) {
+      const v = parseInt(hex.slice(1),16);
+      return [(v>>16&255)/255,(v>>8&255)/255,(v&255)/255,1];
+    }
 
-        // debug : lister les noms
-        scene.traverse(node => {
-          if (node.isMesh) console.log('Mesh:', node.name);
-        });
+    function applyColor(materials, cat, rgba) {
+      let applied=false;
+      materials.forEach(mat => {
+        const name=mat.name.toLowerCase();
+        if (materialMapping[cat].some(k=>name.includes(k))) {
+          mat.pbrMetallicRoughness.setBaseColorFactor(rgba);
+          applied=true;
+        }
+      });
+      return applied;
+    }
 
-        // bind clicks
-        document.querySelectorAll('.swatch').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const cat = btn.dataset.category;
-            const color = btn.dataset.color;
+    viewer.addEventListener('load', ()=>{
+      // afficher le viewer, cacher le loader
+      loading.style.display='none';
+      viewer.style.display='block';
+
+      // liste debug
+      console.log('Matériaux:', viewer.model.materials.map(m=>m.name));
+
+      // attacher partout
+      document.querySelectorAll('.group').forEach(group=>{
+        const cat=group.dataset.cat;
+        const materials=viewer.model.materials;
+        group.querySelectorAll('button').forEach(btn=>{
+          btn.addEventListener('click',()=>{
             // UI
-            document.querySelectorAll(`.swatch[data-category="${cat}"]`)
-                    .forEach(b => b.classList.remove('selected'));
+            group.querySelectorAll('button')
+                 .forEach(b=>b.classList.remove('selected'));
             btn.classList.add('selected');
-            // apply color
-            scene.traverse(node => {
-              if (!node.isMesh) return;
-              const name = node.name.toLowerCase();
-              if (substrMap[cat].some(sub => name.includes(sub))) {
-                node.material.color.set(color);
-              }
-            });
+            // prix
+            selection[cat]=+btn.dataset.cost;
+            const total=Object.values(selection).reduce((a,b)=>a+b,basePrice);
+            priceEl.textContent=`Prix total : ${total.toLocaleString()} €`;
+            // couleur
+            const rgba=hexToRGBA(btn.dataset.color);
+            const ok=applyColor(materials,cat,rgba);
+            if(!ok) console.warn(`Aucun matériau recoloré pour ${cat}`);
           });
         });
-
-        // default select
-        document.querySelectorAll('.category').forEach(catDiv => {
-          const first = catDiv.querySelector('.swatch');
-          if (first) first.click();
-        });
+        // click par défaut
+        group.querySelector('button').click();
       });
+    });
+
+    viewer.addEventListener('error', e=>{
+      console.error('Erreur modèle :',e);
+      loading.innerHTML=`<p style="color:#e74c3c;font-weight:bold;">
+        ❌ Impossible de charger TRADIHOME4.glb</p>
+        <p>Vérifiez bien le nom et l’emplacement du fichier.</p>`;
     });
   </script>
 </body>
 </html>
-
 
