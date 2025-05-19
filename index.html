@@ -14,18 +14,13 @@
     html, body { height:100%; font-family:sans-serif }
     #container { display:flex; height:100vh }
 
-    /* +++ on passe flex:2 → flex:3 +++ */
     model-viewer {
       flex:3;
       height:100%;
       background:#fff;
-      antialias
-      min-pixel-ratio="1"
-      max-pixel-ratio="2"
-      shadow-intensity="1"
-      camera-controls
-      auto-rotate
-      exposure="1.2"
+      /* ces directives CSS n'ont pas d'effet ici :
+         antialias, min-pixel-ratio, max-pixel-ratio, ...
+         elles doivent impérativement être passées en attribut HTML */
     }
 
     #controls {
@@ -58,9 +53,19 @@
 <body>
   <div id="container">
     <!-- 3D VIEWER -->
-    <model-viewer id="mv" src="TRADIHOME4.glb" alt="Maison TRADIHOME"
-                  environment-image="neutral" loading="eager">
-    </model-viewer>
+    <model-viewer
+      id="mv"
+      src="TRADIHOME4.glb"
+      alt="Maison TRADIHOME"
+      environment-image="neutral"
+      loading="eager"
+      camera-controls
+      auto-rotate
+      shadow-intensity="1"
+      exposure="1.2"
+      min-pixel-ratio="1"
+      max-pixel-ratio="2"
+    ></model-viewer>
 
     <!-- PANNEAU DE CONTROLES -->
     <div id="controls">
@@ -69,9 +74,9 @@
       <div class="category" data-cat="Bardage">
         <h3>Bardage extérieur</h3>
         <div class="swatches">
-          <button class="swatch" data-cat="Bardage" data-label="Chêne Clair"   data-color="#C49A6C"></button>
-          <button class="swatch" data-cat="Bardage" data-label="Chêne Foncé"   data-color="#8C5E2B"></button>
-          <button class="swatch" data-cat="Bardage" data-label="Gris Orage"    data-color="#334257"></button>
+          <button class="swatch" data-cat="Bardage" data-label="Chêne Clair" data-color="#C49A6C"></button>
+          <button class="swatch" data-cat="Bardage" data-label="Chêne Foncé" data-color="#8C5E2B"></button>
+          <button class="swatch" data-cat="Bardage" data-label="Gris Orage"  data-color="#334257"></button>
         </div>
       </div>
 
@@ -114,38 +119,53 @@
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       const mv = document.querySelector('#mv');
+
+      // Fragments EXACTS des noms de matériaux
       const targets = {
         Bardage:    ['poutrine01','poutrine02'],
-        Menuiserie: ['portes internes','cadre porte fenetre','volets'],
+        Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
         Pergola:    ['poutres','volet pergola'],
         Murs:       ['murs'],
-        Toit:       ['toit1']
+        Toit:       ['toit1','toit contour']
       };
 
       mv.addEventListener('load', async () => {
         const model = mv.model;
-        if (!model) return console.error('mv.model est undefined');
+        if (!model) {
+          console.error('❌ mv.model est undefined');
+          return;
+        }
 
         const materials = model.materials;
-        function hex2rgba(h){ const v=parseInt(h.slice(1),16);return[(v>>16&255)/255,(v>>8&255)/255,(v&255)/255,1]; }
+        // Conversion HEX → [0..1] RGBA
+        function hex2rgba(h) {
+          const v = parseInt(h.slice(1),16);
+          return [(v>>16&255)/255, (v>>8&255)/255, (v&255)/255, 1];
+        }
 
         document.querySelectorAll('.category').forEach(catDiv => {
-          const cat  = catDiv.dataset.cat;
-          const frags= targets[cat]||[];
+          const cat   = catDiv.dataset.cat;
+          const frags = targets[cat] || [];
 
-          catDiv.querySelectorAll('.swatch').forEach(btn=>{
-            btn.addEventListener('click', ()=>{
+          catDiv.querySelectorAll('.swatch').forEach(btn => {
+            btn.addEventListener('click', () => {
+              // UI
               catDiv.querySelectorAll('.swatch').forEach(b=>b.classList.remove('selected'));
               btn.classList.add('selected');
+
               const rgba = hex2rgba(btn.dataset.color);
-              materials.forEach(mat=>{
-                if (frags.some(f=>mat.name.toLowerCase().includes(f))) {
+
+              // Appliquer à tous les mats matching
+              materials.forEach(mat => {
+                const lname = mat.name.toLowerCase();
+                if (frags.some(f=>lname.includes(f))) {
                   mat.pbrMetallicRoughness.setBaseColorFactor(rgba);
                 }
               });
             });
           });
 
+          // choix par défaut
           const first = catDiv.querySelector('.swatch');
           if (first) first.click();
         });
@@ -154,5 +174,4 @@
   </script>
 </body>
 </html>
-
 
