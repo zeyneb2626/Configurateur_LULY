@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Configurateur Tradi'home P4</title>
-  <!-- Model Viewer -->
   <script type="module"
           src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
@@ -17,15 +16,22 @@
       flex:3;
       width:100%; height:100%;
       background:#fff;
-      /* Qualité maximale et ombres fines pour bien voir les détails */
+      /* Qualité d’image maximale */
       antialias
-      shadow-intensity="1"
-      shadow-softness="0.1"
-      exposure="1.0"
       min-pixel-ratio="2"
       max-pixel-ratio="4"
+
+      /* Éclairage plus contrasté */
+      environment-image="studio"
+      exposure="0.6"
+
+      /* Ombres plus nettes */
+      shadow-intensity="0.8"
+      shadow-softness="0.2"
+
+      /* Permettre à l’utilisateur de déplacer la caméra */
       camera-controls
-      environment-image="neutral"
+
       loading="eager"
     }
 
@@ -136,7 +142,6 @@
         </div>
       </div>
 
-      <!-- Prix total -->
       <div id="price-box">
         Prix total : <span id="price">170 000 €</span>
       </div>
@@ -149,7 +154,6 @@
       const basePrice = 170000;
       const priceEl   = document.getElementById('price');
 
-      // Correspondances exactes des fragments de nom dans le GLB
       const targets = {
         Bardage:    ['poutrine01','poutrine02'],
         Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
@@ -166,7 +170,7 @@
 
         function hex2rgba(h) {
           const v = parseInt(h.slice(1),16);
-          return [(v>>16&255)/255, (v>>8&255)/255, (v&255)/255,1];
+          return [(v>>16&255)/255,(v>>8&255)/255,(v&255)/255,1];
         }
 
         const selection = {};
@@ -177,19 +181,15 @@
 
           catDiv.querySelectorAll('.swatch').forEach(btn => {
             btn.addEventListener('click', () => {
-              // mise à jour visuelle
-              catDiv.querySelectorAll('.swatch')
-                .forEach(b=>b.classList.remove('selected'));
+              catDiv.querySelectorAll('.swatch').forEach(b=>b.classList.remove('selected'));
               btn.classList.add('selected');
 
-              // calcul du prix
+              // prix
               selection[cat] = Number(btn.dataset.cost);
-              const total = Object.values(selection)
-                                   .reduce((sum,v)=>sum+v, basePrice);
-              priceEl.textContent = new Intl.NumberFormat('fr-FR')
-                                         .format(total) + ' €';
+              const total = Object.values(selection).reduce((s,v)=>s+v, basePrice);
+              priceEl.textContent = new Intl.NumberFormat('fr-FR').format(total) + ' €';
 
-              // application de la couleur
+              // couleur
               const rgba = hex2rgba(btn.dataset.color);
               materials.forEach(mat => {
                 const lname = mat.name.toLowerCase();
@@ -200,7 +200,7 @@
             });
           });
 
-          // clic par défaut sur la première option
+          // sélection par défaut
           const first = catDiv.querySelector('.swatch');
           if (first) first.click();
         });
