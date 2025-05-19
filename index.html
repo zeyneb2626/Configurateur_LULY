@@ -8,67 +8,61 @@
           src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0 }
-    html, body { height: 100%; font-family: sans-serif }
-    #container { display: flex; height: 100vh }
+    * { box-sizing:border-box; margin:0; padding:0 }
+    html, body { height:100%; font-family:sans-serif }
+    #container { display:flex; height:100vh }
     model-viewer {
-      flex: 3;
-      width: 100%;
-      height: 100%;
-      background: #fff;
-
+      flex:3;
+      width:100%; height:100%;
+      background:#fff;
       /* Qualité maximale */
       antialias
       min-pixel-ratio="2"
       max-pixel-ratio="4"
-
-      /* Éclairage plus sombre et contrasté */
+      /* Éclairage plus contrasté depuis les côtés */
       environment-image="studio"
-      exposure="0.5"
-
-      /* Ombres plus fines */
-      shadow-intensity="0.6"
-      shadow-softness="0.3"
-
+      exposure="0.4"
+      /* Ombres plus marquées pour faire ressortir les détails */
+      shadow-intensity="1"
+      shadow-softness="0.2"
       /* Contrôle manuel uniquement */
       camera-controls
-
       loading="eager"
     }
     #controls {
-      flex: 1;
-      background: #f6f6f6;
-      padding: 1rem;
-      overflow-y: auto;
-      border-left: 1px solid #ddd;
+      flex:1;
+      background:#f6f6f6;
+      padding:1rem;
+      overflow-y:auto;
+      border-left:1px solid #ddd;
     }
-    h2 { margin-bottom: 1rem; }
-    .category { margin-bottom: 1.5rem; }
-    .category h3 { margin-bottom: .5rem; }
-    .swatches { display: flex; gap: .5rem; flex-wrap: wrap; }
+    h2 { margin-bottom:1rem }
+    .category { margin-bottom:1.5rem }
+    .category h3 { margin-bottom:.5rem }
+    .swatches { display:flex; gap:.5rem; flex-wrap:wrap }
     .swatch {
-      width: 40px; height: 40px;
-      border: 2px solid #ccc; border-radius: 4px;
-      cursor: pointer; position: relative;
-      transition: border .2s;
+      width:40px; height:40px;
+      border:2px solid #ccc; border-radius:4px;
+      cursor:pointer; position:relative;
+      transition:border .2s;
     }
-    .swatch:hover { border-color: #888; }
-    .swatch.selected { outline: 3px solid #007aff; }
+    .swatch:hover { border-color:#888 }
+    .swatch.selected { outline:3px solid #007aff }
     .swatch::after {
-      content: attr(data-label);
-      position: absolute; bottom: -1.3rem; left: 50%;
-      transform: translateX(-50%); font-size: .6rem; color: #333;
-      white-space: nowrap;
+      content:attr(data-label);
+      position:absolute; bottom:-1.3rem; left:50%;
+      transform:translateX(-50%); font-size:.6rem; color:#333;
+      white-space:nowrap;
     }
     #price-box {
-      margin-top: 2rem;
-      padding: 1rem;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      text-align: right;
-      font-size: 1.2rem;
-      font-weight: bold;
+      margin-top:2rem;
+      padding:1rem;
+      background:#fff;
+      border:1px solid #ddd;
+      border-radius:4px;
+      text-align:right;
+      font-size:1.2rem;
+      font-weight:bold;
     }
   </style>
 </head>
@@ -89,9 +83,9 @@
       <div class="category" data-cat="Bardage">
         <h3>Bardage extérieur</h3>
         <div class="swatches">
-          <button class="swatch" data-cat="Bardage" data-label="Chêne clair" data-color="#C19A6B" data-cost="520"></button>
-          <button class="swatch" data-cat="Bardage" data-label="Chêne foncé" data-color="#8B5A2B" data-cost="790"></button>
-          <button class="swatch" data-cat="Bardage" data-label="Gris oragé"  data-color="#3D4C5C" data-cost="895"></button>
+          <button class="swatch" data-cat="Bardage" data-label="Chêne clair"  data-color="#C19A6B" data-cost="520"></button>
+          <button class="swatch" data-cat="Bardage" data-label="Chêne foncé"  data-color="#8B5A2B" data-cost="790"></button>
+          <button class="swatch" data-cat="Bardage" data-label="Gris oragé"   data-color="#3D4C5C" data-cost="895"></button>
         </div>
       </div>
 
@@ -149,11 +143,10 @@
 
   <script>
     window.addEventListener('DOMContentLoaded', () => {
-      const mv = document.getElementById('mv');
+      const mv        = document.getElementById('mv');
       const basePrice = 170000;
-      const priceEl  = document.getElementById('price');
-
-      const targets = {
+      const priceEl   = document.getElementById('price');
+      const targets   = {
         Bardage:    ['poutrine01','poutrine02'],
         Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
         Gouttiere:  ['goutieres'],
@@ -180,16 +173,15 @@
 
           catDiv.querySelectorAll('.swatch').forEach(btn => {
             btn.addEventListener('click', () => {
-              // UI
               catDiv.querySelectorAll('.swatch').forEach(b=>b.classList.remove('selected'));
               btn.classList.add('selected');
 
-              // Prix
+              // calcul du prix
               selection[cat] = Number(btn.dataset.cost);
               const total = Object.values(selection).reduce((s,v)=>s+v, basePrice);
-              priceEl.textContent = total.toLocaleString('fr-FR') + ' €';
+              priceEl.textContent = new Intl.NumberFormat('fr-FR').format(total) + ' €';
 
-              // Couleur
+              // application couleur
               const rgba = hex2rgba(btn.dataset.color);
               materials.forEach(mat => {
                 const lname = mat.name.toLowerCase();
