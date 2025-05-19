@@ -7,41 +7,69 @@
 
   <!-- model-viewer web component -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <!-- ThreeJS depuis un CDN pour le TextureLoader -->
+  <script type="module">
+    import * as THREE from 'https://cdn.skypack.dev/three@0.150.1';
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const viewer = document.querySelector('model-viewer');
+
+      viewer.addEventListener('load', () => {
+        const scene = viewer.model.scene;         // la scène THREE.js interne
+        const loader = new THREE.TextureLoader(); // pour charger les PNG/JPEG
+        const base = 'https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/';
+
+        // Mappage mesh-name → URL de votre texture BaseColor
+        const texturesMap = {
+          'Murs':        base + 'Murs_baseColor.png',
+          'Toit1':       base + 'Toit1_baseColor.png',
+          'Volets':      base + 'Volets_baseColor.png',
+          'dalles':      base + 'dalles_baseColor.jpeg',
+          'goutieres':   base + 'goutieres_baseColor.jpeg',
+          'material_32': base + 'material_32_baseColor.png',
+          'poutrine01':  base + 'poutrine01_baseColor.jpeg'
+        };
+
+        // Parcours de tous les objets de la scène
+        scene.traverse((node) => {
+          if (node.isMesh && texturesMap[node.name]) {
+            const texURL = texturesMap[node.name];
+            loader.load(texURL, (tex) => {
+              node.material.map = tex;
+              node.material.needsUpdate = true;
+            });
+          }
+        });
+      });
+    });
+  </script>
 
   <style>
-    body, html {
+    html, body {
       margin: 0; padding: 0; height: 100%;
-      background-color: #ddd;
+      background: #ddd;
       overflow: hidden;
     }
     model-viewer {
       width: 100%; height: 100%;
-      /* Si vous voulez un fond uni, changez ici */
+      background-color: #f0f0f0;
     }
   </style>
 </head>
-<body>
 
+<body>
   <model-viewer
+    id="viewer"
     src="https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/TRADIHOME.glb"
-    alt="Maison TRADIHOME 3D"
-    
-    /* contrôles utilisateur */
+    alt="Maison TRADIHOME texturée"
     camera-controls
     auto-rotate
-
-    /* éclairage HDR pour PBR + ombres */
     environment-image="https://modelviewer.dev/shared-assets/environments/venice_sunset_1k.hdr"
     shadow-intensity="1"
-    shadow-softness="0.5"
-
-    /* ajustement de l'exposition (0.5 à 2) */
-    exposure="1.2"
-
-    /* chargement rapide */
+    exposure="1.3"
     loading="eager">
   </model-viewer>
-
 </body>
 </html>
+
 
