@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Configurateur TRADIHOME</title>
 
-  <!-- Chargement de la version fixe de model-viewer -->
+  <!-- Chargement du web-component model-viewer -->
   <script type="module"
-    src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
+          src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
 
   <style>
@@ -17,20 +17,20 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
+      background-color: #ffffff;
     }
-    /* Le viewer prend tout l'écran */
     model-viewer {
       width: 100%;
       height: 100%;
-      /* fond blanc par défaut */
-      background-color: #ffffff;
+      /* active l’interaction souris/tactile */
+      pointer-events: all;
     }
   </style>
 </head>
 
 <body>
   <model-viewer
-    src="TRADIHOME2.glb"
+    src="TRADIHOME3.glb"
     alt="Maison TRADIHOME"
     camera-controls
     auto-rotate
