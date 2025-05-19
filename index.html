@@ -8,49 +8,67 @@
           src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
   <style>
-    * { box-sizing:border-box; margin:0; padding:0 }
-    html, body { height:100%; font-family:sans-serif }
-    #container { display:flex; height:100vh }
+    * { box-sizing: border-box; margin: 0; padding: 0 }
+    html, body { height: 100%; font-family: sans-serif }
+    #container { display: flex; height: 100vh }
     model-viewer {
-      flex:3;
-      width:100%;
-      height:100%;
-      background:#fff;
+      flex: 3;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+
+      /* Qualité maximale */
+      antialias
+      min-pixel-ratio="2"
+      max-pixel-ratio="4"
+
+      /* Éclairage plus sombre et contrasté */
+      environment-image="studio"
+      exposure="0.5"
+
+      /* Ombres plus fines */
+      shadow-intensity="0.6"
+      shadow-softness="0.3"
+
+      /* Contrôle manuel uniquement */
+      camera-controls
+
+      loading="eager"
     }
     #controls {
-      flex:1;
-      background:#f6f6f6;
-      padding:1rem;
-      overflow-y:auto;
-      border-left:1px solid #ddd;
+      flex: 1;
+      background: #f6f6f6;
+      padding: 1rem;
+      overflow-y: auto;
+      border-left: 1px solid #ddd;
     }
-    h2 { margin-bottom:1rem }
-    .category { margin-bottom:1.5rem }
-    .category h3 { margin-bottom:.5rem }
-    .swatches { display:flex; gap:.5rem; flex-wrap:wrap }
+    h2 { margin-bottom: 1rem; }
+    .category { margin-bottom: 1.5rem; }
+    .category h3 { margin-bottom: .5rem; }
+    .swatches { display: flex; gap: .5rem; flex-wrap: wrap; }
     .swatch {
-      width:40px; height:40px;
-      border:2px solid #ccc; border-radius:4px;
-      cursor:pointer; position:relative;
-      transition:border .2s;
+      width: 40px; height: 40px;
+      border: 2px solid #ccc; border-radius: 4px;
+      cursor: pointer; position: relative;
+      transition: border .2s;
     }
-    .swatch:hover { border-color:#888 }
-    .swatch.selected { outline:3px solid #007aff }
+    .swatch:hover { border-color: #888; }
+    .swatch.selected { outline: 3px solid #007aff; }
     .swatch::after {
-      content:attr(data-label);
-      position:absolute; bottom:-1.3rem; left:50%;
-      transform:translateX(-50%); font-size:.6rem; color:#333;
-      white-space:nowrap;
+      content: attr(data-label);
+      position: absolute; bottom: -1.3rem; left: 50%;
+      transform: translateX(-50%); font-size: .6rem; color: #333;
+      white-space: nowrap;
     }
     #price-box {
-      margin-top:2rem;
-      padding:1rem;
-      background:#fff;
-      border:1px solid #ddd;
-      border-radius:4px;
-      text-align:right;
-      font-size:1.2rem;
-      font-weight:bold;
+      margin-top: 2rem;
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      text-align: right;
+      font-size: 1.2rem;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -60,19 +78,10 @@
     <model-viewer
       id="mv"
       src="TRADIHOME4.glb"
-      alt="Maison Tradi'home P4"
-      environment-image="neutral"
-      loading="eager"
-      camera-controls
-      auto-rotate
-      shadow-intensity="0.8"
-      shadow-softness="1"
-      exposure="0.7"
-      min-pixel-ratio="1"
-      max-pixel-ratio="2">
+      alt="Maison Tradi'home P4">
     </model-viewer>
 
-    <!-- PANNEAU DE CONTROLES -->
+    <!-- PANNEAU DE CONTRÔLES -->
     <div id="controls">
       <h2>Personnalisez votre maison</h2>
 
@@ -140,11 +149,10 @@
 
   <script>
     window.addEventListener('DOMContentLoaded', () => {
-      const mv = document.querySelector('#mv');
+      const mv = document.getElementById('mv');
       const basePrice = 170000;
-      const priceEl  = document.querySelector('#price');
+      const priceEl  = document.getElementById('price');
 
-      // Fragments EXACTS dans le GLB (console)
       const targets = {
         Bardage:    ['poutrine01','poutrine02'],
         Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
@@ -154,14 +162,14 @@
         Toit:       ['toit1','toit contour']
       };
 
-      mv.addEventListener('load', async () => {
+      mv.addEventListener('load', () => {
         const model     = mv.model;
         if (!model) return console.error('mv.model est undefined');
         const materials = model.materials;
 
         function hex2rgba(h) {
           const v = parseInt(h.slice(1),16);
-          return [(v>>16&255)/255, (v>>8&255)/255, (v&255)/255,1];
+          return [(v>>16&255)/255,(v>>8&255)/255,(v&255)/255,1];
         }
 
         const selection = {};
@@ -201,4 +209,3 @@
   </script>
 </body>
 </html>
-
