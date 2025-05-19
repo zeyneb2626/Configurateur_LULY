@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Configurateur TRADIHOME</title>
 
-  <!-- On fixe la version de model-viewer pour plus de stabilité -->
+  <!-- Chargement de la version fixe de model-viewer -->
   <script type="module"
     src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
@@ -14,33 +14,29 @@
     html, body {
       margin: 0;
       padding: 0;
+      width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #f0f0f0;
     }
+    /* Le viewer prend tout l'écran */
     model-viewer {
       width: 100%;
       height: 100%;
-      /* Pour que le viewer capte bien les événements souris/tactile */
-      pointer-events: all;
+      /* fond blanc par défaut */
+      background-color: #ffffff;
     }
   </style>
 </head>
 
 <body>
   <model-viewer
-    src="TRADIHOME1.glb"                    <!-- Votre fichier 3D -->
+    src="TRADIHOME2.glb"
     alt="Maison TRADIHOME"
     camera-controls
     auto-rotate
-
-    <!-- Nouveau HDRI, à la racine du repo -->
-    environment-image="lilienstein_4k.exr"
-
     shadow-intensity="1"
-    exposure="1.3"
+    exposure="1.2"
     loading="eager">
   </model-viewer>
 </body>
 </html>
-
