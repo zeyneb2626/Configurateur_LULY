@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Configurateur TRADIHOME</title>
 
-  <!-- Model-viewer web component -->
+  <!-- model-viewer web component, version figée -->
   <script type="module"
           src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
@@ -13,29 +13,44 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height:100%; width:100%; font-family:sans-serif; }
+
+    /* Grid 2 colonnes : 3D / contrôles */
     #container {
       display: grid;
       grid-template-columns: 2fr 1fr;
       height: 100%;
     }
+
+    /* Conserver le viewer en dessous */
     #viewer-container {
+      position: relative;
+      z-index: 1;
       background: #fafafa;
     }
+
     model-viewer {
       width: 100%;
       height: 100%;
-      background: #fff;
-      pointer-events: all; /* laisse la 3D intéractive */
+      background: #ffffff;
+      /* anti-aliasing matériel + résolution HD */
+      antialias: true;
+      /* via attributs ci-dessous */
     }
+
+    /* Le panneau de droite doit rester au-dessus pour capter les clics */
     #controls {
+      position: relative;
+      z-index: 2;
       background: #f6f6f6;
       border-left: 1px solid #ddd;
       padding: 1rem;
       overflow-y: auto;
     }
+
     #controls h2 { margin-bottom:1rem; font-size:1.2rem; }
     .category { margin-bottom:1.5rem; }
     .category h3 { margin-bottom:.5rem; }
+
     .swatches {
       display: flex; flex-wrap: wrap; gap:.5rem;
     }
@@ -43,19 +58,19 @@
       width:40px; height:40px;
       border:2px solid #ccc; border-radius:4px;
       cursor:pointer; position:relative;
-      background-color: transparent;
+      background-color:transparent;
     }
     .swatch.selected { outline:3px solid #007aff; }
     .swatch::after {
       content: attr(data-label);
       position:absolute; bottom:-1.5rem; left:50%;
-      transform:translateX(-50%); font-size:.6rem; color:#333;
-      white-space:nowrap;
+      transform:translateX(-50%);
+      white-space:nowrap; font-size:.6rem; color:#333;
     }
   </style>
 </head>
-<body>
 
+<body>
   <div id="container">
     <!-- 3D Viewer -->
     <div id="viewer-container">
@@ -65,6 +80,12 @@
         alt="Maison TRADIHOME"
         camera-controls
         auto-rotate
+
+        <!-- Amélioration de qualité -->
+        antialias
+        min-pixel-ratio="1"
+        max-pixel-ratio="2"
+
         shadow-intensity="1"
         exposure="1.2"
         loading="eager">
@@ -124,11 +145,10 @@
     window.addEventListener('DOMContentLoaded', () => {
       const mv = document.getElementById('mv');
 
-      // Sous-chaînes à matcher dans node.name
       const substrMap = {
-        Bardage:    ['poutrine01',    'poutrine02'],
-        Menuiserie: ['portes',        'cadre',      'volets'],
-        Pergola:    ['poutres',       'volet pergola'],
+        Bardage:    ['poutrine01','poutrine02'],
+        Menuiserie: ['portes','cadre','volets'],
+        Pergola:    ['poutres','volet pergola'],
         Murs:       ['murs'],
         Toit:       ['toit1']
       };
@@ -136,23 +156,20 @@
       mv.addEventListener('load', e => {
         const model = e.detail.model;
 
-        // DEBUG : lister tous les noms de meshes
-        console.log('--- Mesh names in TRADIHOME4.glb ---');
+        // debug : nom des meshes
         model.traverse(node => {
-          if (node.isMesh) console.log(node.name);
+          if (node.isMesh) console.log('Mesh:', node.name);
         });
 
-        // Swatches
         document.querySelectorAll('.swatch').forEach(btn => {
           btn.addEventListener('click', () => {
             const cat   = btn.dataset.category;
             const color = btn.dataset.color;
-            // UI sélection
-            document
-              .querySelectorAll(`.swatch[data-category="${cat}"]`)
+            // UI
+            document.querySelectorAll(`.swatch[data-category="${cat}"]`)
               .forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            // Appliquer sur chaque mesh dont le name contient une des sous-chaînes
+            // coloration
             model.traverse(node => {
               if (!node.isMesh) return;
               const name = node.name.toLowerCase();
@@ -163,7 +180,7 @@
           });
         });
 
-        // Pré-sélection
+        // pré-sélection
         document.querySelectorAll('.category').forEach(catDiv => {
           const first = catDiv.querySelector('.swatch');
           if (first) first.click();
@@ -174,3 +191,4 @@
 
 </body>
 </html>
+
