@@ -4,15 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Configurateur TRADIHOME</title>
-
-  <!-- Web component model-viewer -->
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-
+  <!-- model-viewer web component -->
+  <script type="module" 
+    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+  </script>
   <style>
     html, body {
       margin: 0; padding: 0; height: 100%;
-      background: #ddd;  /* on voit tout de suite si la page charge */
-      overflow: hidden;
+      background: #eee; overflow: hidden;
     }
     model-viewer {
       width: 100%; height: 100%;
@@ -24,8 +23,8 @@
 
   <model-viewer
     id="mv"
-    src="https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/TRADIHOME.glb"
-    alt="Maison TRADIHOME"
+    src="https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/TRADIHOME1.glb"
+    alt="Maison TRADIHOME texturée"
     camera-controls
     auto-rotate
     environment-image="https://modelviewer.dev/shared-assets/environments/venice_sunset_1k.hdr"
@@ -34,57 +33,30 @@
     loading="eager">
   </model-viewer>
 
-  <!-- Notre script de texturage, placé après le <model-viewer> -->
   <script type="module">
-    import { TextureLoader } from 'https://unpkg.com/three@0.150.1/build/three.module.js';
-
-    // Mapping mesh-name → URL RAW GitHub de la BaseColor
-    const texturesMap = {
-      'Murs':        'https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/Murs_baseColor.png',
-      'Toit1':       'https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/Toit1_baseColor.png',
-      'Volets':      'https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/Volets_baseColor.png',
-      'dalles':      'https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/dalles_baseColor.jpeg',
-      'goutieres':   'https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/goutieres_baseColor.jpeg',
-      'material_32': 'https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/material_32_baseColor.png',
-      'poutrine01':  'https://raw.githubusercontent.com/zeyneb2626/Configurateur_LULY/main/poutrine01_baseColor.jpeg'
-    };
-
+    // On attend que model-viewer ait fini de charger son ThreeJS interne
     const mv = document.getElementById('mv');
-    mv.addEventListener('load', (event) => {
-      console.log('🔄 ModelViewer “load” event reçu', event.detail.model);
-      const loader = new TextureLoader();
-      const model = event.detail.model;
+    mv.addEventListener('load', (e) => {
+      const model = e.detail.model;
 
-      // On traverse TOUTES les nodes de la scène interne
-      model.traverse((node) => {
-        if (!node.isMesh) return;
-        console.log('→ Mesh trouvé :', node.name);
-
-        // Si on a une texture à appliquer sur ce mesh...
-        const url = texturesMap[node.name];
-        if (url) {
-          console.log(`   • Chargement de la texture pour "${node.name}" → ${url}`);
-          loader.load(
-            url,
-            (tex) => {
-              node.material.map = tex;
-              node.material.needsUpdate = true;
-              console.log(`   ✓ Texture appliquée sur ${node.name}`);
-            },
-            undefined,
-            (err) => {
-              console.error(`   ✗ Erreur chargement texture ${node.name}`, err);
-            }
-          );
+      /**
+       * Teinte un mesh existant dans la scène.
+       * @param {string} meshName - Nom exact du mesh (voir Blender Outliner).
+       * @param {string} hexColor - Couleur CSS (ex: '#ff6600').
+       */
+      window.setMeshColor = (meshName, hexColor) => {
+        const mesh = model.getObjectByName(meshName);
+        if (!mesh || !mesh.material) {
+          console.warn(`Mesh "${meshName}" introuvable !`);
+          return;
         }
-      });
-    });
+        mesh.material.color.set(hexColor);
+      };
 
-    // Astuce debug : ouvrez la console (F12) pour voir la liste des meshes et repérer s'ils ont
-    // bien les noms "Murs", "Toit1", etc. Si un mesh a un nom différent, ajoutez‐le à texturesMap.
+      // Exemple : colorer les murs en bleu clair
+      // setMeshColor('Murs', '#87ceeb');
+    });
   </script>
 
 </body>
 </html>
-
-
