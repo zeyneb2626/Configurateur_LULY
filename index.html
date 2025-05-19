@@ -2,96 +2,153 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Configurateur TRADIHOME</title>
   <script type="module"
     src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{width:100%;height:100%;font-family:sans-serif}
-    #container{display:grid;grid-template-columns:3fr 1fr;height:100vh}
-    model-viewer{width:100%;height:100%;background:#fff;display:block}
-    #controls{padding:1rem;overflow:auto;background:#f6f6f6;border-left:1px solid #ddd}
-    .category{margin-bottom:1.5rem}
-    .swatches{display:flex;gap:.5rem;flex-wrap:wrap}
-    .swatch{width:40px;height:40px;border:2px solid #ccc;border-radius:4px;cursor:pointer;position:relative}
-    .swatch.selected{outline:3px solid #007aff}
-    .swatch::after{content:attr(data-label);position:absolute;bottom:-1.5rem;left:50%;transform:translateX(-50%);font-size:.6rem}
+    * { box-sizing:border-box; margin:0; padding:0 }
+    html, body { width:100%; height:100%; font-family:sans-serif }
+    #container { display:grid; grid-template-columns:3fr 1fr; height:100vh }
+    model-viewer { width:100%; height:100%; background:#fff; display:block }
+    #controls { padding:1rem; overflow:auto; background:#f6f6f6; border-left:1px solid #ddd }
+    .category { margin-bottom:1.5rem }
+    .category h3 { margin-bottom:.5rem }
+    .swatches { display:flex; flex-wrap:wrap; gap:.5rem }
+    .swatch {
+      width:40px; height:40px; border:2px solid #ccc;
+      border-radius:4px; cursor:pointer; position:relative;
+    }
+    .swatch.selected { outline:3px solid #007aff }
+    .swatch::after {
+      content: attr(data-label);
+      position:absolute; bottom:-1.4rem; left:50%;
+      transform:translateX(-50%); font-size:.65rem; color:#333;
+      white-space:nowrap;
+    }
   </style>
 </head>
 <body>
-  <div id="container">
-    <model-viewer
-      id="mv"
-      src="TRADIHOME4.glb"
-      alt="Maison TRADIHOME"
-      camera-controls
-      auto-rotate
-      shadow-intensity="1"
-      exposure="1.2"
-      loading="eager">
-    </model-viewer>
-    <div id="controls">
-      <h2>Personnalisez votre maison</h2>
-      <!-- Exemple d’une catégorie -->
-      <div class="category" data-category="Bardage">
-        <h3>Bardage extérieur</h3>
-        <div class="swatches">
-          <button class="swatch" data-label="Chêne Clair"  data-color="#C49A6C" data-category="Bardage"></button>
-          <button class="swatch" data-label="Chêne Foncé"  data-color="#8C5E2B" data-category="Bardage"></button>
-          <button class="swatch" data-label="Gris Orage"   data-color="#334257" data-category="Bardage"></button>
-        </div>
-      </div>
-      <!-- répétez pour Menuiserie, Pergola, Murs, Toit... -->
-    </div>
-  </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded',()=>{
-      const mv = document.getElementById('mv');
-      // ➊ Remplissez ces tableaux avec les noms EXACTS repérés dans la console
+<div id="container">
+  <!-- 3D viewer -->
+  <model-viewer
+    id="mv"
+    src="TRADIHOME4.glb"
+    alt="Maison TRADIHOME"
+    camera-controls auto-rotate
+    shadow-intensity="1" exposure="1.2"
+    loading="eager">
+  </model-viewer>
+
+  <!-- Sidebar controls -->
+  <div id="controls">
+    <h2>Personnalisez votre maison</h2>
+
+    <div class="category" data-cat="Bardage">
+      <h3>Bardage extérieur</h3>
+      <div class="swatches">
+        <button class="swatch" data-label="Chêne clair"  data-color="#C49A6C"></button>
+        <button class="swatch" data-label="Chêne foncé"  data-color="#8C5E2B"></button>
+        <button class="swatch" data-label="Gris orage"   data-color="#334257"></button>
+      </div>
+    </div>
+
+    <div class="category" data-cat="Menuiserie">
+      <h3>Menuiserie alu</h3>
+      <div class="swatches">
+        <button class="swatch" data-label="Blanc"      data-color="#FFFFFF"></button>
+        <button class="swatch" data-label="Anthracite" data-color="#333333"></button>
+      </div>
+    </div>
+
+    <div class="category" data-cat="Pergola">
+      <h3>Pergola bioclimatique</h3>
+      <div class="swatches">
+        <button class="swatch" data-label="Blanc"      data-color="#FFFFFF"></button>
+        <button class="swatch" data-label="Anthracite" data-color="#333333"></button>
+      </div>
+    </div>
+
+    <div class="category" data-cat="Murs">
+      <h3>Peinture murs extérieurs</h3>
+      <div class="swatches">
+        <button class="swatch" data-label="Blanc"       data-color="#FFFFFF"></button>
+        <button class="swatch" data-label="Beige WES"   data-color="#CDB79C"></button>
+        <button class="swatch" data-label="Ocre Mojave" data-color="#E8AD99"></button>
+      </div>
+    </div>
+
+    <div class="category" data-cat="Toit">
+      <h3>Tôle ondulée</h3>
+      <div class="swatches">
+        <button class="swatch" data-label="Bleu ardoise"   data-color="#2F4155"></button>
+        <button class="swatch" data-label="Gris acier"     data-color="#BCC0C0"></button>
+        <button class="swatch" data-label="Rouge hibiscus" data-color="#C44133"></button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const mv = document.getElementById('mv');
+
+    // → Après avoir chargé, on liste tous les matériaux (copier/coller ces noms)
+    mv.addEventListener('load', ({ detail })=>{
+      const mats = detail.model.materials;
+      console.log('--- Liste des matériaux du GLB ---');
+      mats.forEach(m=> console.log(m.name));
+      console.log('----------------------------------');
+
+      // → Remplacez ces fragments par vos vrais noms EXACTS récupérés ci-dessous
       const mapping = {
         Bardage:    ['poutrine01','poutrine02'],
-        Menuiserie: ['cadre','portes','volets'],
-        Pergola:    ['poutres','volet pergola'],
+        Menuiserie: ['porte','cadre','volets'],
+        Pergola:    ['poutres','voletpergola'],
         Murs:       ['murs'],
         Toit:       ['toit1']
       };
 
-      mv.addEventListener('load',({detail})=>{
-        const scene = detail.model.scene;
-        // DEBUG : afficher tous les mesh names
-        scene.traverse(node=>{
-          if(node.isMesh) console.log(`Mesh: "${node.name}"`);
-        });
-        // lier les swatches
-        document.querySelectorAll('.swatch').forEach(btn=>{
-          btn.addEventListener('click',()=>{
-            const cat   = btn.dataset.category;
-            const color = btn.dataset.color;
+      // convertit "#rrggbb" → [r,g,b,a]
+      function hexToRGBA(hex){
+        return [
+          parseInt(hex.substr(1,2),16)/255,
+          parseInt(hex.substr(3,2),16)/255,
+          parseInt(hex.substr(5,2),16)/255,
+          1
+        ];
+      }
+
+      // lie les boutons
+      document.querySelectorAll('.category').forEach(catDiv=>{
+        const cat = catDiv.dataset.cat;
+        catDiv.querySelectorAll('.swatch').forEach(btn=>{
+          btn.addEventListener('click', ()=>{
             // UI
-            document.querySelectorAll(`.swatch[data-category="${cat}"]`)
-                    .forEach(b=>b.classList.remove('selected'));
+            catDiv.querySelectorAll('.swatch')
+              .forEach(b=>b.classList.remove('selected'));
             btn.classList.add('selected');
-            // appliquer la couleur
-            scene.traverse(node=>{
-              if(!node.isMesh) return;
-              const name = node.name.toLowerCase();
-              if(mapping[cat].some(key=>name.includes(key.toLowerCase()))){
-                node.material.color.set(color);
+            // applique couleur
+            const rgba = hexToRGBA(btn.dataset.color);
+            mats.forEach(mat=>{
+              const name = mat.name.toLowerCase();
+              if(mapping[cat].some(key => name.includes(key.toLowerCase()))){
+                mat.pbrMetallicRoughness.setBaseColorFactor(rgba);
               }
             });
           });
         });
-        // auto-sélection première option
-        document.querySelectorAll('.category').forEach(div=>{
-          const first = div.querySelector('.swatch');
-          if(first) first.click();
-        });
+        // auto-select premier
+        const first = catDiv.querySelector('.swatch');
+        if(first) first.click();
       });
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
 
