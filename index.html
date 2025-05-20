@@ -142,9 +142,9 @@
         camera-controls>
       </model-viewer>
       <div id="maison-info">
-        <div><strong>85 m²</strong><br><span>Surface</span></div>
-        <div><strong>3 Ch</strong><br><span>Chambres</span></div>
-        <div><strong>2 SdE</strong><br><span>Salles d'eau</span></div>
+        <div><strong>85 m²</strong><br><span>Surface</span></div>
+        <div><strong>3 Ch</strong><br><span>Chambres</span></div>
+        <div><strong>2 SdE</strong><br><span>Salles d'eau</span></div>
       </div>
     </div>
 
@@ -152,16 +152,16 @@
     <div class="controls">
       <h2>Configuration Tradi’home P4</h2>
 
-      <!-- Options groups here... (remains unchanged) -->
+      <!-- (vos groupes d’options inchangés ici) -->
 
       <!-- Détail prix personnalisé -->
       <div id="price-detail">
-        Configuration de base : 170 000 €<br>
-        Toit rouge hibiscus : +1 500 €
+        Configuration de base : 170 000 €<br>
+        Toit rouge hibiscus : +1 500 €
       </div>
 
       <div id="price-box">
-        Prix total : <span id="price">171 500 €</span>
+        Prix total : <span id="price">171 500 €</span>
       </div>
 
       <div class="action-buttons">
@@ -209,17 +209,20 @@
 
           group.querySelectorAll('.swatch').forEach(sw => {
             sw.addEventListener('click', () => {
-              group.querySelectorAll('.swatch').forEach(x => x.classList.remove('selected'));
+              group.querySelectorAll('.swatch')
+                   .forEach(x => x.classList.remove('selected'));
               sw.classList.add('selected');
 
               sel[cat] = +sw.dataset.cost;
               const total = Object.values(sel).reduce((a,b) => a+b, base);
-              priceEl.textContent = total.toLocaleString('fr-FR') + ' €';
+              priceEl.textContent = total.toLocaleString('fr-FR') + ' €';
 
-            const detailEl = document.getElementById('price-detail');
-            // Met à jour résumé détail (exemple simple)
-            detailEl.innerHTML = `Configuration de base : ${base.toLocaleString('fr-FR')} €` +
-                                 `<br>${group.querySelector('.option-label').textContent} : +${sw.dataset.cost} €`;
+              // mise à jour du détail
+              const detailEl = document.getElementById('price-detail');
+              const label    = group.querySelector('.option-label').textContent;
+              detailEl.innerHTML = 
+                `Configuration de base : ${base.toLocaleString('fr-FR')} €` +
+                `<br>${label} : +${sw.dataset.cost} €`;
 
               const rgba = hex2rgba(sw.dataset.color);
               mats.forEach(m => {
@@ -239,4 +242,3 @@
   </script>
 </body>
 </html>
-
