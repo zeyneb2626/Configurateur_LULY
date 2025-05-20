@@ -28,7 +28,7 @@
     model-viewer {
       width:100%; height:100%;
       background:#fafafa;
-      /* permet de manipuler la vue à la souris / au doigt */
+      /* rend le modèle interactif */
       pointer-events: all;
       touch-action: none;
     }
@@ -50,12 +50,8 @@
       color:#444;
       font-size:1.1rem;
     }
-    .options {
-      display:flex; gap:1rem; flex-wrap:wrap;
-    }
-    .option {
-      text-align:center; width:80px;
-    }
+    .options { display:flex; gap:1rem; flex-wrap:wrap; }
+    .option { text-align:center; width:80px; }
     .swatch {
       width:100%; aspect-ratio:1;
       border:2px solid #ddd;
@@ -282,12 +278,11 @@
       const priceEl = document.getElementById('price');
       let sel       = {};
 
-      // Ajout du simple 'volet' pour bien attraper tous les volets pergola
       const targets = {
         Bardage:    ['poutrine01','poutrine02'],
         Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
         Gouttiere:  ['goutieres'],
-        Pergola:    ['poutres','volet','volets pergola'],
+        Pergola:    ['poutres','volet pergola'],  /* ici : uniquement 'volet pergola' */
         Murs:       ['murs'],
         Toit:       ['toit1','toit contour']
       };
@@ -301,7 +296,6 @@
       mv.addEventListener('load', () => {
         const mats      = mv.model.materials;
         const fixedRGBA = hex2rgba(hexFixed);
-        // poutrine02 reste toujours fixe
         mats.forEach(m => {
           if (m.name.toLowerCase().includes('poutrine02')) {
             m.pbrMetallicRoughness.setBaseColorFactor(fixedRGBA);
@@ -310,23 +304,22 @@
 
         document.querySelectorAll('.group').forEach(group => {
           const cat   = group.dataset.cat;
-          const frags = targets[cat]||[];
+          const frags = targets[cat] || [];
 
           group.querySelectorAll('.swatch').forEach(sw => {
             sw.addEventListener('click', () => {
               group.querySelectorAll('.swatch')
-                   .forEach(x=>x.classList.remove('selected'));
+                   .forEach(x => x.classList.remove('selected'));
               sw.classList.add('selected');
 
               sel[cat] = +sw.dataset.cost;
-              const total = Object.values(sel).reduce((a,b)=>a+b,base);
-              priceEl.textContent = total.toLocaleString('fr-FR')+' €';
+              const total = Object.values(sel).reduce((a,b) => a + b, base);
+              priceEl.textContent = total.toLocaleString('fr-FR') + ' €';
 
               const rgba = hex2rgba(sw.dataset.color);
               mats.forEach(m => {
                 const n = m.name.toLowerCase();
-                if (frags.some(f => n.includes(f))
-                    && !n.includes('poutrine02')) {
+                if (frags.some(f => n.includes(f)) && !n.includes('poutrine02')) {
                   m.pbrMetallicRoughness.setBaseColorFactor(rgba);
                 }
               });
