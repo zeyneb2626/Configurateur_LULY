@@ -4,9 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Configuration Tradi'home P4</title>
+
   <script type="module"
           src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
+
   <style>
     * { box-sizing:border-box; margin:0; padding:0 }
     html, body { height:100%; font-family:sans-serif; background:#f0f2f5 }
@@ -20,44 +22,19 @@
     .viewer-card {
       background:#fff;
       border-radius:8px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.1);
-      position:relative;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
       overflow:hidden;
-      display:flex;
-      flex-direction:column;
     }
     model-viewer {
-      flex:1;
       width:100%; height:100%;
       background:#fafafa;
       pointer-events: all;
       touch-action: none;
     }
-    /* -- DIMENSIONS CARDS -- */
-    .dimensions {
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      background:#fff;
-      padding:1rem;
-      border-top:1px solid #eee;
-      border-radius:0 0 8px 8px;
-      gap:1rem;
-    }
-    .dim-card {
-      background:#fff;
-      border:1px solid #eee;
-      border-radius:6px;
-      padding:.75rem;
-      text-align:center;
-      box-shadow:0 1px 4px rgba(0,0,0,0.05);
-    }
-    .dim-card strong { display:block; font-size:1.25rem; color:#222; }
-    .dim-card span   { font-size:.85rem; color:#666; }
-
     .controls {
       background:#fff;
       border-radius:8px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
       padding:1.5rem;
       overflow-y:auto;
     }
@@ -66,24 +43,24 @@
       color:#222;
       font-size:1.5rem;
     }
-    .group { margin-bottom:1.5rem; }
+    .group { margin-bottom:2rem; }
     .group h3 {
-      margin-bottom:.5rem;
-      color:#333;
+      margin-bottom:.75rem;
+      color:#444;
       font-size:1.1rem;
     }
-    .options { display:flex; gap:.75rem; flex-wrap:wrap; }
-    .option { text-align:center; width:70px; }
+    .options { display:flex; gap:1rem; flex-wrap:wrap; }
+    .option { text-align:center; width:80px; }
     .swatch {
       width:100%; aspect-ratio:1;
-      border:1px solid #ccc;
-      border-radius:4px;
+      border:2px solid #ddd;
+      border-radius:6px;
       cursor:pointer;
       position:relative;
       transition:border-color .2s;
     }
-    .swatch:hover { border-color:#999; }
-    .swatch.selected { border-color:#006aff; } /* on garde juste la bordure bleue */
+    .swatch:hover { border-color:#aaa; }
+    .swatch.selected { border-color:#006aff; }
     .swatch.selected::after {
       content:'✔';
       position:absolute; top:4px; right:6px;
@@ -91,61 +68,59 @@
       font-size:1rem;
     }
     .option-label {
-      margin-top:.3rem;
-      font-size:.75rem;
+      margin-top:.5rem;
+      font-size:.85rem;
       color:#444;
     }
     .option-price {
-      font-size:.7rem;
+      margin-top:.25rem;
+      font-size:.8rem;
       color:#666;
     }
-
-    /* Bloc récapitulatif prix – SOBRE */
-    #price-summary {
-      background:#fff;
-      border:1px solid #eee;
-      border-radius:6px;
-      padding:1rem;
-      margin:1rem 0;
-      box-shadow:0 1px 4px rgba(0,0,0,0.05);
-    }
-    #price-summary h3 {
-      margin-bottom:.75rem;
-      font-size:1rem;
+    #price-box {
+      margin-top:1.5rem;
+      font-size:1.2rem;
+      text-align:right;
+      font-weight:700;
       color:#222;
     }
-    #price-summary .line {
-      display:flex;
-      justify-content:space-between;
-      margin-bottom:.5rem;
-      font-size:.9rem;
-      color:#333;
-    }
-    #price-summary .line.total {
-      font-weight:700;
-      font-size:1.1rem;
+
+    /* ——— Ajout des media-queries pour le responsive ——— */
+    @media (max-width: 1024px) {
+      #configurator {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+      model-viewer {
+        height: 50vh;
+      }
     }
 
-    .action-buttons {
-      display:flex;
-      gap:.75rem;
+    @media (max-width: 600px) {
+      #configurator {
+        padding: 0.5rem;
+        gap: 0.5rem;
+      }
+      .viewer-card {
+        border-radius: 0;
+      }
+      .controls {
+        padding: 1rem;
+        box-shadow: none;
+      }
+      .group h3 {
+        font-size: 1rem;
+      }
+      .option { width: 60px; }
+      .controls { max-height: 40vh; }
     }
-    .action-buttons button {
-      flex:1;
-      padding:.75rem;
-      font-size:.95rem;
-      border:none;
-      border-radius:4px;
-      cursor:pointer;
-    }
-    .btn-save { background:#f0f0f0; color:#333; }
-    .btn-quote{ background:#006aff; color:#fff; }
+    /* —————————————————————————————————————————— */
   </style>
 </head>
 <body>
 
   <div id="configurator">
-    <!-- 3D VIEWER + dimensions -->
+    <!-- 3D VIEWER -->
     <div class="viewer-card">
       <model-viewer
         id="mv"
@@ -160,22 +135,6 @@
         max-pixel-ratio="2"
         camera-controls>
       </model-viewer>
-
-      <!-- Dimensions sous le viewer -->
-      <div class="dimensions">
-        <div class="dim-card">
-          <strong>85 m²</strong>
-          <span>Surface</span>
-        </div>
-        <div class="dim-card">
-          <strong>3 Ch</strong>
-          <span>Chambres</span>
-        </div>
-        <div class="dim-card">
-          <strong>2 SdE</strong>
-          <span>Salles d'eau</span>
-        </div>
-      </div>
     </div>
 
     <!-- CONTROLES -->
@@ -294,136 +253,71 @@
         </div>
       </div>
 
-      <!-- Bloc récapitulatif de prix -->
-      <div id="price-summary">
-        <h3>Récapitulatif de prix</h3>
-        <div class="line"><span>Prix de base :</span><span id="base-price">170 000 €</span></div>
-        <div class="line"><span>Vos options :</span><span id="opt-price">0 €</span></div>
-        <div class="line total"><span>Prix total TTC :</span><span id="total-price">170 000 €</span></div>
-      </div>
-
-      <!-- Boutons -->
-      <div class="action-buttons">
-        <button class="btn-save">Enregistrer la configuration</button>
-        <button class="btn-quote">Demander un devis</button>
+      <div id="price-box">
+        Prix total : <span id="price">170 000 €</span>
       </div>
     </div>
   </div>
 
   <script>
     window.addEventListener('DOMContentLoaded', () => {
-      const mv         = document.getElementById('mv');
-      const basePrice  = 170000;
-      const baseEl     = document.getElementById('base-price');
-      const optEl      = document.getElementById('opt-price');
-      const totalEl    = document.getElementById('total-price');
-      let selection    = {};
+      const mv      = document.getElementById('mv');
+      const base    = 170000;
+      const priceEl = document.getElementById('price');
+      let sel       = {};
 
       const targets = {
-        Bardage:    ['poutrine01','poutrine02'],
-        Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
+        Bardage:    ['poutrine01', 'poutrine02'],
+        Menuiserie: ['porte', 'cadre porte fenetre', 'volets', 'encadrement'],
         Gouttiere:  ['goutieres'],
-        Pergola:    ['poutres','volet pergola'],
+        Pergola:    ['poutres', 'volet pergola', 'volets pergola'],
         Murs:       ['murs'],
-        Toit:       ['toit1','toit contour']
+        Toit:       ['toit1', 'toit contour']
       };
 
       const hexFixed = '#1c1c1c';
-      function hex2rgba(h){
-        const v = parseInt(h.slice(1),16);
-        return [(v>>16&255)/255,(v>>8&255)/255,(v&255)/255,1];
+      function hex2rgba(h) {
+        const v = parseInt(h.slice(1), 16);
+        return [(v >> 16 & 255) / 255, (v >> 8 & 255) / 255, (v & 255) / 255, 1];
       }
 
-      mv.addEventListener('load',()=>{
-        const mats = mv.model.materials;
+      mv.addEventListener('load', () => {
+        const mats      = mv.model.materials;
         const fixedRGBA = hex2rgba(hexFixed);
-        // Bloquer poutrine02
-        mats.forEach(m=>{
-          if(m.name.toLowerCase().includes('poutrine02')){
+        mats.forEach(m => {
+          if (m.name.toLowerCase().includes('poutrine02')) {
             m.pbrMetallicRoughness.setBaseColorFactor(fixedRGBA);
           }
         });
 
-        document.querySelectorAll('.group').forEach(group=>{
+        document.querySelectorAll('.group').forEach(group => {
           const cat   = group.dataset.cat;
-          const frags = targets[cat]||[];
+          const frags = targets[cat] || [];
 
-          group.querySelectorAll('.swatch').forEach(sw=>{
-            sw.addEventListener('click',()=>{
-              group.querySelectorAll('.swatch').forEach(x=>x.classList.remove('selected'));
+          group.querySelectorAll('.swatch').forEach(sw => {
+            sw.addEventListener('click', () => {
+              group.querySelectorAll('.swatch').forEach(x => x.classList.remove('selected'));
               sw.classList.add('selected');
 
-              // Prix
-              selection[cat] = +sw.dataset.cost;
-              const opts = Object.values(selection).reduce((a,b)=>a+b,0);
-              optEl.textContent = opts.toLocaleString('fr-FR')+' €';
-              totalEl.textContent = (basePrice+opts).toLocaleString('fr-FR')+' €';
+              sel[cat] = +sw.dataset.cost;
+              const total = Object.values(sel).reduce((a, b) => a + b, base);
+              priceEl.textContent = total.toLocaleString('fr-FR') + ' €';
 
-              // Couleurs
               const rgba = hex2rgba(sw.dataset.color);
-              mats.forEach(m=>{
+              mats.forEach(m => {
                 const n = m.name.toLowerCase();
-                if(frags.some(f=>n.includes(f)) && !n.includes('poutrine02')){
+                if (frags.some(f => n.includes(f)) && !n.includes('poutrine02')) {
                   m.pbrMetallicRoughness.setBaseColorFactor(rgba);
                 }
               });
             });
           });
 
-          // selection par défaut
           const first = group.querySelector('.swatch');
-          if(first) first.click();
+          if (first) first.click();
         });
       });
     });
-    /* === RESPONSIVE === */
-@media (max-width: 1024px) {
-  /* passage en une seule colonne sous 1024px */
-  #configurator {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr; /* viewer en haut, controls en dessous */
-    height: auto;
-  }
-  .viewer-card {
-    height: 50vh; /* on fixe une hauteur raisonnable au viewer */
-  }
-}
-
-@media (max-width: 768px) {
-  /* dimensions : 2 colonnes sous 768px */
-  .dimensions {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .dimensions .dim-card {
-    padding: .5rem;
-  }
-  .controls {
-    padding: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  /* dimensions : 1 colonne sous 480px */
-  .dimensions {
-    grid-template-columns: 1fr;
-    gap: .5rem;
-  }
-  .viewer-card {
-    height: 40vh; /* un peu moins haut sur tout petit écran */
-  }
-  /* réduisons un peu la taille des swatches pour rentrer dans l’écran */
-  .option {
-    width: 60px;
-  }
-  .controls {
-    padding: .75rem;
-  }
-  .action-buttons button {
-    font-size: .9rem;
-    padding: .5rem;
-  }
-}
-
   </script>
 </body>
 </html>
