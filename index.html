@@ -169,6 +169,44 @@
 }
 /* —————————————————————————————— */
 
+@media (max-width: 768px) {
+  /* Sur tablette / petit desktop on alourdit un peu la hauteur */
+  .viewer-card { flex-direction: column; }
+  model-viewer {
+    height: 60vh !important;
+    min-height: 400px;
+  }
+  .dimensions {
+    /* Toujours 3 en ligne, mais on resserre les marges */
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+  }
+  .dimensions .dim-card {
+    flex: 1;
+    margin: 0 0.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Sur mobile on passe le viewer en portrait fort pour agrandir */
+  model-viewer {
+    height: 80vh !important;
+    min-height: 300px;
+  }
+  .dimensions {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+  }
+  .dimensions .dim-card {
+    flex: 1;
+    margin: 0 0.25rem;
+    /* On réduit un peu la typo si besoin */
+    font-size: 0.9rem;
+  }
+}
+
   </style>
 </head>
 <body>
