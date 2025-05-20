@@ -141,33 +141,51 @@
     .btn-save { background:#f0f0f0; color:#333; }
     .btn-quote{ background:#006aff; color:#fff; }
 
-    /* ——— AJOUT MEDIA-QUERIES RESPONSIVE ——— */
-@media (max-width: 1024px) {
-  #configurator { grid-template-columns:1fr; }
-  .viewer-card { height:auto; }
-  model-viewer {
-    height:80vh !important;    /* Plus grand sur tablette */
-  }
-}
-@media (max-width: 600px) {
-  #configurator { padding:.5rem; gap:.5rem; }
-  .viewer-card { border-radius:0; }
-  model-viewer {
-    height:80vh !important;    /* Très grand sur mobile */
-  }
-  .dimensions {
-    display:flex;
-    flex-direction:column;
-  }
-  .dim-card { margin-bottom:.5rem; }
-  .controls {
-    padding:1rem;
-    box-shadow:none;
-  }
-  .group h3 { font-size:1rem; }
-  .option { width:50px; }
-}
-/* —————————————————————————————— */
+      /* ——— MEDIA-QUERIES RESPONSIVE ——— */
+    @media (max-width: 1024px) {
+      #configurator {
+        grid-template-columns: 1fr;
+      }
+      .viewer-card { height: auto; }
+      model-viewer {
+        height: 60vh !important;
+        min-height: 350px;
+      }
+    }
+    @media (max-width: 600px) {
+      #configurator {
+        padding:.5rem;
+        gap:.5rem;
+      }
+      .viewer-card {
+        border-radius:0;
+      }
+      model-viewer {
+        /* on agrandit verticalement */
+        height: 70vh !important;
+        min-height: 300px;
+      }
+      /* on remet les cartes dimensions en ligne */
+      .dimensions {
+        display:flex;
+        flex-direction:row;
+        padding:.5rem;
+        gap:.5rem;
+      }
+      .dim-card {
+        flex:1;
+        margin:0;
+      }
+      /* on alléger le contrôle */
+      .controls {
+        padding:1rem;
+        box-shadow:none;
+      }
+      .group h3 { font-size:1rem; }
+      .option { width:50px; }
+    }
+    /* —————————————————————————————— */
+  </style>
 
 @media (max-width: 768px) {
   /* Sur tablette / petit desktop on alourdit un peu la hauteur */
