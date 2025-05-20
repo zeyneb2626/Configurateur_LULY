@@ -239,7 +239,7 @@
         Bardage:    ['poutrine01', 'poutrine02'],
         Menuiserie: ['porte', 'cadre porte fenetre', 'volets', 'encadrement'],
         Gouttiere:  ['goutieres'],
-        Pergola:    ['poutres', 'volet pergola'],  /* ici on ne garde que "volet pergola" */
+        Pergola:    ['poutres', 'volet pergola', 'volets pergola'], /* Ajouté 'volets pergola' */
         Murs:       ['murs'],
         Toit:       ['toit1', 'toit contour']
       };
@@ -276,6 +276,7 @@
               const rgba = hex2rgba(sw.dataset.color);
               mats.forEach(m => {
                 const n = m.name.toLowerCase();
+                // Condition enrichie pour prendre en compte "volets pergola"
                 if (frags.some(f => n.includes(f)) && !n.includes('poutrine02')) {
                   m.pbrMetallicRoughness.setBaseColorFactor(rgba);
                 }
