@@ -282,12 +282,12 @@
       const priceEl = document.getElementById('price');
       let sel       = {};
 
-      // On cible maintenant "volet pergola" ET "volets pergola"
+      // Ajout du simple 'volet' pour bien attraper tous les volets pergola
       const targets = {
         Bardage:    ['poutrine01','poutrine02'],
         Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
         Gouttiere:  ['goutieres'],
-        Pergola:    ['poutres','volet pergola','volets pergola'],
+        Pergola:    ['poutres','volet','volets pergola'],
         Murs:       ['murs'],
         Toit:       ['toit1','toit contour']
       };
