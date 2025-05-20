@@ -376,6 +376,54 @@
         });
       });
     });
+    /* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  /* passage en une seule colonne sous 1024px */
+  #configurator {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr; /* viewer en haut, controls en dessous */
+    height: auto;
+  }
+  .viewer-card {
+    height: 50vh; /* on fixe une hauteur raisonnable au viewer */
+  }
+}
+
+@media (max-width: 768px) {
+  /* dimensions : 2 colonnes sous 768px */
+  .dimensions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dimensions .dim-card {
+    padding: .5rem;
+  }
+  .controls {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* dimensions : 1 colonne sous 480px */
+  .dimensions {
+    grid-template-columns: 1fr;
+    gap: .5rem;
+  }
+  .viewer-card {
+    height: 40vh; /* un peu moins haut sur tout petit écran */
+  }
+  /* réduisons un peu la taille des swatches pour rentrer dans l’écran */
+  .option {
+    width: 60px;
+  }
+  .controls {
+    padding: .75rem;
+  }
+  .action-buttons button {
+    font-size: .9rem;
+    padding: .5rem;
+  }
+}
+
   </script>
 </body>
 </html>
