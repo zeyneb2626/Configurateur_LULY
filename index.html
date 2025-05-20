@@ -83,7 +83,7 @@
       transition:border-color .2s;
     }
     .swatch:hover { border-color:#999; }
-    .swatch.selected { border-color:#006aff; } /* on garde juste la bordure bleue */
+    .swatch.selected { border-color:#006aff; }
     .swatch.selected::after {
       content:'✔';
       position:absolute; top:4px; right:6px;
@@ -145,10 +145,13 @@
     @media (max-width: 1024px) {
       #configurator {
         grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr;
+      }
+      .viewer-card {
+        height: auto;
       }
       model-viewer {
-        height: 50vh;
+        height: 50vh !important;
+        min-height: 300px;
       }
     }
     @media (max-width: 600px) {
@@ -160,7 +163,11 @@
         border-radius: 0;
       }
       .dimensions {
-        grid-template-columns: repeat(1,1fr);
+        grid-template-columns: 1fr;
+      }
+      model-viewer {
+        height: 40vh !important;
+        min-height: 200px;
       }
       .controls {
         padding: 1rem;
