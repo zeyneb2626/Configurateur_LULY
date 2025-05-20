@@ -30,6 +30,7 @@
       background:#fafafa;
       pointer-events: all;
       touch-action: none;
+      camera-controls;
     }
     .controls {
       background:#fff;
@@ -279,9 +280,11 @@
                 if (frags.some(f => n.includes(f)) && !n.includes('poutrine02')) {
                   // Applique la couleur
                   m.pbrMetallicRoughness.setBaseColorFactor(rgba);
-                  // → Et on désactive le côté métallique + on rend la surface mate
-                  m.pbrMetallicRoughness.setMetallicFactor(0);
-                  m.pbrMetallicRoughness.setRoughnessFactor(1);
+                  // → Désactive le côté métallique et rend mat uniquement pour la menuiserie
+                  if (cat === 'Menuiserie') {
+                    m.pbrMetallicRoughness.setMetallicFactor(0);
+                    m.pbrMetallicRoughness.setRoughnessFactor(1);
+                  }
                 }
               });
             });
