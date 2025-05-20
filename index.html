@@ -153,29 +153,29 @@
       }
     }
     @media (max-width: 600px) {
-      #configurator {
-        padding:.5rem;
-        gap:.5rem;
-      }
-      .viewer-card {
-        border-radius:0;
-      }
-      model-viewer {
-        /* on agrandit verticalement */
-        height: 100vh !important;
-        min-height: 300px;
-      }
-      /* on remet les cartes dimensions en ligne */
-      .dimensions {
-        display:flex;
-        flex-direction:row;
-        padding:.5rem;
-        gap:.5rem;
-      }
-      .dim-card {
-        flex:1;
-        margin:0;
-      }
+  /* … autres règles mobile que tu laisses en place … */
+
+  /* → on agrandit verticalement le viewer */
+  model-viewer {
+    height: 70vh !important;
+    min-height: 300px;
+  }
+
+  /* → on remet les 3 cartes dimensions en ligne */
+  .dimensions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: .5rem;
+    gap: .5rem;
+  }
+  .dim-card {
+    margin-bottom: 0;
+  }
+
+  /* le reste de tes règles mobile existantes… */
+}
+
       /* on alléger le contrôle */
       .controls {
         padding:1rem;
