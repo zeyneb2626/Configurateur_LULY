@@ -30,14 +30,6 @@
       background:#fafafa;
       pointer-events: all;
       touch-action: none;
-      camera-controls
-      exposure="0.4"
-      shadow-intensity="0.8"
-      shadow-softness="0.3"
-      environment-image="neutral"
-      loading="eager"
-      min-pixel-ratio="2"
-      max-pixel-ratio="2"
     }
     .controls {
       background:#fff;
@@ -102,7 +94,15 @@
       <model-viewer
         id="mv"
         src="./TRADIHOME4.glb"
-        alt="Maison Tradi'home">
+        alt="Maison Tradi'home"
+        exposure="0.4"
+        shadow-intensity="0.8"
+        shadow-softness="0.3"
+        environment-image="neutral"
+        loading="eager"
+        min-pixel-ratio="2"
+        max-pixel-ratio="2"
+        camera-controls>
       </model-viewer>
     </div>
 
@@ -236,18 +236,18 @@
       let sel       = {};
 
       const targets = {
-        Bardage:    ['poutrine01','poutrine02'],
-        Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
+        Bardage:    ['poutrine01', 'poutrine02'],
+        Menuiserie: ['porte', 'cadre porte fenetre', 'volets', 'encadrement'],
         Gouttiere:  ['goutieres'],
-        Pergola:    ['poutres','volet pergola'],  /* <-- ici seul "volet pergola" */
+        Pergola:    ['poutres', 'volet pergola'],  /* ici on ne garde que "volet pergola" */
         Murs:       ['murs'],
-        Toit:       ['toit1','toit contour']
+        Toit:       ['toit1', 'toit contour']
       };
 
       const hexFixed = '#1c1c1c';
       function hex2rgba(h) {
-        const v = parseInt(h.slice(1),16);
-        return [(v>>16&255)/255,(v>>8&255)/255,(v&255)/255,1];
+        const v = parseInt(h.slice(1), 16);
+        return [(v >> 16 & 255) / 255, (v >> 8 & 255) / 255, (v & 255) / 255, 1];
       }
 
       mv.addEventListener('load', () => {
@@ -261,15 +261,16 @@
 
         document.querySelectorAll('.group').forEach(group => {
           const cat   = group.dataset.cat;
-          const frags = targets[cat]||[];
+          const frags = targets[cat] || [];
 
           group.querySelectorAll('.swatch').forEach(sw => {
             sw.addEventListener('click', () => {
-              group.querySelectorAll('.swatch').forEach(x=>x.classList.remove('selected'));
+              group.querySelectorAll('.swatch')
+                   .forEach(x => x.classList.remove('selected'));
               sw.classList.add('selected');
 
               sel[cat] = +sw.dataset.cost;
-              const total = Object.values(sel).reduce((a,b)=>a+b,base);
+              const total = Object.values(sel).reduce((a, b) => a + b, base);
               priceEl.textContent = total.toLocaleString('fr-FR') + ' €';
 
               const rgba = hex2rgba(sw.dataset.color);
