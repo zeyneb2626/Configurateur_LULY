@@ -24,12 +24,26 @@
       border-radius:8px;
       box-shadow:0 4px 12px rgba(0,0,0,0.1);
       overflow:hidden;
+      position:relative; /* ajouté pour positionner #maison-info */
     }
     model-viewer {
       width:100%; height:100%;
       background:#fafafa;
       pointer-events: all;
       touch-action: none;
+    }
+    /* Bloc dimensions sous le modèle */
+    #maison-info {
+      position:absolute;
+      bottom:16px;
+      left:16px;
+      background:rgba(255,255,255,0.9);
+      padding:0.5rem 1rem;
+      border-radius:4px;
+      font-size:0.9rem;
+      color:#222;
+      display:flex;
+      gap:1.5rem;
     }
     .controls {
       background:#fff;
@@ -77,13 +91,38 @@
       font-size:.8rem;
       color:#666;
     }
+    /* Bloc détail de prix */
+    #price-detail {
+      margin:1rem 0;
+      padding:1rem;
+      background:#eef;
+      border-radius:4px;
+      font-size:1rem;
+      color:#333;
+    }
     #price-box {
-      margin-top:1.5rem;
+      margin-top:1rem;
       font-size:1.2rem;
       text-align:right;
       font-weight:700;
       color:#222;
     }
+    /* Boutons d’actions */
+    .action-buttons {
+      margin-top:1.5rem;
+      display:flex;
+      gap:1rem;
+    }
+    .action-buttons button {
+      flex:1;
+      padding:.75rem;
+      font-size:1rem;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+    }
+    .btn-save { background:#ddd; color:#333; }
+    .btn-email { background:#06f; color:#fff; }
   </style>
 </head>
 <body>
@@ -104,6 +143,13 @@
         max-pixel-ratio="2"
         camera-controls>
       </model-viewer>
+
+      <!-- 1. Dimensions sous le modèle -->
+      <div id="maison-info">
+        <div><strong>85 m²</strong><br><span>Surface</span></div>
+        <div><strong>3 Ch</strong><br><span>Chambres</span></div>
+        <div><strong>2 SdE</strong><br><span>Salles d'eau</span></div>
+      </div>
     </div>
 
     <!-- CONTROLES -->
@@ -222,9 +268,21 @@
         </div>
       </div>
 
-      <div id="price-box">
-        Prix total : <span id="price">170 000 €</span>
+      <!-- 2. Bloc détail prix -->
+      <div id="price-detail">
+        Configuration de base : 170 000 €<br>
+        Toit rouge hibiscus : +1 500 €
       </div>
+
+      <!-- 3. Prix total et boutons -->
+      <div id="price-box">
+        Prix total : <span id="price">171 500 €</span>
+      </div>
+      <div class="action-buttons">
+        <button class="btn-save">Enregistrer la configuration</button>
+        <button class="btn-email">Envoyer par e-mail</button>
+      </div>
+
     </div>
   </div>
 
@@ -273,13 +331,15 @@
               const total = Object.values(sel).reduce((a, b) => a + b, base);
               priceEl.textContent = total.toLocaleString('fr-FR') + ' €';
 
+              const detailEl = document.getElementById('price-detail');
+              detailEl.innerHTML = `Configuration de base : ${base.toLocaleString('fr-FR')} €` +
+                                   `<br>${group.querySelector('.option-label').textContent} : +${sw.dataset.cost} €`;
+
               const rgba = hex2rgba(sw.dataset.color);
               mats.forEach(m => {
                 const n = m.name.toLowerCase();
                 if (frags.some(f => n.includes(f)) && !n.includes('poutrine02')) {
-                  // Applique la couleur
                   m.pbrMetallicRoughness.setBaseColorFactor(rgba);
-                  // → on désactive le mat/metal **sauf** pour la catégorie Murs
                   if (cat !== 'Murs') {
                     m.pbrMetallicRoughness.setMetallicFactor(0);
                     m.pbrMetallicRoughness.setRoughnessFactor(1);
