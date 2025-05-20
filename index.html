@@ -189,8 +189,8 @@
         src="./TRADIHOME4.glb"
         alt="Maison Tradi'home"
         exposure="0.6"
-        shadow-intensity="0.6"
-        shadow-softness="0.3"
+        shadow-intensity="0.8"
+        shadow-softness="0.5"
         environment-image="neutral"
         loading="eager"
         min-pixel-ratio="2"
@@ -399,7 +399,7 @@
                 const n = m.name.toLowerCase();
                 if(frags.some(f=>n.includes(f)) && !n.includes('poutrine02')){
                   m.pbrMetallicRoughness.setBaseColorFactor(rgba);
-                  m.pbrMetallicRoughness.setMetallicFactor(0);
+                  m.pbrMetallicRoughness.setMetallicFactor(0.5);
                   m.pbrMetallicRoughness.setRoughnessFactor(1);
                 }
               });
