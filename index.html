@@ -143,38 +143,33 @@
 
     /* ——— AJOUT MEDIA-QUERIES RESPONSIVE ——— */
     @media (max-width: 1024px) {
-      #configurator {
-        grid-template-columns: 1fr;
-      }
-      .viewer-card {
-        height: auto;
-      }
+      #configurator { grid-template-columns:1fr; }
+      .viewer-card { height:auto; }
       model-viewer {
-        height: 50vh !important;
-        min-height: 300px;
+        height:60vh !important;    /* PLUS de hauteur sur tablette */
+        min-height:400px;
       }
+      .dimensions { grid-template-columns:repeat(3,1fr); }
+      .controls { margin-top:1rem; }
     }
     @media (max-width: 600px) {
-      #configurator {
-        padding: .5rem;
-        gap: .5rem;
-      }
-      .viewer-card {
-        border-radius: 0;
+      #configurator { padding:.5rem; gap:.5rem; }
+      .viewer-card { border-radius:0; }
+      model-viewer {
+        height:50vh !important;    /* MODE MOBILE : viewer très grand */
+        min-height:300px;
       }
       .dimensions {
-        grid-template-columns: 1fr;
+        display:flex;
+        flex-direction:column;     /* tuiles verticales */
       }
-      model-viewer {
-        height: 40vh !important;
-        min-height: 200px;
-      }
+      .dim-card { margin-bottom:.5rem; }
       .controls {
-        padding: 1rem;
-        box-shadow: none;
+        padding:1rem;
+        box-shadow:none;
       }
-      .group h3 { font-size: 1rem; }
-      .option { width: 50px; }
+      .group h3 { font-size:1rem; }
+      .option { width:50px; }
     }
     /* —————————————————————————————— */
   </style>
@@ -215,7 +210,7 @@
       </div>
     </div>
 
-    <!-- CONTROLES -->
+    <!-- CONTROLES (inchangés) -->
     <div class="controls">
       <h2>Configuration Tradi’home P4</h2>
 
