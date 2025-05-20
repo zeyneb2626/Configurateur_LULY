@@ -28,7 +28,6 @@
     model-viewer {
       width:100%; height:100%;
       background:#fafafa;
-      /* rend le modèle interactif */
       pointer-events: all;
       touch-action: none;
     }
@@ -237,18 +236,18 @@
       let sel       = {};
 
       const targets = {
-        Bardage:    ['poutrine01','poutrine02'],
-        Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
+        Bardage:    ['poutrine01', 'poutrine02'],
+        Menuiserie: ['porte', 'cadre porte fenetre', 'volets', 'encadrement'],
         Gouttiere:  ['goutieres'],
-        Pergola:    ['poutres','volet pergola','volets pergola'],  /* ajouté 'volets pergola' ici */
+        Pergola:    ['poutres', 'volet pergola', 'volets pergola'], /* Ajouté 'volets pergola' ici */
         Murs:       ['murs'],
-        Toit:       ['toit1','toit contour']
+        Toit:       ['toit1', 'toit contour']
       };
 
       const hexFixed = '#1c1c1c';
       function hex2rgba(h) {
-        const v = parseInt(h.slice(1),16);
-        return [(v>>16&255)/255,(v>>8&255)/255,(v&255)/255,1];
+        const v = parseInt(h.slice(1), 16);
+        return [(v >> 16 & 255) / 255, (v >> 8 & 255) / 255, (v & 255) / 255, 1];
       }
 
       mv.addEventListener('load', () => {
@@ -271,7 +270,7 @@
               sw.classList.add('selected');
 
               sel[cat] = +sw.dataset.cost;
-              const total = Object.values(sel).reduce((a,b) => a + b, base);
+              const total = Object.values(sel).reduce((a, b) => a + b, base);
               priceEl.textContent = total.toLocaleString('fr-FR') + ' €';
 
               const rgba = hex2rgba(sw.dataset.color);
