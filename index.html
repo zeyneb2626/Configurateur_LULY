@@ -142,36 +142,33 @@
     .btn-quote{ background:#006aff; color:#fff; }
 
     /* ——— AJOUT MEDIA-QUERIES RESPONSIVE ——— */
-    @media (max-width: 1024px) {
-      #configurator { grid-template-columns:1fr; }
-      .viewer-card { height:auto; }
-      model-viewer {
-        height:60vh !important;    /* PLUS de hauteur sur tablette */
-        min-height:400px;
-      }
-      .dimensions { grid-template-columns:repeat(3,1fr); }
-      .controls { margin-top:1rem; }
-    }
-    @media (max-width: 600px) {
-      #configurator { padding:.5rem; gap:.5rem; }
-      .viewer-card { border-radius:0; }
-      model-viewer {
-        height:50vh !important;    /* MODE MOBILE : viewer très grand */
-        min-height:300px;
-      }
-      .dimensions {
-        display:flex;
-        flex-direction:column;     /* tuiles verticales */
-      }
-      .dim-card { margin-bottom:.5rem; }
-      .controls {
-        padding:1rem;
-        box-shadow:none;
-      }
-      .group h3 { font-size:1rem; }
-      .option { width:50px; }
-    }
-    /* —————————————————————————————— */
+@media (max-width: 1024px) {
+  #configurator { grid-template-columns:1fr; }
+  .viewer-card { height:auto; }
+  model-viewer {
+    height:80vh !important;    /* Plus grand sur tablette */
+  }
+}
+@media (max-width: 600px) {
+  #configurator { padding:.5rem; gap:.5rem; }
+  .viewer-card { border-radius:0; }
+  model-viewer {
+    height:80vh !important;    /* Très grand sur mobile */
+  }
+  .dimensions {
+    display:flex;
+    flex-direction:column;
+  }
+  .dim-card { margin-bottom:.5rem; }
+  .controls {
+    padding:1rem;
+    box-shadow:none;
+  }
+  .group h3 { font-size:1rem; }
+  .option { width:50px; }
+}
+/* —————————————————————————————— */
+
   </style>
 </head>
 <body>
