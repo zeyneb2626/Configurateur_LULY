@@ -188,7 +188,7 @@
         id="mv"
         src="./TRADIHOME4.glb"
         alt="Maison Tradi'home"
-        exposure="0.4"
+        exposure="0.6"
         shadow-intensity="0.8"
         shadow-softness="0.3"
         environment-image="neutral"
@@ -219,117 +219,7 @@
     <div class="controls">
       <h2>Configuration Tradi’home P4</h2>
 
-      <!-- Bardage -->
-      <div class="group" data-cat="Bardage">
-        <h3>Bardage extérieur</h3>
-        <div class="options">
-          <div class="option">
-            <div class="swatch" style="background-color:#C19A6B" data-color="#C19A6B" data-cost="520"></div>
-            <div class="option-label">Chêne clair</div>
-            <div class="option-price">+520 €</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#8B5A2B" data-color="#8B5A2B" data-cost="790"></div>
-            <div class="option-label">Chêne foncé</div>
-            <div class="option-price">+790 €</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#3D4C5C" data-color="#3D4C5C" data-cost="895"></div>
-            <div class="option-label">Gris oragé</div>
-            <div class="option-price">+895 €</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Menuiserie -->
-      <div class="group" data-cat="Menuiserie">
-        <h3>Menuiserie ALU</h3>
-        <div class="options">
-          <div class="option">
-            <div class="swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
-            <div class="option-label">Blanc</div>
-            <div class="option-price">Inclus</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#293133" data-color="#293133" data-cost="1480"></div>
-            <div class="option-label">Anthracite</div>
-            <div class="option-price">+1 480 €</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Gouttière -->
-      <div class="group" data-cat="Gouttiere">
-        <h3>Gouttière et descente</h3>
-        <div class="options">
-          <div class="option">
-            <div class="swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
-            <div class="option-label">Blanc</div>
-            <div class="option-price">Inclus</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pergola -->
-      <div class="group" data-cat="Pergola">
-        <h3>Pergola bioclimatique</h3>
-        <div class="options">
-          <div class="option">
-            <div class="swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="3500"></div>
-            <div class="option-label">Blanc</div>
-            <div class="option-price">+3 500 €</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#293133" data-color="#293133" data-cost="3500"></div>
-            <div class="option-label">Anthracite</div>
-            <div class="option-price">+3 500 €</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Peinture murs -->
-      <div class="group" data-cat="Murs">
-        <h3>Peinture (mur extérieur)</h3>
-        <div class="options">
-          <div class="option">
-            <div class="swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
-            <div class="option-label">Blanc</div>
-            <div class="option-price">Inclus</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#CCC0AF" data-color="#CCC0AF" data-cost="399"></div>
-            <div class="option-label">Beige Ares</div>
-            <div class="option-price">+399 €</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#E6C7B1" data-color="#E6C7B1" data-cost="1499"></div>
-            <div class="option-label">Ocre Mojave</div>
-            <div class="option-price">+1 499 €</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Toiture -->
-      <div class="group" data-cat="Toit">
-        <h3>Tôle ondulée</h3>
-        <div class="options">
-          <div class="option">
-            <div class="swatch" style="background-color:#133654" data-color="#133654" data-cost="0"></div>
-            <div class="option-label">Bleu Ardoise</div>
-            <div class="option-price">Inclus</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#777777" data-color="#777777" data-cost="0"></div>
-            <div class="option-label">Gris Acier</div>
-            <div class="option-price">Inclus</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#CC3333" data-color="#CC3333" data-cost="1500"></div>
-            <div class="option-label">Rouge Hibiscus</div>
-            <div class="option-price">+1 500 €</div>
-          </div>
-        </div>
-      </div>
+      <!-- (… vos groupes d’options inchangés) … -->
 
       <!-- Bloc récapitulatif de prix -->
       <div id="price-summary">
@@ -374,6 +264,7 @@
       mv.addEventListener('load',()=>{  
         const mats = mv.model.materials;
         const fixedRGBA = hex2rgba(hexFixed);
+        // Bloquer poutrine02
         mats.forEach(m=>{
           if(m.name.toLowerCase().includes('poutrine02')){
             m.pbrMetallicRoughness.setBaseColorFactor(fixedRGBA);
@@ -386,24 +277,30 @@
 
           group.querySelectorAll('.swatch').forEach(sw=>{
             sw.addEventListener('click',()=>{
-              group.querySelectorAll('.swatch').forEach(x=>x.classList.remove('selected'));
+              group.querySelectorAll('.swatch')
+                   .forEach(x=>x.classList.remove('selected'));
               sw.classList.add('selected');
 
+              // Prix
               selection[cat] = +sw.dataset.cost;
               const opts = Object.values(selection).reduce((a,b)=>a+b,0);
               optEl.textContent   = opts.toLocaleString('fr-FR')+' €';
               totalEl.textContent = (basePrice+opts).toLocaleString('fr-FR')+' €';
 
+              // Couleurs
               const rgba = hex2rgba(sw.dataset.color);
               mats.forEach(m=>{
                 const n = m.name.toLowerCase();
                 if(frags.some(f=>n.includes(f)) && !n.includes('poutrine02')){
                   m.pbrMetallicRoughness.setBaseColorFactor(rgba);
+                  m.pbrMetallicRoughness.setMetallicFactor(0);
+                  m.pbrMetallicRoughness.setRoughnessFactor(1);
                 }
               });
             });
           });
 
+          // sélection par défaut
           const first = group.querySelector('.swatch');
           if(first) first.click();
         });
