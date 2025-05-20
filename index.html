@@ -3,173 +3,265 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Configurateur Tradi'home P4</title>
+  <title>Configuration Tradi'home P4</title>
 
   <script type="module"
           src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
 
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0 }
-    html, body { height: 100%; font-family: sans-serif }
-    #container { display: flex; height: 100vh; background: #f5f5f5 }
+    * { box-sizing:border-box; margin:0; padding:0 }
+    html, body { height:100%; font-family:sans-serif; background:#f0f2f5 }
+    #configurator {
+      display:grid;
+      grid-template-columns:2fr 1fr;
+      height:100vh;
+      gap:1rem;
+      padding:1rem;
+    }
+    .viewer-card {
+      background:#fff;
+      border-radius:8px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      overflow:hidden;
+    }
     model-viewer {
-      flex: 3;
-      width: 100%; height: 100%;
-      background: #fff;
-      camera-controls        /* PERMET à l'utilisateur de faire tourner/le zoomer */
+      width:100%; height:100%;
+      background:#fafafa;
+      camera-controls        /* rend le modèle manipulable */
+      exposure="0.4"
       shadow-intensity="0.8"
       shadow-softness="0.3"
-      exposure="0.4"
       environment-image="neutral"
       loading="eager"
-      min-pixel-ratio="1"
+      min-pixel-ratio="2"
       max-pixel-ratio="2";
     }
-    #controls {
-      flex: 1; padding: 1.5rem;
-      background: #fafafa; border-left: 1px solid #ddd;
-      overflow-y: auto;
+    .controls {
+      background:#fff;
+      border-radius:8px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      padding:1.5rem;
+      overflow-y:auto;
     }
-    h2 { margin-bottom: 1rem; font-size: 1.5rem; color: #333 }
-    .group { margin-bottom: 2rem }
-    .group h3 { margin-bottom: .75rem; font-size: 1.1rem; color: #222 }
-    .swatches { display: flex; gap: .5rem; flex-wrap: wrap }
+    .controls h2 {
+      margin-bottom:1rem;
+      color:#222;
+      font-size:1.5rem;
+    }
+    .group { margin-bottom:2rem; }
+    .group h3 {
+      margin-bottom:.75rem;
+      color:#444;
+      font-size:1.1rem;
+    }
+    .options {
+      display:flex; gap:1rem; flex-wrap:wrap;
+    }
+    .option {
+      text-align:center; width:80px;
+    }
     .swatch {
-      width: 48px; height: 48px;
-      border: 2px solid #ccc; border-radius: 6px;
-      cursor: pointer; position: relative;
-      background-size: cover; background-position: center;
-      transition: border-color .2s, transform .1s;
+      width:100%; aspect-ratio:1;
+      border:2px solid #ddd;
+      border-radius:6px;
+      cursor:pointer;
+      position:relative;
+      transition:border-color .2s;
     }
-    .swatch:hover { border-color: #888; transform: scale(1.05) }
-    .swatch.selected { border-color: #007aff; box-shadow: 0 0 0 3px rgba(0,122,255,0.2) }
-    .swatch::after {
-      content: attr(data-label);
-      position: absolute; bottom: -1.4rem; left: 50%;
-      transform: translateX(-50%);
-      font-size: .65rem; color: #555; white-space: nowrap;
+    .swatch:hover { border-color:#aaa; }
+    .swatch.selected { border-color:#006aff; }
+    .swatch.selected::after {
+      content:'✔';
+      position:absolute; top:4px; right:6px;
+      color:#006aff;
+      font-size:1rem;
     }
-    .price-tag {
-      position: absolute; bottom: -2.9rem; left:50%;
-      transform: translateX(-50%);
-      font-size: .6rem; color: #666;
+    .option-label {
+      margin-top:.5rem;
+      font-size:.85rem;
+      color:#444;
+    }
+    .option-price {
+      margin-top:.25rem;
+      font-size:.8rem;
+      color:#666;
     }
     #price-box {
-      margin-top: 2rem; padding: 1rem;
-      background: #fff; border: 1px solid #ddd; border-radius: 6px;
-      text-align: right; font-size: 1.25rem; font-weight: bold; color: #2c3e50;
+      margin-top:1.5rem;
+      font-size:1.2rem;
+      text-align:right;
+      font-weight:700;
+      color:#222;
     }
   </style>
 </head>
 <body>
 
-  <div id="container">
+  <div id="configurator">
     <!-- 3D VIEWER -->
-    <model-viewer
-      id="mv"
-      src="TRADIHOME4.glb"
-      alt="Maison Tradi'home P4">
-    </model-viewer>
+    <div class="viewer-card">
+      <model-viewer
+        id="mv"
+        src="./TRADIHOME4.glb"
+        alt="Maison Tradi'home">
+      </model-viewer>
+    </div>
 
     <!-- CONTROLES -->
-    <div id="controls">
-      <h2>Personnalisez votre maison</h2>
+    <div class="controls">
+      <h2>Configuration Tradi’home P4</h2>
 
-      <!-- Bardage extérieur -->
+      <!-- Bardage -->
       <div class="group" data-cat="Bardage">
         <h3>Bardage extérieur</h3>
-        <div class="swatches">
-          <div class="swatch" data-cat="Bardage" data-label="Chêne clair"   data-color="#C19A6B" data-cost="520"
-               style="background-color:#C19A6B;">
-            <div class="price-tag">+520 €</div>
+        <div class="options">
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#C19A6B"
+                 data-color="#C19A6B"
+                 data-cost="520"></div>
+            <div class="option-label">Chêne clair</div>
+            <div class="option-price">+520 €</div>
           </div>
-          <div class="swatch" data-cat="Bardage" data-label="Chêne foncé"   data-color="#8B5A2B" data-cost="790"
-               style="background-color:#8B5A2B;">
-            <div class="price-tag">+790 €</div>
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#8B5A2B"
+                 data-color="#8B5A2B"
+                 data-cost="790"></div>
+            <div class="option-label">Chêne foncé</div>
+            <div class="option-price">+790 €</div>
           </div>
-          <div class="swatch" data-cat="Bardage" data-label="Gris oragé"    data-color="#3D4C5C" data-cost="895"
-               style="background-color:#3D4C5C;">
-            <div class="price-tag">+895 €</div>
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#3D4C5C"
+                 data-color="#3D4C5C"
+                 data-cost="895"></div>
+            <div class="option-label">Gris oragé</div>
+            <div class="option-price">+895 €</div>
           </div>
         </div>
       </div>
 
-      <!-- Menuiserie ALU -->
+      <!-- Menuiserie -->
       <div class="group" data-cat="Menuiserie">
         <h3>Menuiserie ALU</h3>
-        <div class="swatches">
-          <div class="swatch" data-cat="Menuiserie" data-label="Blanc"      data-color="#FFFFFF" data-cost="0"
-               style="background-color:#FFFFFF;">
-            <div class="price-tag">Inclus</div>
+        <div class="options">
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#FFFFFF"
+                 data-color="#FFFFFF"
+                 data-cost="0"></div>
+            <div class="option-label">Blanc</div>
+            <div class="option-price">Inclus</div>
           </div>
-          <div class="swatch" data-cat="Menuiserie" data-label="Anthracite" data-color="#293133" data-cost="1480"
-               style="background-color:#293133;">
-            <div class="price-tag">+1 480 €</div>
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#293133"
+                 data-color="#293133"
+                 data-cost="1480"></div>
+            <div class="option-label">Anthracite</div>
+            <div class="option-price">+1 480 €</div>
           </div>
         </div>
       </div>
 
-      <!-- Gouttière et descente -->
+      <!-- Gouttière -->
       <div class="group" data-cat="Gouttiere">
         <h3>Gouttière et descente</h3>
-        <div class="swatches">
-          <div class="swatch" data-cat="Gouttiere" data-label="Blanc" data-color="#FFFFFF" data-cost="0"
-               style="background-color:#FFFFFF;">
-            <div class="price-tag">Inclus</div>
+        <div class="options">
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#FFFFFF"
+                 data-color="#FFFFFF"
+                 data-cost="0"></div>
+            <div class="option-label">Blanc</div>
+            <div class="option-price">Inclus</div>
           </div>
         </div>
       </div>
 
-      <!-- Pergola bioclimatique -->
+      <!-- Pergola -->
       <div class="group" data-cat="Pergola">
         <h3>Pergola bioclimatique</h3>
-        <div class="swatches">
-          <div class="swatch" data-cat="Pergola" data-label="Blanc"      data-color="#FFFFFF" data-cost="3500"
-               style="background-color:#FFFFFF;">
-            <div class="price-tag">+3 500 €</div>
+        <div class="options">
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#FFFFFF"
+                 data-color="#FFFFFF"
+                 data-cost="3500"></div>
+            <div class="option-label">Blanc</div>
+            <div class="option-price">+3 500 €</div>
           </div>
-          <div class="swatch" data-cat="Pergola" data-label="Anthracite" data-color="#293133" data-cost="3500"
-               style="background-color:#293133;">
-            <div class="price-tag">+3 500 €</div>
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#293133"
+                 data-color="#293133"
+                 data-cost="3500"></div>
+            <div class="option-label">Anthracite</div>
+            <div class="option-price">+3 500 €</div>
           </div>
         </div>
       </div>
 
-      <!-- Peinture (mur extérieur) -->
+      <!-- Peinture murs -->
       <div class="group" data-cat="Murs">
         <h3>Peinture (mur extérieur)</h3>
-        <div class="swatches">
-          <div class="swatch" data-cat="Murs" data-label="Blanc"       data-color="#FFFFFF" data-cost="0"
-               style="background-color:#FFFFFF;">
-            <div class="price-tag">Inclus</div>
+        <div class="options">
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#FFFFFF"
+                 data-color="#FFFFFF"
+                 data-cost="0"></div>
+            <div class="option-label">Blanc</div>
+            <div class="option-price">Inclus</div>
           </div>
-          <div class="swatch" data-cat="Murs" data-label="Beige Ares"   data-color="#CCC0AF" data-cost="399"
-               style="background-color:#CCC0AF;">
-            <div class="price-tag">+399 €</div>
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#CCC0AF"
+                 data-color="#CCC0AF"
+                 data-cost="399"></div>
+            <div class="option-label">Beige Ares</div>
+            <div class="option-price">+399 €</div>
           </div>
-          <div class="swatch" data-cat="Murs" data-label="Ocre Mojave" data-color="#E6C7B1" data-cost="1499"
-               style="background-color:#E6C7B1;">
-            <div class="price-tag">+1 499 €</div>
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#E6C7B1"
+                 data-color="#E6C7B1"
+                 data-cost="1499"></div>
+            <div class="option-label">Ocre Mojave</div>
+            <div class="option-price">+1 499 €</div>
           </div>
         </div>
       </div>
 
-      <!-- Tôle ondulée -->
+      <!-- Toiture -->
       <div class="group" data-cat="Toit">
         <h3>Tôle ondulée</h3>
-        <div class="swatches">
-          <div class="swatch" data-cat="Toit" data-label="Bleu Ardoise"   data-color="#133654" data-cost="0"
-               style="background-color:#133654;">
-            <div class="price-tag">Inclus</div>
+        <div class="options">
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#133654"
+                 data-color="#133654"
+                 data-cost="0"></div>
+            <div class="option-label">Bleu Ardoise</div>
+            <div class="option-price">Inclus</div>
           </div>
-          <div class="swatch" data-cat="Toit" data-label="Gris Acier"     data-color="#777777" data-cost="0"
-               style="background-color:#777777;">
-            <div class="price-tag">Inclus</div>
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#777777"
+                 data-color="#777777"
+                 data-cost="0"></div>
+            <div class="option-label">Gris Acier</div>
+            <div class="option-price">Inclus</div>
           </div>
-          <div class="swatch" data-cat="Toit" data-label="Rouge Hibiscus" data-color="#CC3333" data-cost="1500"
-               style="background-color:#CC3333;">
-            <div class="price-tag">+1 500 €</div>
+          <div class="option">
+            <div class="swatch"
+                 style="background-color:#CC3333"
+                 data-color="#CC3333"
+                 data-cost="1500"></div>
+            <div class="option-label">Rouge Hibiscus</div>
+            <div class="option-price">+1 500 €</div>
           </div>
         </div>
       </div>
@@ -185,11 +277,11 @@
       const mv      = document.getElementById('mv');
       const base    = 170000;
       const priceEl = document.getElementById('price');
-      let selection = {};
+      let sel       = {};
 
-      // Quelles parties changer pour chaque catégorie (sauf poutrine02)
+      // Les morceaux à colorer par catégorie
       const targets = {
-        Bardage:    ['poutrine01'],
+        Bardage:    ['poutrine01','poutrine02'],
         Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
         Gouttiere:  ['goutieres'],
         Pergola:    ['poutres','volet pergola'],
@@ -197,50 +289,53 @@
         Toit:       ['toit1','toit contour']
       };
 
-      function hex2rgba(hex) {
-        const v = parseInt(hex.slice(1),16);
+      // Couleur fixe pour poutrine02
+      const hexFixed = '#1c1c1c';  
+      function hex2rgba(h) {
+        const v = parseInt(h.slice(1),16);
         return [(v>>16&255)/255, (v>>8&255)/255, (v&255)/255, 1];
       }
 
       mv.addEventListener('load', () => {
         const mats = mv.model.materials;
 
-        // On fixe d’emblée poutrine02 en chêne foncé
-        const dark = hex2rgba('#8B5A2B');
+        // Appliquer la couleur fixe dès le départ sur poutrine02
+        const fixedRGBA = hex2rgba(hexFixed);
         mats.forEach(m => {
           if (m.name.toLowerCase().includes('poutrine02')) {
-            m.pbrMetallicRoughness.setBaseColorFactor(dark);
+            m.pbrMetallicRoughness.setBaseColorFactor(fixedRGBA);
           }
         });
 
+        // Pour chaque groupe d’options...
         document.querySelectorAll('.group').forEach(group => {
           const cat   = group.dataset.cat;
           const frags = targets[cat] || [];
 
-          group.querySelectorAll('.swatch').forEach(btn => {
-            btn.addEventListener('click', () => {
+          group.querySelectorAll('.swatch').forEach(sw => {
+            sw.addEventListener('click', () => {
               // UI
               group.querySelectorAll('.swatch')
-                   .forEach(el => el.classList.remove('selected'));
-              btn.classList.add('selected');
+                   .forEach(x => x.classList.remove('selected'));
+              sw.classList.add('selected');
 
               // Prix
-              selection[cat] = Number(btn.dataset.cost);
-              const total = Object.values(selection).reduce((a,b)=>a+b, base);
+              sel[cat] = +sw.dataset.cost;
+              const total = Object.values(sel).reduce((a,b)=>a+b, base);
               priceEl.textContent = total.toLocaleString('fr-FR') + ' €';
 
-              // Couleur
-              const rgba = hex2rgba(btn.dataset.color);
+              // Couleur (sauf poutrine02 qui est bloquée)
+              const rgba = hex2rgba(sw.dataset.color);
               mats.forEach(m => {
-                const name = m.name.toLowerCase();
-                if (frags.some(f => name.includes(f))) {
+                const n = m.name.toLowerCase();
+                if (frags.some(f => n.includes(f)) && !n.includes('poutrine02')) {
                   m.pbrMetallicRoughness.setBaseColorFactor(rgba);
                 }
               });
             });
           });
 
-          // Sélection initiale
+          // Sélection par défaut sur la première option
           const first = group.querySelector('.swatch');
           if (first) first.click();
         });
@@ -249,5 +344,6 @@
   </script>
 </body>
 </html>
+
 
 
