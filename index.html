@@ -399,14 +399,16 @@
       const totalEl    = document.getElementById('total-price');
       let selection    = {};
 
-      const targets = {
-        Bardage:    ['poutrine01','poutrine02'],
-        Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
-        Gouttiere:  ['goutieres'],
-        Pergola:    ['poutres','volet pergola'],
-        Murs:       ['murs'],
-        Toit:       ['toit1','toit contour']
-      };
+    const targets = {
+  Murs:    ['murs'],
+  Dalles:  ['dalles'],
+  Menuiserie: ['cadre_porte_fenetre','poigne','porte','Volets','encadrement','vitres'],
+  Toit:    ['Toit1','toit_contour','charpente'],
+  Gouttiere: ['goutieres'],
+  Pergola: ['poutres','volet_pergola','sol_pergola'],
+  // etc.
+};
+
 
       const hexFixed = '#1c1c1c';
       function hex2rgba(h){
