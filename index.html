@@ -185,7 +185,7 @@
       .option { width:50px; }
     }
     /* —————————————————————————————— */
- 
+
   @media (max-width: 768px) {
   /* Sur tablette / petit desktop on alourdit un peu la hauteur */
   .viewer-card { flex-direction: column; }
@@ -233,8 +233,9 @@
     <div class="viewer-card">
       <model-viewer
         id="mv"
-        src="./TRADIHOME14.glb"
+        src="./TRADIHOME15.glb"
         alt="Maison Tradi'home"
+         exposure="0.4"
          exposure="0.5"
   shadow-intensity="2"
   shadow-softness="0.6"
@@ -399,16 +400,14 @@
       const totalEl    = document.getElementById('total-price');
       let selection    = {};
 
-    const targets = {
-  Murs:    ['murs'],
-  Dalles:  ['dalles'],
-  Menuiserie: ['cadre_porte_fenetre','poigne','porte','Volets','encadrement'],
-  Toit:    ['Toit1','toit_contour','charpente'],
-  Gouttiere: ['goutieres'],
-  Pergola: ['poutres','volet_pergola'],
-  // etc.
-};
-
+      const targets = {
+        Bardage:    ['poutrine01','poutrine02'],
+        Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
+        Gouttiere:  ['goutieres'],
+        Pergola:    ['poutres','volet pergola'],
+        Murs:       ['murs'],
+        Toit:       ['toit1','toit contour']
+      };
 
       const hexFixed = '#1c1c1c';
       function hex2rgba(h){
@@ -459,4 +458,3 @@
   </script>
 </body>
 </html>
-
