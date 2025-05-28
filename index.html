@@ -440,16 +440,15 @@
       function updateEnergy(){
         let sum=0, lines=[];
         Object.entries(selection).forEach(([cat])=>{
-          const sw=document.querySelector(`.group[data-cat="${cat}"] .swatch.selected`);
+          + const sw = document.querySelector(`.group[data-cat="${cat}"] .swatch.selected`);
           if(!sw)return;
           const col=sw.dataset.color, imp=energyImpact[cat][col]||0;
           sum+=imp;
-          lines.push(`• ${cat} – ${sw.nextElementSibling.textContent}: ${imp>0?'+':''}${imp} kWh/an`);
-        });
-        energyEl.textContent=`${sum} kWh/an`;
+         + lines.push(`• ${cat} – ${sw.nextElementSibling.textContent}: ${imp>0?'+':''}${imp} kWh/an`);
+        + energyEl.textContent = `${sum} kWh/an`;
         const cls=getEnergyClass(sum);
         classEl.textContent=cls==='Aplus'?'A+':cls;
-        barFill.style.width=`${Math.min(100,Math.round(sum/4000*100))}%`;
+        + barFill.style.width = `${Math.min(100, Math.round(sum/4000*100))}%`;
         arrows.forEach(a=>a.classList.remove('active'));
         document.getElementById(`arrow-${cls}`).classList.add('active');
         document.getElementById('energy-details').innerHTML=
