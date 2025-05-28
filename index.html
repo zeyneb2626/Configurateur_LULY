@@ -8,6 +8,7 @@
           src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
   </script>
   <style>
+    /* --- ton CSS complet ici (inchangé) --- */
     * { box-sizing:border-box; margin:0; padding:0 }
     html, body { height:100%; font-family:sans-serif; background:#f0f2f5 }
     #configurator {
@@ -24,143 +25,80 @@
       display:flex;
       flex-direction:column;
       overflow:hidden;
-      /* Règles ajoutées pour placer le viewer sous les contrôles */
       position: relative;
       z-index: 1;
     }
     model-viewer {
-      flex:5;                   /* modèle agrandi */
+      flex:5;
       width:100%; height:100%;
-      background:#dddddd;       /* fond gris clair */
+      background:#dddddd;
       pointer-events: all;
       touch-action: none;
     }
-
-    /* === Panneau ÉNERGIE toujours visible + scroll === */
-    #energy-summary {
-      flex:2;                   /* plus petit que le viewer */
-      background:#fff;
-      border-top:1px solid #eee;
-      overflow-y:auto;
-      padding:1rem;
-    }
-    #energy-summary h3 {
-      font-size:1rem;
-      color:#222;
-      margin-bottom:1rem;
-    }
-    #energy-visual {
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      gap:1rem;
-      margin-bottom:1rem;
-    }
-    /* Silhouette maison avec porte et fenêtres */
-    #energy-visual svg.house {
-      width:180px; height:120px;
-    }
-    /* Flèches DPE */
-    #energy-visual svg.dpe {
-      width:60px; height:160px;
-    }
+    /* === Panneau ÉNERGIE === */
+    #energy-summary { flex:2; background:#fff; border-top:1px solid #eee; overflow-y:auto; padding:1rem; }
+    #energy-summary h3 { font-size:1rem; color:#222; margin-bottom:1rem; }
+    #energy-visual { display:flex; align-items:flex-start; justify-content:center; gap:1rem; margin-bottom:1rem; }
+    #energy-visual svg.house { width:180px; height:120px; }
+    #energy-visual svg.dpe   { width:60px; height:160px; }
     .dpe-arrow { opacity:.2; transition:opacity .4s; }
     .dpe-arrow.active { opacity:1; }
+    .energy-line { display:flex; justify-content:space-between; margin-bottom:.25rem; }
+    .energy-bar  { width:100%; height:6px; background:#eee; border-radius:3px; overflow:hidden; margin-top:.5rem; }
+    #energy-bar-fill { height:100%; width:0; background:#4caf50; transition:width .5s; }
+    #energy-details { margin-top:.5rem; font-size:.85rem; color:#555; line-height:1.4; max-height:120px; overflow:auto; }
 
-    .energy-line {
-      display:flex; justify-content:space-between;
-      margin-bottom:.25rem;
-    }
-    .energy-bar {
-      width:100%; height:6px; background:#eee;
-      border-radius:3px; overflow:hidden; margin-top:.5rem;
-    }
-    #energy-bar-fill {
-      height:100%; width:0; background:#4caf50;
-      transition:width .5s;
-    }
-    #energy-details {
-      margin-top:.5rem; font-size:.85rem; color:#555;
-      line-height:1.4; max-height:120px; overflow:auto;
-    }
-
-    /* -- DIMENSIONS CARDS -- */
+    /* -- DIMENSIONS -- */
     .dimensions {
-      flex:1;
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      background:#fff;
-      padding:1rem;
-      border-top:1px solid #eee;
-      border-radius:0 0 8px 8px;
-      gap:1rem;
+      flex:1; display:grid; grid-template-columns:repeat(3,1fr);
+      background:#fff; padding:1rem; border-top:1px solid #eee; border-radius:0 0 8px 8px; gap:1rem;
     }
     .dim-card {
-      background:#fff; border:1px solid #eee;
-      border-radius:6px; padding:.75rem;
-      text-align:center;
-      box-shadow:0 1px 4px rgba(0,0,0,0.05);
+      background:#fff; border:1px solid #eee; border-radius:6px; padding:.75rem;
+      text-align:center; box-shadow:0 1px 4px rgba(0,0,0,0.05);
     }
     .dim-card strong { display:block; font-size:1.25rem; color:#222 }
     .dim-card span   { font-size:.85rem; color:#666 }
 
-    /* -- CONTROLES -- */
+    /* -- CONTRÔLES -- */
     .controls {
-      background:#fff; border-radius:8px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.1);
-      padding:1.5rem; overflow-y:auto;
-      /* Règles ajoutées pour s’assurer que les contrôles captent les clics */
-      position: relative;
-      z-index: 2;
-      pointer-events: auto;
+      background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);
+      padding:1.5rem; overflow-y:auto; position: relative; z-index:2; pointer-events: auto;
     }
-    .controls h2 {
-      font-size:1.5rem; color:#222; margin-bottom:1rem;
-    }
+    .controls h2 { font-size:1.5rem; color:#222; margin-bottom:1rem; }
     .group { margin-bottom:1.5rem }
-    .group h3 {
-      font-size:1.1rem; color:#333; margin-bottom:.5rem;
-    }
+    .group h3 { font-size:1.1rem; color:#333; margin-bottom:.5rem; }
     .options { display:flex; gap:.75rem; flex-wrap:wrap }
-    .option { text-align:center; width:70px }
+    .option  { text-align:center; width:70px }
     .swatch {
-      width:100%; aspect-ratio:1;
-      border:1px solid #ccc; border-radius:4px;
-      cursor:pointer; position:relative;
-      transition:border-color .2s;
+      width:100%; aspect-ratio:1; border:1px solid #ccc; border-radius:4px;
+      cursor:pointer; position:relative; transition:border-color .2s;
     }
-    .swatch:hover { border-color:#999 }
+    .swatch:hover    { border-color:#999 }
     .swatch.selected { border-color:#006aff }
     .swatch.selected::after {
-      content:'✔'; position:absolute; top:4px; right:6px;
-      color:#006aff; font-size:1rem;
+      content:'✔'; position:absolute; top:4px; right:6px; color:#006aff; font-size:1rem;
     }
     .option-label { margin-top:.3rem; font-size:.75rem; color:#444 }
     .option-price { font-size:.7rem; color:#666 }
 
+    /* -- Récapitulatif prix -- */
     #price-summary {
-      background:#fff; border:1px solid #eee;
-      border-radius:6px; padding:1rem; margin:1rem 0;
-      box-shadow:0 1px 4px rgba(0,0,0,0.05);
+      background:#fff; border:1px solid #eee; border-radius:6px;
+      padding:1rem; margin:1rem 0; box-shadow:0 1px 4px rgba(0,0,0,0.05);
     }
-    #price-summary h3 {
-      font-size:1rem; margin-bottom:.75rem; color:#222;
-    }
+    #price-summary h3 { font-size:1rem; margin-bottom:.75rem; color:#222 }
     #price-summary .line {
-      display:flex; justify-content:space-between;
-      margin-bottom:.5rem; font-size:.9rem; color:#333;
+      display:flex; justify-content:space-between; margin-bottom:.5rem; font-size:.9rem; color:#333;
     }
-    #price-summary .line.total {
-      font-weight:700; font-size:1.1rem;
-    }
+    #price-summary .line.total { font-weight:700; font-size:1.1rem; }
 
     .action-buttons { display:flex; gap:.75rem }
     .action-buttons button {
-      flex:1; padding:.75rem; font-size:.95rem;
-      border:none; border-radius:4px; cursor:pointer;
+      flex:1; padding:.75rem; font-size:.95rem; border:none; border-radius:4px; cursor:pointer;
     }
-    .btn-save { background:#f0f0f0; color:#333 }
-    .btn-quote{ background:#006aff; color:#fff }
+    .btn-save  { background:#f0f0f0; color:#333 }
+    .btn-quote { background:#006aff; color:#fff }
 
     @media (max-width:1024px){
       #configurator{ grid-template-columns:1fr }
@@ -189,7 +127,7 @@
         max-camera-orbit="360deg 90deg auto">
       </model-viewer>
 
-      <!-- panneau ÉNERGIE avec scroll -->
+      <!-- panneau ÉNERGIE -->
       <div id="energy-summary">
         <h3>Performance énergétique estimée</h3>
 
@@ -210,7 +148,7 @@
           <svg class="dpe" viewBox="0 0 60 160" xmlns="http://www.w3.org/2000/svg">
             <g id="arrow-Aplus" class="dpe-arrow">
               <polygon points="0,0 50,0 60,10 50,20 0,20" fill="#006400"/>
-              <text x="5" y="15" font-size="12" fill="#fff">A+</text>
+              <text x="5"  y="15" font-size="12" fill="#fff">A+</text>
             </g>
             <g id="arrow-A" class="dpe-arrow" transform="translate(0,20)">
               <polygon points="0,0 50,0 60,10 50,20 0,20" fill="#2e7d32"/>
@@ -261,7 +199,8 @@
     <!-- CONTROLES -->
     <div class="controls">
       <h2>Configuration Tradi’home</h2>
- <!-- Bardage -->
+
+      <!-- Bardage -->
       <div class="group" data-cat="Bardage">
         <h3>Bardage extérieur</h3>
         <div class="options">
@@ -282,6 +221,7 @@
           </div>
         </div>
       </div>
+
       <!-- Menuiserie ALU -->
       <div class="group" data-cat="Menuiserie">
         <h3>Menuiserie ALU</h3>
@@ -299,7 +239,7 @@
         </div>
       </div>
 
-      <!-- Gouttière et descente -->
+      <!-- Gouttière -->
       <div class="group" data-cat="Gouttiere">
         <h3>Gouttière et descente</h3>
         <div class="options">
@@ -311,7 +251,7 @@
         </div>
       </div>
 
-      <!-- Pergola bioclimatique -->
+      <!-- Pergola -->
       <div class="group" data-cat="Pergola">
         <h3>Pergola bioclimatique</h3>
         <div class="options">
@@ -328,7 +268,7 @@
         </div>
       </div>
 
-      <!-- Peinture (mur extérieur) -->
+      <!-- Peinture -->
       <div class="group" data-cat="Murs">
         <h3>Peinture (mur extérieur)</h3>
         <div class="options">
@@ -350,7 +290,7 @@
         </div>
       </div>
 
-      <!-- Tôle ondulée -->
+      <!-- Toit -->
       <div class="group" data-cat="Toit">
         <h3>Tôle ondulée</h3>
         <div class="options">
@@ -372,7 +312,7 @@
         </div>
       </div>
 
-      <!-- Récapitulatif de prix -->
+      <!-- Récapitulatif -->
       <div id="price-summary">
         <h3>Récapitulatif de prix</h3>
         <div class="line"><span>Prix de base :</span><span id="base-price">170 000 €</span></div>
@@ -380,7 +320,6 @@
         <div class="line total"><span>Total TTC :</span><span id="total-price">170 000 €</span></div>
       </div>
 
-      <!-- Boutons d’action -->
       <div class="action-buttons">
         <button class="btn-save">Enregistrer la configuration</button>
         <button class="btn-quote">Demander un devis</button>
@@ -391,11 +330,12 @@
   <script>
     // --------------------------------------------------
     const energyImpact = {
-      Toit:      {'#1A2E3F':3000,'#A6A6A6':3200,'#C0392B':3500},
-      Pergola:   {'#FFFFFF':-200,'#000000':300},
-      Murs:      {'#FFFFFF':0,'#D4C4A3':100,'#E6C7B1':150},
-      Menuiserie:{'#FFFFFF':0,'#000000':50},
-      Gouttiere: {'#FFFFFF':0}
+      Bardage:    {'#C19A6B':520,'#8B5A2B':790,'#3D4C5C':895},
+      Toit:       {'#1A2E3F':3000,'#A6A6A6':3200,'#C0392B':3500},
+      Pergola:    {'#FFFFFF':-200,'#000000':300},
+      Murs:       {'#FFFFFF':0,'#D4C4A3':100,'#E6C7B1':150},
+      Menuiserie: {'#FFFFFF':0,'#000000':50},
+      Gouttiere:  {'#FFFFFF':0}
     };
     function getEnergyClass(kwh){
       if(kwh<2000) return 'Aplus';
@@ -405,9 +345,8 @@
       if(kwh<4000) return 'D';
       return 'E';
     }
-    // --------------------------------------------------
 
-    window.addEventListener('DOMContentLoaded',()=>{
+    window.addEventListener('DOMContentLoaded',()=> {
       const mv        = document.getElementById('mv');
       const optEl     = document.getElementById('opt-price');
       const totalEl   = document.getElementById('total-price');
@@ -418,7 +357,7 @@
       const basePrice = 170000;
       let   selection = {};
 
-       const targets = {
+      const targets = {
         Bardage:    ['poutrine01','poutrine02'],
         Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
         Gouttiere:  ['goutieres'],
@@ -428,49 +367,52 @@
       };
 
       function hex2rgba(h){
-        const v=parseInt(h.slice(1),16);
-        return[
-          (v>>16&255)/255,
-          (v>>8 &255)/255,
-          (v     &255)/255,
+        const v = parseInt(h.slice(1),16);
+        return [
+          (v>>16 & 255)/255,
+          (v>> 8 & 255)/255,
+          (v     & 255)/255,
           1
         ];
       }
 
       function updateEnergy(){
-        let sum=0, lines=[];
-        Object.entries(selection).forEach(([cat])=>{
-          + const sw = document.querySelector(`.group[data-cat="${cat}"] .swatch.selected`);
-          if(!sw)return;
-          const col=sw.dataset.color, imp=energyImpact[cat][col]||0;
-          sum+=imp;
-         + lines.push(`• ${cat} – ${sw.nextElementSibling.textContent}: ${imp>0?'+':''}${imp} kWh/an`);
-        + energyEl.textContent = `${sum} kWh/an`;
-        const cls=getEnergyClass(sum);
-        classEl.textContent=cls==='Aplus'?'A+':cls;
-        + barFill.style.width = `${Math.min(100, Math.round(sum/4000*100))}%`;
-        arrows.forEach(a=>a.classList.remove('active'));
+        let sum = 0, lines = [];
+        Object.keys(selection).forEach(cat => {
+          const sw = document.querySelector(`.group[data-cat="${cat}"] .swatch.selected`);
+          if (!sw) return;
+          const col = sw.dataset.color;
+          const imp = energyImpact[cat][col] || 0;
+          sum += imp;
+          lines.push(`• ${cat} – ${sw.nextElementSibling.textContent}: ${imp>0?'+':''}${imp} kWh/an`);
+        });
+        energyEl.textContent = `${sum} kWh/an`;
+        const cls = getEnergyClass(sum);
+        classEl.textContent = cls==='Aplus' ? 'A+' : cls;
+        barFill.style.width = `${Math.min(100, Math.round(sum/4000*100))}%`;
+        arrows.forEach(a => a.classList.remove('active'));
         document.getElementById(`arrow-${cls}`).classList.add('active');
-        document.getElementById('energy-details').innerHTML=
-          lines.length?lines.join('<br>'):'<i>Aucun matériau sélectionné</i>';
+        document.getElementById('energy-details').innerHTML =
+          lines.length ? lines.join('<br>') : '<i>Aucun matériau sélectionné</i>';
       }
 
-      mv.addEventListener('load',()=>{
-        const mats=mv.model.materials;
-        document.querySelectorAll('.group').forEach(group=>{
-          const cat=group.dataset.cat, frags=targets[cat]||[];
-          group.querySelectorAll('.swatch').forEach(sw=>{
-            sw.addEventListener('click',()=>{
-              group.querySelectorAll('.swatch').forEach(x=>x.classList.remove('selected'));
+      mv.addEventListener('load', ()=> {
+        const mats = mv.model.materials;
+        document.querySelectorAll('.group').forEach(group => {
+          const cat = group.dataset.cat;
+          const frags = targets[cat] || [];
+          group.querySelectorAll('.swatch').forEach(sw => {
+            sw.addEventListener('click', ()=> {
+              group.querySelectorAll('.swatch').forEach(x=> x.classList.remove('selected'));
               sw.classList.add('selected');
-              selection[cat]=+sw.dataset.cost;
-              const tot=Object.values(selection).reduce((a,b)=>a+b,0);
-              optEl.textContent=`${tot.toLocaleString('fr-FR')} €`;
-              totalEl.textContent=`${(basePrice+tot).toLocaleString('fr-FR')} €`;
-              const rgba=hex2rgba(sw.dataset.color);
-              mats.forEach(m=>{
-                const name=m.name.toLowerCase();
-                if(frags.some(f=>name.includes(f))){
+              selection[cat] = +sw.dataset.cost;
+              const tot = Object.values(selection).reduce((a,b)=>a+b, 0);
+              optEl.textContent   = `${tot.toLocaleString('fr-FR')} €`;
+              totalEl.textContent = `${(basePrice+tot).toLocaleString('fr-FR')} €`;
+              const rgba = hex2rgba(sw.dataset.color);
+              mats.forEach(m => {
+                const name = m.name.toLowerCase();
+                if (frags.some(f=>name.includes(f))) {
                   m.pbrMetallicRoughness.setBaseColorFactor(rgba);
                   m.pbrMetallicRoughness.setMetallicFactor(1);
                   m.pbrMetallicRoughness.setRoughnessFactor(1);
@@ -479,8 +421,8 @@
               updateEnergy();
             });
           });
-          const first=group.querySelector('.swatch');
-          if(first) first.click();
+          const first = group.querySelector('.swatch');
+          if (first) first.click();
         });
         updateEnergy();
       });
@@ -488,3 +430,4 @@
   </script>
 </body>
 </html>
+
