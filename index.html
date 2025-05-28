@@ -338,13 +338,16 @@
       Gouttiere:  {'#FFFFFF':0}
     };
     function getEnergyClass(kwh){
-      if(kwh<2000) return 'Aplus';
-      if(kwh<2500) return 'A';
-      if(kwh<3000) return 'B';
-      if(kwh<3500) return 'C';
-      if(kwh<4000) return 'D';
-      return 'E';
-    }
+  if (kwh < 2000) return 'Aplus';
+  if (kwh < 2500) return 'A';
+  // On passe de 3000 à 3500 pour B
+  if (kwh < 3500) return 'B';
+  // On décale C et D à partir de 3500 et 4000
+  if (kwh < 4000) return 'C';
+  if (kwh < 4500) return 'D';
+  return 'E';
+}
+
 
     window.addEventListener('DOMContentLoaded',()=> {
       const mv        = document.getElementById('mv');
