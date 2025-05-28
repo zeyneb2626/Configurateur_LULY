@@ -21,10 +21,11 @@
       background:#fff;
       border-radius:8px;
       box-shadow:0 2px 8px rgba(0,0,0,0.1);
-      position:relative;
-      overflow:hidden;
+      position:relative;  /* pour que .controls soit au-dessus */
+      z-index:1;
       display:flex;
       flex-direction:column;
+      overflow:hidden;
     }
     model-viewer {
       flex:1;
@@ -33,6 +34,57 @@
       pointer-events: all;
       touch-action: none;
     }
+
+    /* === Panneau ÉNERGIE === */
+    #energy-summary {
+      background:#fff;
+      border-top:1px solid #eee;
+      padding:1rem;
+      overflow-y:auto;
+    }
+    #energy-summary h3 {
+      margin-bottom:1rem;
+      font-size:1rem;
+      color:#222;
+    }
+    #energy-visual {
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      gap:1rem;
+      margin-bottom:1rem;
+    }
+    /* silhouette maison */
+    #energy-visual svg.house {
+      width:180px; height:120px;
+    }
+    /* flèches DPE */
+    #energy-visual svg.dpe {
+      width:60px; height:160px;
+    }
+    .dpe-arrow { opacity:.2; transition:opacity .4s }
+    .dpe-arrow.active { opacity:1 }
+
+    .energy-line {
+      display:flex; justify-content:space-between;
+      margin-bottom:.25rem;
+    }
+    .energy-bar {
+      width:100%; height:6px; background:#eee;
+      border-radius:3px; overflow:hidden; margin-top:.5rem;
+    }
+    #energy-bar-fill {
+      height:100%; width:0; background:#4caf50;
+      transition:width .5s;
+    }
+    #energy-details {
+      margin-top:.5rem;
+      font-size:.85rem;
+      color:#555;
+      line-height:1.4;
+    }
+    /* ==================== */
+
     /* -- DIMENSIONS CARDS -- */
     .dimensions {
       display:grid;
@@ -51,8 +103,8 @@
       text-align:center;
       box-shadow:0 1px 4px rgba(0,0,0,0.05);
     }
-    .dim-card strong { display:block; font-size:1.25rem; color:#222; }
-    .dim-card span   { font-size:.85rem; color:#666; }
+    .dim-card strong { display:block; font-size:1.25rem; color:#222 }
+    .dim-card span   { font-size:.85rem; color:#666 }
 
     .controls {
       background:#fff;
@@ -60,20 +112,23 @@
       box-shadow:0 2px 8px rgba(0,0,0,0.1);
       padding:1.5rem;
       overflow-y:auto;
+      position:relative;  /* pour rester au-dessus */
+      z-index:2;
+      pointer-events:auto;
     }
     .controls h2 {
       margin-bottom:1rem;
       color:#222;
       font-size:1.5rem;
     }
-    .group { margin-bottom:1.5rem; }
+    .group { margin-bottom:1.5rem }
     .group h3 {
       margin-bottom:.5rem;
       color:#333;
       font-size:1.1rem;
     }
-    .options { display:flex; gap:.75rem; flex-wrap:wrap; }
-    .option { text-align:center; width:70px; }
+    .options { display:flex; gap:.75rem; flex-wrap:wrap }
+    .option { text-align:center; width:70px }
     .swatch {
       width:100%; aspect-ratio:1;
       border:1px solid #ccc;
@@ -82,25 +137,15 @@
       position:relative;
       transition:border-color .2s;
     }
-    .swatch:hover { border-color:#999; }
-    .swatch.selected { border-color:#006aff; }
+    .swatch:hover { border-color:#999 }
+    .swatch.selected { border-color:#006aff }
     .swatch.selected::after {
-      content:'✔';
-      position:absolute; top:4px; right:6px;
-      color:#006aff;
-      font-size:1rem;
+      content:'✔'; position:absolute; top:4px; right:6px;
+      color:#006aff; font-size:1rem;
     }
-    .option-label {
-      margin-top:.3rem;
-      font-size:.75rem;
-      color:#444;
-    }
-    .option-price {
-      font-size:.7rem;
-      color:#666;
-    }
+    .option-label { margin-top:.3rem; font-size:.75rem; color:#444 }
+    .option-price { font-size:.7rem; color:#666 }
 
-    /* Bloc récapitulatif prix – SOBRE */
     #price-summary {
       background:#fff;
       border:1px solid #eee;
@@ -111,162 +156,134 @@
     }
     #price-summary h3 {
       margin-bottom:.75rem;
-      font-size:1rem;
-      color:#222;
+      font-size:1rem; color:#222;
     }
     #price-summary .line {
-      display:flex;
-      justify-content:space-between;
+      display:flex; justify-content:space-between;
       margin-bottom:.5rem;
       font-size:.9rem;
       color:#333;
     }
     #price-summary .line.total {
-      font-weight:700;
-      font-size:1.1rem;
+      font-weight:700; font-size:1.1rem;
     }
 
     .action-buttons {
-      display:flex;
-      gap:.75rem;
+      display:flex; gap:.75rem;
     }
     .action-buttons button {
-      flex:1;
-      padding:.75rem;
-      font-size:.95rem;
-      border:none;
-      border-radius:4px;
-      cursor:pointer;
+      flex:1; padding:.75rem; font-size:.95rem;
+      border:none; border-radius:4px; cursor:pointer;
     }
-    .btn-save { background:#f0f0f0; color:#333; }
-    .btn-quote{ background:#006aff; color:#fff; }
+    .btn-save { background:#f0f0f0; color:#333 }
+    .btn-quote{ background:#006aff; color:#fff }
 
-      /* ——— MEDIA-QUERIES RESPONSIVE ——— */
-    @media (max-width: 1024px) {
-      #configurator {
-        grid-template-columns: 1fr;
-      }
-      .viewer-card { height: auto; }
-      model-viewer {
-        height: 70vh !important;
-        min-height: 350px;
-      }
+    /* ——— MEDIA-QUERIES ——— */
+    @media (max-width:1024px){
+      #configurator{grid-template-columns:1fr}
+      .viewer-card{height:auto}
+      model-viewer{height:70vh!important;min-height:350px}
     }
-    @media (max-width: 600px) {
-  /* … autres règles mobile que tu laisses en place … */
-
-  /* → on agrandit verticalement le viewer */
-  model-viewer {
-    height: 70vh !important;
-    min-height: 300px;
-  }
-
-  /* → on remet les 3 cartes dimensions en ligne */
-  .dimensions {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: .5rem;
-    gap: .5rem;
-  }
-  .dim-card {
-    margin-bottom: 0;
-  }
-
-  /* le reste de tes règles mobile existantes… */
-}
-
-      /* on alléger le contrôle */
-      .controls {
-        padding:1rem;
-        box-shadow:none;
-      }
-      .group h3 { font-size:1rem; }
-      .option { width:50px; }
+    @media (max-width:600px){
+      model-viewer{height:70vh!important;min-height:300px}
+      .dimensions{display:flex;gap:.5rem;padding:.5rem}
     }
-    /* —————————————————————————————— */
-
-  @media (max-width: 768px) {
-  /* Sur tablette / petit desktop on alourdit un peu la hauteur */
-  .viewer-card { flex-direction: column; }
-  model-viewer {
-    height: 60vh !important;
-    min-height: 400px;
-  }
-  .dimensions {
-    /* Toujours 3 en ligne, mais on resserre les marges */
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 1rem;
-  }
-  .dimensions .dim-card {
-    flex: 1;
-    margin: 0 0.25rem;
-  }
-}
-
-@media (max-width: 480px) {
-  /* Sur mobile on passe le viewer en portrait fort pour agrandir */
-  model-viewer {
-    height: 80vh !important;
-    min-height: 300px;
-  }
-  .dimensions {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem;
-  }
-  .dimensions .dim-card {
-    flex: 1;
-    margin: 0 0.25rem;
-    /* On réduit un peu la typo si besoin */
-    font-size: 0.9rem;
-  }
-}
-
   </style>
 </head>
 <body>
 
   <div id="configurator">
-    <!-- 3D VIEWER + dimensions -->
+    <!-- 3D VIEWER + ÉNERGIE + dimensions -->
     <div class="viewer-card">
       <model-viewer
         id="mv"
         src="./TRADIHOME17.glb"
         alt="Maison Tradi'home"
-         exposure="0.8"
-  shadow-intensity="2"
-  shadow-softness="0.8"
+        exposure="0.8"
+        shadow-intensity="2"
+        shadow-softness="0.8"
         camera-controls
-        <!-- phi = 0° 
-       phi = 90° 
-  min-camera-orbit="0deg 0deg auto"
-  max-camera-orbit="360deg 90deg auto">
+        min-camera-orbit="0deg 0deg auto"
+        max-camera-orbit="360deg 90deg auto">
       </model-viewer>
 
-      <!-- Dimensions sous le viewer -->
+      <!-- panneau énergie -->
+      <div id="energy-summary">
+        <h3>Performance énergétique estimée</h3>
+
+        <div id="energy-visual">
+          <!-- silhouette maison -->
+          <svg class="house" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="10,60 60,20 110,60" fill="#C19A6B"/>
+            <rect x="10" y="60" width="100" height="30" fill="#C19A6B"/>
+            <rect x="55" y="70" width="10" height="20" fill="#8B5A2B"/>
+            <rect x="25" y="70" width="12" height="12" fill="#FFF"/>
+            <rect x="80" y="70" width="12" height="12" fill="#FFF"/>
+          </svg>
+          <!-- flèches DPE -->
+          <svg class="dpe" viewBox="0 0 60 160" xmlns="http://www.w3.org/2000/svg">
+            <g id="arrow-Aplus" class="dpe-arrow">
+              <polygon points="0,0 50,0 60,10 50,20 0,20" fill="#006400"/>
+              <text x="5" y="15" font-size="12" fill="#fff">A+</text>
+            </g>
+            <g id="arrow-A" class="dpe-arrow" transform="translate(0,20)">
+              <polygon points="0,0 50,0 60,10 50,20 0,20" fill="#2e7d32"/>
+              <text x="20" y="15" font-size="12" fill="#fff">A</text>
+            </g>
+            <g id="arrow-B" class="dpe-arrow" transform="translate(0,40)">
+              <polygon points="0,0 50,0 60,10 50,20 0,20" fill="#558b2f"/>
+              <text x="20" y="15" font-size="12" fill="#fff">B</text>
+            </g>
+            <g id="arrow-C" class="dpe-arrow" transform="translate(0,60)">
+              <polygon points="0,0 50,0 60,10 50,20 0,20" fill="#9ccc65"/>
+              <text x="20" y="15" font-size="12" fill="#000">C</text>
+            </g>
+            <g id="arrow-D" class="dpe-arrow" transform="translate(0,80)">
+              <polygon points="0,0 50,0 60,10 50,20 0,20" fill="#ffeb3b"/>
+              <text x="20" y="15" font-size="12" fill="#000">D</text>
+            </g>
+            <g id="arrow-E" class="dpe-arrow" transform="translate(0,100)">
+              <polygon points="0,0 50,0 60,10 50,20 0,20" fill="#ffb300"/>
+              <text x="20" y="15" font-size="12" fill="#000">E</text>
+            </g>
+            <g id="arrow-F" class="dpe-arrow" transform="translate(0,120)">
+              <polygon points="0,0 50,0 60,10 50,20 0,20" fill="#f4511e"/>
+              <text x="20" y="15" font-size="12" fill="#fff">F</text>
+            </g>
+            <g id="arrow-G" class="dpe-arrow" transform="translate(0,140)">
+              <polygon points="0,0 50,0 60,10 50,20 0,20" fill="#d32f2f"/>
+              <text x="20" y="15" font-size="12" fill="#fff">G</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="energy-line">
+          <span>Consommation :</span><span id="energy-value">0 kWh/an</span>
+        </div>
+        <div class="energy-line">
+          <span>Classe :</span><span id="energy-class">–</span>
+        </div>
+        <div class="energy-bar">
+          <div id="energy-bar-fill"></div>
+        </div>
+        <h4 style="margin-top:1rem;font-size:.9rem;color:#555">
+          Détail par matériau
+        </h4>
+        <div id="energy-details"><i>Aucun matériau sélectionné</i></div>
+      </div>
+
+      <!-- Dimensions -->
       <div class="dimensions">
-        <div class="dim-card">
-          <strong>85 m²</strong>
-          <span>Surface</span>
-        </div>
-        <div class="dim-card">
-          <strong>3 Ch</strong>
-          <span>Chambres</span>
-        </div>
-        <div class="dim-card">
-          <strong>2 SdE</strong>
-          <span>Salles d'eau</span>
-        </div>
+        <div class="dim-card"><strong>85 m²</strong><span>Surface</span></div>
+        <div class="dim-card"><strong>3 Ch</strong><span>Chambres</span></div>
+        <div class="dim-card"><strong>2 SdE</strong><span>Salles d'eau</span></div>
       </div>
     </div>
 
     <!-- CONTROLES (inchangés) -->
     <div class="controls">
       <h2>Configuration Tradi’home P4</h2>
-
-      <!-- Bardage -->
+      <!-- tes groupes Bardage, Menuiserie, … Toit comme avant -->
       <div class="group" data-cat="Bardage">
         <h3>Bardage extérieur</h3>
         <div class="options">
@@ -287,106 +304,13 @@
           </div>
         </div>
       </div>
-
-      <!-- Menuiserie -->
-      <div class="group" data-cat="Menuiserie">
-        <h3>Menuiserie ALU</h3>
-        <div class="options">
-          <div class="option">
-            <div class="swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
-            <div class="option-label">Blanc</div>
-            <div class="option-price">Inclus</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#293133" data-color="#293133" data-cost="1480"></div>
-            <div class="option-label">Anthracite</div>
-            <div class="option-price">+1 480 €</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Gouttière -->
-      <div class="group" data-cat="Gouttiere">
-        <h3>Gouttière et descente</h3>
-        <div class="options">
-          <div class="option">
-            <div class="swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
-            <div class="option-label">Blanc</div>
-            <div class="option-price">Inclus</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Pergola -->
-      <div class="group" data-cat="Pergola">
-        <h3>Pergola bioclimatique</h3>
-        <div class="options">
-          <div class="option">
-            <div class="swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="3500"></div>
-            <div class="option-label">Blanc</div>
-            <div class="option-price">+3 500 €</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#293133" data-color="#293133" data-cost="3500"></div>
-            <div class="option-label">Anthracite</div>
-            <div class="option-price">+3 500 €</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Peinture murs -->
-      <div class="group" data-cat="Murs">
-        <h3>Peinture (mur extérieur)</h3>
-        <div class="options">
-          <div class="option">
-            <div class="swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
-            <div class="option-label">Blanc</div>
-            <div class="option-price">Inclus</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#CCC0AF" data-color="#CCC0AF" data-cost="399"></div>
-            <div class="option-label">Beige Ares</div>
-            <div class="option-price">+399 €</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#E6C7B1" data-color="#E6C7B1" data-cost="1499"></div>
-            <div class="option-label">Ocre Mojave</div>
-            <div class="option-price">+1 499 €</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Toiture -->
-      <div class="group" data-cat="Toit">
-        <h3>Tôle ondulée</h3>
-        <div class="options">
-          <div class="option">
-            <div class="swatch" style="background-color:#133654" data-color="#133654" data-cost="0"></div>
-            <div class="option-label">Bleu Ardoise</div>
-            <div class="option-price">Inclus</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#777777" data-color="#777777" data-cost="0"></div>
-            <div class="option-label">Gris Acier</div>
-            <div class="option-price">Inclus</div>
-          </div>
-          <div class="option">
-            <div class="swatch" style="background-color:#CC3333" data-color="#CC3333" data-cost="1500"></div>
-            <div class="option-label">Rouge Hibiscus</div>
-            <div class="option-price">+1 500 €</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bloc récapitulatif de prix -->
+      <!-- … (Menuiserie, Gouttiere, Pergola, Murs, Toit) … -->
       <div id="price-summary">
         <h3>Récapitulatif de prix</h3>
         <div class="line"><span>Prix de base :</span><span id="base-price">170 000 €</span></div>
         <div class="line"><span>Vos options :</span><span id="opt-price">0 €</span></div>
         <div class="line total"><span>Prix total TTC :</span><span id="total-price">170 000 €</span></div>
       </div>
-
-      <!-- Boutons -->
       <div class="action-buttons">
         <button class="btn-save">Enregistrer la configuration</button>
         <button class="btn-quote">Demander un devis</button>
@@ -395,13 +319,34 @@
   </div>
 
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const mv         = document.getElementById('mv');
-      const basePrice  = 170000;
-      const baseEl     = document.getElementById('base-price');
-      const optEl      = document.getElementById('opt-price');
-      const totalEl    = document.getElementById('total-price');
-      let selection    = {};
+    // impact énergétique en kWh/an
+    const energyImpact = {
+      Toit:      {'#133654':3000,'#777777':3200,'#CC3333':3500},
+      Pergola:   {'#FFFFFF':-200,'#293133':-300},
+      Murs:      {'#FFFFFF':0,'#CCC0AF':100,'#E6C7B1':150},
+      Menuiserie:{'#FFFFFF':0,'#293133':50},
+      Gouttiere: {'#FFFFFF':0},
+      Bardage:   {'#C19A6B':100,'#8B5A2B':120,'#3D4C5C':140}
+    };
+    function getEnergyClass(kwh){
+      if(kwh<2000) return 'Aplus';
+      if(kwh<2500) return 'A';
+      if(kwh<3000) return 'B';
+      if(kwh<3500) return 'C';
+      if(kwh<4000) return 'D';
+      return 'E';
+    }
+
+    window.addEventListener('DOMContentLoaded',()=>{
+      const mv        = document.getElementById('mv');
+      const optEl     = document.getElementById('opt-price');
+      const totalEl   = document.getElementById('total-price');
+      const energyEl  = document.getElementById('energy-value');
+      const classEl   = document.getElementById('energy-class');
+      const barFill   = document.getElementById('energy-bar-fill');
+      const arrows    = Array.from(document.querySelectorAll('.dpe-arrow'));
+      const basePrice = 170000;
+      let   selection = {};
 
       const targets = {
         Bardage:    ['poutrine01','poutrine02'],
@@ -412,52 +357,61 @@
         Toit:       ['toit1','toit contour']
       };
 
-      const hexFixed = '#1c1c1c';
       function hex2rgba(h){
-        const v = parseInt(h.slice(1),16);
-        return [(v>>16&255)/255,(v>>8&255)/255,(v&255)/255,1];
+        const v=parseInt(h.slice(1),16);
+        return[(v>>16&255)/255,(v>>8&255)/255,(v&255)/255,1];
       }
 
-      mv.addEventListener('load',()=>{  
-        const mats = mv.model.materials;
-        const fixedRGBA = hex2rgba(hexFixed);
-        mats.forEach(m=>{
-          if(m.name.toLowerCase().includes('poutrine02')){
-            m.pbrMetallicRoughness.setBaseColorFactor(fixedRGBA);
-          }
+      function updateEnergy(){
+        let sum=0, lines=[];
+        Object.entries(selection).forEach(([cat])=>{
+          const sw=document.querySelector(`.group[data-cat="${cat}"] .swatch.selected`);
+          if(!sw)return;
+          const col=sw.dataset.color, imp=energyImpact[cat][col]||0;
+          sum+=imp;
+          lines.push(`• ${cat} – ${sw.nextElementSibling.textContent}: ${imp>0?'+':''}${imp} kWh/an`);
         });
+        energyEl.textContent=`${sum.toLocaleString('fr-FR')} kWh/an`;
+        const cls=getEnergyClass(sum);
+        classEl.textContent=cls==='Aplus'?'A+':cls;
+        barFill.style.width=`${Math.min(100,Math.round(sum/4000*100))}%`;
+        arrows.forEach(a=>a.classList.remove('active'));
+        document.getElementById(`arrow-${cls}`).classList.add('active');
+        document.getElementById('energy-details').innerHTML=
+          lines.join('<br>')||'<i>Aucun matériau sélectionné</i>';
+      }
 
+      mv.addEventListener('load',()=>{
+        const mats=mv.model.materials;
         document.querySelectorAll('.group').forEach(group=>{
-          const cat   = group.dataset.cat;
-          const frags = targets[cat]||[];
-
+          const cat=group.dataset.cat, frags=targets[cat]||[];
           group.querySelectorAll('.swatch').forEach(sw=>{
             sw.addEventListener('click',()=>{
               group.querySelectorAll('.swatch').forEach(x=>x.classList.remove('selected'));
               sw.classList.add('selected');
-
-              selection[cat] = +sw.dataset.cost;
-              const opts = Object.values(selection).reduce((a,b)=>a+b,0);
-              optEl.textContent   = opts.toLocaleString('fr-FR')+' €';
-              totalEl.textContent = (basePrice+opts).toLocaleString('fr-FR')+' €';
-
-              const rgba = hex2rgba(sw.dataset.color);
+              selection[cat]=+sw.dataset.cost;
+              const tot=Object.values(selection).reduce((a,b)=>a+b,0);
+              optEl.textContent=`${tot.toLocaleString('fr-FR')} €`;
+              totalEl.textContent=`${(basePrice+tot).toLocaleString('fr-FR')} €`;
+              const rgba=hex2rgba(sw.dataset.color);
               mats.forEach(m=>{
-                const n = m.name.toLowerCase();
-                if(frags.some(f=>n.includes(f)) && !n.includes('poutrine02')){
+                const name=m.name.toLowerCase();
+                if(frags.some(f=>name.includes(f))){
                   m.pbrMetallicRoughness.setBaseColorFactor(rgba);
                   m.pbrMetallicRoughness.setMetallicFactor(1);
                   m.pbrMetallicRoughness.setRoughnessFactor(1);
                 }
               });
+              updateEnergy();
             });
           });
-
-          const first = group.querySelector('.swatch');
+          const first=group.querySelector('.swatch');
           if(first) first.click();
         });
+        updateEnergy();
       });
     });
   </script>
 </body>
 </html>
+
