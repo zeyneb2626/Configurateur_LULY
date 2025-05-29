@@ -4,9 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Configuration Tradi'home P4</title>
-  <script type="module"
-          src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js">
-  </script>
+  <script type="module" src="https://unpkg.com/@google/model-viewer@1.12.0/dist/model-viewer.min.js"></script>
   <style>
     * { box-sizing:border-box; margin:0; padding:0 }
     html, body { height:100%; font-family:sans-serif; background:#f0f2f5 }
@@ -74,21 +72,21 @@
     }
 
     .rating-bar {
+      position: relative;
       display: flex;
       align-items: center;
-      height: 24px;
-      border-radius: 4px;
-      padding: 0 8px;
+      height: 32px;
+      margin-bottom: 4px;
+      padding: 0 12px;
       color: white;
-      opacity: 0.3;
-      transition: opacity 0.4s ease;
-      font-size: 0.9em;
+      clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%);
+      transition: all 0.3s ease;
+      width: 85%;
     }
 
     .rating-bar.active {
-      opacity: 1;
-      transform: scale(1.05);
-      transition: all 0.3s ease;
+      width: 100%;
+      transform: translateX(8px);
     }
 
     .rating-label {
@@ -178,20 +176,36 @@
     .price-display {
       background: #f8fafc;
       border-radius: 8px;
-      padding: 1rem;
-      margin-bottom: 2rem;
+      padding: 1.5rem;
+      margin: 1rem 0 2rem;
       text-align: center;
       border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
+
     .price-total {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: bold;
       color: #1a202c;
+      margin-bottom: 0.5rem;
     }
+
     .price-details {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
       color: #64748b;
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    .price-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .price-label {
+      color: #94a3b8;
     }
 
     .group { margin-bottom:1.5rem }
@@ -233,8 +247,7 @@
 
     .action-buttons {
       display:flex;
-      gap:.75rem;
-      margin-top: 2rem;
+      gap:.75rem
     }
     .action-buttons button {
       flex:1;
@@ -243,22 +256,9 @@
       border:none;
       border-radius:4px;
       cursor:pointer;
-      transition: all 0.3s ease;
     }
-    .btn-save { 
-      background:#f0f0f0; 
-      color:#333;
-    }
-    .btn-save:hover {
-      background:#e0e0e0;
-    }
-    .btn-quote{ 
-      background:#006aff; 
-      color:#fff;
-    }
-    .btn-quote:hover {
-      background:#0055cc;
-    }
+    .btn-save { background:#f0f0f0; color:#333 }
+    .btn-quote{ background:#006aff; color:#fff }
 
     @media (max-width:1024px){
       #configurator{ grid-template-columns:1fr }
@@ -270,13 +270,17 @@
     }
 
     @keyframes drift {
-      0% { transform: translateY(0); opacity: 0.6; }
-      50% { transform: translateY(-2px); opacity: 0.3; }
-      100% { transform: translateY(0); opacity: 0.6; }
+      0% { transform: translateY(0) translateX(0); opacity: 0.6; }
+      50% { transform: translateY(-2px) translateX(2px); opacity: 0.3; }
+      100% { transform: translateY(0) translateX(0); opacity: 0.6; }
     }
 
     .smoke path {
       animation: drift 3s infinite ease-in-out;
+    }
+
+    .house-body {
+      transition: fill 0.6s ease-in-out, stroke 0.6s ease-in-out;
     }
   </style>
 </head>
@@ -428,7 +432,14 @@
       <div class="price-display">
         <div class="price-total" id="total-price">170 000 €</div>
         <div class="price-details">
-          Prix de base : <span id="base-price">170 000 €</span> | Options : <span id="opt-price">0 €</span>
+          <div class="price-item">
+            <span class="price-label">Prix de base :</span>
+            <span id="base-price">170 000 €</span>
+          </div>
+          <div class="price-item">
+            <span class="price-label">Options :</span>
+            <span id="opt-price">0 €</span>
+          </div>
         </div>
       </div>
 
@@ -454,7 +465,7 @@
         </div>
       </div>
 
-      <!-- Murs -->
+      <!-- Peinture -->
       <div class="group" data-cat="Murs">
         <h3>Peinture (mur extérieur)</h3>
         <div class="options">
@@ -493,19 +504,7 @@
         </div>
       </div>
 
-      <!-- Gouttière -->
-      <div class="group" data-cat="Gouttiere">
-        <h3>Gouttière et descente</h3>
-        <div class="options">
-          <div class="option">
-            <div class="swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
-            <div class="option-label">Blanc</div>
-            <div class="option-price">+0 €</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Menuiserie -->
+      <!-- Menuiserie ALU -->
       <div class="group" data-cat="Menuiserie">
         <h3>Menuiserie ALU</h3>
         <div class="options">
@@ -518,6 +517,18 @@
             <div class="swatch" style="background-color:#000000" data-color="#000000" data-cost="2499"></div>
             <div class="option-label">Noir</div>
             <div class="option-price">+2 499 €</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gouttière -->
+      <div class="group" data-cat="Gouttiere">
+        <h3>Gouttière et descente</h3>
+        <div class="options">
+          <div class="option">
+            <div class="swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
+            <div class="option-label">Blanc</div>
+            <div class="option-price">+0 €</div>
           </div>
         </div>
       </div>
