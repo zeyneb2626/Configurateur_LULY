@@ -176,28 +176,51 @@
     }
 
     .dimensions {
-      flex: 1;
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      background: #fff;
-      padding: 1rem;
-      border-top: 1px solid #eee;
-      border-radius: 0 0 8px 8px;
-      gap: 1rem;
-    }
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #fff;
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  border-radius: 0 0 8px 8px;
+  gap: 1rem;
+}
 
-    .dim-card {
-      background: #fff;
-      border: 1px solid #eee;
-      border-radius: 6px;
-      padding: .75rem;
-      text-align: center;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-    }
+@media (max-width: 1024px) {
+  #configurator { 
+    grid-template-columns: 1fr;
+  }
+  model-viewer { 
+    height: 50vh !important; 
+    min-height: 300px;
+  }
+  .dimensions {
+    grid-template-columns: repeat(3, 1fr); /* Garde 3 colonnes */
+  }
+}
 
-    .dim-card strong { display: block; font-size: 1.25rem; color: #222; }
-    .dim-card span { font-size: .85rem; color: #666; }
-
+@media (max-width: 600px) {
+  model-viewer { 
+    height: 40vh !important; 
+    min-height: 200px;
+  }
+  .dimensions {
+    grid-template-columns: 1fr; /* Passe à 1 colonne */
+    gap: 0.5rem; /* Réduit l'espace entre les cartes */
+  }
+  .dim-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+  }
+  .dim-card strong {
+    margin-bottom: 0;
+  }
+  .dim-card span {
+    margin-left: 1rem;
+  }
+}
     .controls {
       background: #fff;
       border-radius: 8px;
