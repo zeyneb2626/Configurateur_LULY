@@ -323,6 +323,11 @@
     .btn-save { background: #f0f0f0; color: #333; }
     .btn-quote { background: #006aff; color: #fff; }
 
+    /* Section mobile cachée par défaut */
+    .mobile-info {
+      display: none;
+    }
+
     /* RESPONSIVE MOBILE - LAYOUT VERTICAL */
     @media (max-width: 768px) {
       #configurator { 
@@ -415,13 +420,6 @@
       }
       
       /* SECTION ÉNERGIE ET DIMENSIONS EN BAS */
-      .mobile-info {
-        display: none;
-      }
-    }
-
-    /* Afficher les infos mobiles uniquement sur mobile */
-    @media (max-width: 768px) {
       .mobile-info {
         display: block !important;
         background: #fff;
