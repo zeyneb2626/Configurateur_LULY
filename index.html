@@ -328,7 +328,7 @@
       display: none;
     }
 
-    /* RESPONSIVE MOBILE - LAYOUT VERTICAL */
+    /* RESPONSIVE MOBILE - LAYOUT ULTRA-COMPACT */
     @media (max-width: 768px) {
       #configurator { 
         display: flex;
@@ -379,48 +379,48 @@
         display: none;
       }
       
-      /* SECTION MOBILE EN 2 COLONNES COMPACTES - DIRECTEMENT APRÈS LE PRIX */
+      /* SECTION MOBILE ULTRA-COMPACTE - RECTANGLE HORIZONTAL */
       .mobile-info {
         display: grid !important;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1.2fr;
         gap: 0.75rem;
         background: #fff;
-        padding: 1rem;
+        padding: 0.75rem;
         border-top: 1px solid #eee;
         order: 3;
-        margin: 0; /* Supprimer tout margin */
+        margin: 0;
       }
       
       /* COLONNE GAUCHE - ÉNERGIE + INFOS MAISON */
       .mobile-left {
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 0.5rem;
       }
       
       .mobile-energy {
         background: #f8fafc;
         border-radius: 6px;
-        padding: 0.75rem;
+        padding: 0.5rem;
         border: 1px solid #e2e8f0;
       }
       
       .mobile-energy h3 {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         color: #222;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.4rem;
       }
       
       .mobile-energy-visual {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.5rem;
+        gap: 0.4rem;
+        margin-bottom: 0.4rem;
       }
       
       .mobile-house {
-        width: 20px;
-        height: 20px;
+        width: 16px;
+        height: 16px;
         flex-shrink: 0;
       }
       
@@ -434,12 +434,12 @@
       .mobile-rating-bar {
         display: flex;
         align-items: center;
-        height: 8px;
-        padding: 0 4px;
+        height: 6px;
+        padding: 0 3px;
         color: white;
         opacity: 0.7;
-        font-size: 0.5rem;
-        clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 50%, calc(100% - 4px) 100%, 0 100%);
+        font-size: 0.4rem;
+        clip-path: polygon(0 0, calc(100% - 3px) 0, 100% 50%, calc(100% - 3px) 100%, 0 100%);
       }
       
       .mobile-rating-bar.active {
@@ -449,15 +449,15 @@
       
       .mobile-rating-label {
         font-weight: bold;
-        margin-right: 2px;
-        min-width: 8px;
+        margin-right: 1px;
+        min-width: 6px;
       }
       
       .mobile-energy-info {
         display: flex;
         justify-content: space-between;
-        font-size: 0.65rem;
-        margin-bottom: 0.2rem;
+        font-size: 0.6rem;
+        margin-bottom: 0.15rem;
       }
       
       .mobile-energy-bar {
@@ -466,86 +466,96 @@
         background: #eee;
         border-radius: 1px;
         overflow: hidden;
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.25rem;
       }
       
       .mobile-energy-details {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
         color: #555;
-        line-height: 1.2;
+        line-height: 1.1;
       }
       
       /* INFOS MAISON */
       .mobile-dimensions {
         background: #f8fafc;
         border-radius: 6px;
-        padding: 0.75rem;
+        padding: 0.5rem;
         border: 1px solid #e2e8f0;
       }
       
       .mobile-dimensions h3 {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         color: #222;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.4rem;
       }
       
       .mobile-dim-grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 0.3rem;
+        gap: 0.25rem;
       }
       
       .mobile-dim-card {
         background: #fff;
         border: 1px solid #e2e8f0;
-        border-radius: 4px;
-        padding: 0.5rem;
+        border-radius: 3px;
+        padding: 0.4rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
       
       .mobile-dim-card strong {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         color: #222;
       }
       
       .mobile-dim-card span {
-        font-size: 0.65rem;
+        font-size: 0.6rem;
         color: #666;
       }
       
-      /* COLONNE DROITE - CONFIGURATION COMPACTE */
+      /* COLONNE DROITE - CONFIGURATION ULTRA-COMPACTE */
       .mobile-config {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.4rem;
       }
       
-      .mobile-config .config-group {
+      /* GRILLE 3x2 POUR LES CONFIGURATIONS */
+      .mobile-config-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 0.4rem;
         margin-bottom: 0.5rem;
       }
       
+      .mobile-config .config-group {
+        margin-bottom: 0;
+      }
+      
       .mobile-config .config-group h3 {
-        font-size: 0.75rem;
-        margin-bottom: 0.3rem;
+        font-size: 0.6rem;
+        margin-bottom: 0.2rem;
         color: #333;
+        font-weight: 600;
       }
       
       .mobile-config .config-options {
         display: flex;
-        gap: 0.25rem;
+        gap: 0.15rem;
         flex-wrap: wrap;
       }
       
       .mobile-config .config-option {
         text-align: center;
-        width: 30px;
+        width: 24px;
       }
       
       .mobile-config .config-swatch {
-        width: 30px;
-        height: 30px;
+        width: 24px;
+        height: 24px;
         border: 1px solid #ccc;
         border-radius: 3px;
         cursor: pointer;
@@ -564,66 +574,67 @@
       .mobile-config .config-swatch.selected::after {
         content: '✔';
         position: absolute;
-        top: 1px;
-        right: 2px;
+        top: 0px;
+        right: 1px;
         color: #006aff;
-        font-size: 0.6rem;
+        font-size: 0.5rem;
       }
       
       .mobile-config .config-option-label {
-        font-size: 0.55rem;
+        font-size: 0.5rem;
         margin-top: 0.1rem;
-        line-height: 1.1;
+        line-height: 1;
         color: #444;
       }
       
       .mobile-config .config-option-price {
-        font-size: 0.5rem;
+        font-size: 0.45rem;
         color: #666;
+        line-height: 1;
       }
       
       /* PRIX ET BOUTONS COMPACTS */
       .mobile-price {
         background: #f8fafc;
         border-radius: 6px;
-        padding: 0.75rem;
+        padding: 0.5rem;
         border: 1px solid #e2e8f0;
-        margin-top: 0.5rem;
+        margin-top: 0.3rem;
       }
       
       .mobile-price h3 {
-        font-size: 0.8rem;
-        margin-bottom: 0.5rem;
+        font-size: 0.7rem;
+        margin-bottom: 0.4rem;
       }
       
       .mobile-price-item {
         display: flex;
         justify-content: space-between;
-        font-size: 0.65rem;
-        margin-bottom: 0.2rem;
-        padding: 0.2rem 0;
+        font-size: 0.6rem;
+        margin-bottom: 0.15rem;
+        padding: 0.15rem 0;
         border-bottom: 1px solid #e2e8f0;
       }
       
       .mobile-price-item:last-child {
         border-bottom: none;
         font-weight: bold;
-        font-size: 0.7rem;
-        margin-top: 0.3rem;
-        padding-top: 0.3rem;
+        font-size: 0.65rem;
+        margin-top: 0.2rem;
+        padding-top: 0.2rem;
         border-top: 1px solid #ccc;
       }
       
       .mobile-buttons {
         display: flex;
         flex-direction: column;
-        gap: 0.3rem;
-        margin-top: 0.5rem;
+        gap: 0.25rem;
+        margin-top: 0.4rem;
       }
       
       .mobile-buttons button {
-        padding: 0.5rem;
-        font-size: 0.7rem;
+        padding: 0.4rem;
+        font-size: 0.6rem;
         border: none;
         border-radius: 4px;
         cursor: pointer;
@@ -891,7 +902,7 @@
         <button class="btn-quote">Demander un devis</button>
       </div>
 
-      <!-- Section mobile pour les infos énergétiques et dimensions -->
+      <!-- Section mobile ultra-compacte -->
       <div class="mobile-info">
         <!-- COLONNE GAUCHE : Énergie + Infos maison -->
         <div class="mobile-left">
@@ -980,116 +991,119 @@
           </div>
         </div>
         
-        <!-- COLONNE DROITE - CONFIGURATION COMPACTE -->
+        <!-- COLONNE DROITE - CONFIGURATION ULTRA-COMPACTE -->
         <div class="mobile-config">
-          <!-- Bardage -->
-          <div class="config-group" data-cat="Bardage">
-            <h3>Bardage</h3>
-            <div class="config-options">
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#D4B285" data-color="#D4B285" data-cost="520"></div>
-                <div class="config-option-label">Chêne clair</div>
-                <div class="config-option-price">+520€</div>
-              </div>
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#8B4513" data-color="#8B4513" data-cost="790"></div>
-                <div class="config-option-label">Chêne foncé</div>
-                <div class="config-option-price">+790€</div>
-              </div>
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#3D4C5C" data-color="#3D4C5C" data-cost="895"></div>
-                <div class="config-option-label">Gris oragé</div>
-                <div class="config-option-price">+895€</div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Menuiserie -->
-          <div class="config-group" data-cat="Menuiserie">
-            <h3>Menuiserie</h3>
-            <div class="config-options">
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
-                <div class="config-option-label">Blanc</div>
-                <div class="config-option-price">+0€</div>
-              </div>
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#2C2C2C" data-color="#2C2C2C" data-cost="2499"></div>
-                <div class="config-option-label">Anthracite</div>
-                <div class="config-option-price">+2499€</div>
+          <!-- GRILLE 3x2 POUR LES CONFIGURATIONS -->
+          <div class="mobile-config-grid">
+            <!-- Bardage -->
+            <div class="config-group" data-cat="Bardage">
+              <h3>Bardage</h3>
+              <div class="config-options">
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#D4B285" data-color="#D4B285" data-cost="520"></div>
+                  <div class="config-option-label">Chêne</div>
+                  <div class="config-option-price">+520€</div>
+                </div>
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#8B4513" data-color="#8B4513" data-cost="790"></div>
+                  <div class="config-option-label">Foncé</div>
+                  <div class="config-option-price">+790€</div>
+                </div>
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#3D4C5C" data-color="#3D4C5C" data-cost="895"></div>
+                  <div class="config-option-label">Gris</div>
+                  <div class="config-option-price">+895€</div>
+                </div>
               </div>
             </div>
-          </div>
+            
+            <!-- Menuiserie -->
+            <div class="config-group" data-cat="Menuiserie">
+              <h3>Menuiserie</h3>
+              <div class="config-options">
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
+                  <div class="config-option-label">Blanc</div>
+                  <div class="config-option-price">+0€</div>
+                </div>
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#2C2C2C" data-color="#2C2C2C" data-cost="2499"></div>
+                  <div class="config-option-label">Anthracite</div>
+                  <div class="config-option-price">+2499€</div>
+                </div>
+              </div>
+            </div>
 
-          <!-- Gouttière -->
-          <div class="config-group" data-cat="Gouttiere">
-            <h3>Gouttière</h3>
-            <div class="config-options">
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
-                <div class="config-option-label">Blanc</div>
-                <div class="config-option-price">+0€</div>
+            <!-- Gouttière -->
+            <div class="config-group" data-cat="Gouttiere">
+              <h3>Gouttière</h3>
+              <div class="config-options">
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
+                  <div class="config-option-label">Blanc</div>
+                  <div class="config-option-price">+0€</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Pergola -->
-          <div class="config-group" data-cat="Pergola">
-            <h3>Pergola</h3>
-            <div class="config-options">
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="8500"></div>
-                <div class="config-option-label">Blanc</div>
-                <div class="config-option-price">+8500€</div>
-              </div>
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#2C2C2C" data-color="#2C2C2C" data-cost="9500"></div>
-                <div class="config-option-label">Anthracite</div>
-                <div class="config-option-price">+9500€</div>
+            <!-- Pergola -->
+            <div class="config-group" data-cat="Pergola">
+              <h3>Pergola</h3>
+              <div class="config-options">
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="8500"></div>
+                  <div class="config-option-label">Blanc</div>
+                  <div class="config-option-price">+8500€</div>
+                </div>
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#2C2C2C" data-color="#2C2C2C" data-cost="9500"></div>
+                  <div class="config-option-label">Anthracite</div>
+                  <div class="config-option-price">+9500€</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Murs -->
-          <div class="config-group" data-cat="Murs">
-            <h3>Peinture</h3>
-            <div class="config-options">
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
-                <div class="config-option-label">Blanc</div>
-                <div class="config-option-price">+0€</div>
-              </div>
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#D4C4A3" data-color="#D4C4A3" data-cost="999"></div>
-                <div class="config-option-label">Beige</div>
-                <div class="config-option-price">+999€</div>
-              </div>
-              <div class="config-option">
-                <div class="config-swatch" style="background-color: #E6C7B1" data-color="#E6C7B1" data-cost="1499"></div>
-                <div class="config-option-label">Ocre</div>
-                <div class="config-option-price">+1499€</div>
+            <!-- Peinture -->
+            <div class="config-group" data-cat="Murs">
+              <h3>Peinture</h3>
+              <div class="config-options">
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
+                  <div class="config-option-label">Blanc</div>
+                  <div class="config-option-price">+0€</div>
+                </div>
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#D4C4A3" data-color="#D4C4A3" data-cost="999"></div>
+                  <div class="config-option-label">Beige</div>
+                  <div class="config-option-price">+999€</div>
+                </div>
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color: #E6C7B1" data-color="#E6C7B1" data-cost="1499"></div>
+                  <div class="config-option-label">Ocre</div>
+                  <div class="config-option-price">+1499€</div>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Toit -->
-          <div class="config-group" data-cat="Toit">
-            <h3>Tôle</h3>
-            <div class="config-options">
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#1A2E3F" data-color="#1A2E3F" data-cost="0"></div>
-                <div class="config-option-label">Bleu</div>
-                <div class="config-option-price">+0€</div>
-              </div>
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#9BA1A9" data-color="#9BA1A9" data-cost="0"></div>
-                <div class="config-option-label">Gris</div>
-                <div class="config-option-price">+0€</div>
-              </div>
-              <div class="config-option">
-                <div class="config-swatch" style="background-color:#C0392B" data-color="#C0392B" data-cost="1800"></div>
-                <div class="config-option-label">Rouge</div>
-                <div class="config-option-price">+1800€</div>
+            <!-- Tôle -->
+            <div class="config-group" data-cat="Toit">
+              <h3>Tôle</h3>
+              <div class="config-options">
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#1A2E3F" data-color="#1A2E3F" data-cost="0"></div>
+                  <div class="config-option-label">Bleu</div>
+                  <div class="config-option-price">+0€</div>
+                </div>
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#9BA1A9" data-color="#9BA1A9" data-cost="0"></div>
+                  <div class="config-option-label">Gris</div>
+                  <div class="config-option-price">+0€</div>
+                </div>
+                <div class="config-option">
+                  <div class="config-swatch" style="background-color:#C0392B" data-color="#C0392B" data-cost="1800"></div>
+                  <div class="config-option-label">Rouge</div>
+                  <div class="config-option-price">+1800€</div>
+                </div>
               </div>
             </div>
           </div>
