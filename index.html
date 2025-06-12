@@ -48,13 +48,20 @@
       padding: 1rem;
     }
 
-    /* MODÈLE 3D EN HAUT - HAUTEUR RÉDUITE POUR DESKTOP */
+    /* SECTION MODÈLE 3D + PLANS EN HAUT */
+    .top-section {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    /* MODÈLE 3D À GAUCHE - HAUTEUR RÉDUITE POUR DESKTOP */
     .viewer-card {
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       height: 35vh; /* Encore plus réduit pour desktop */
-      margin-bottom: 1rem;
     }
 
     model-viewer {
@@ -64,6 +71,39 @@
       border-radius: 8px;
       pointer-events: all;
       touch-action: none;
+    }
+
+    /* PLANS À DROITE - DESKTOP UNIQUEMENT */
+    .plans-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .plan-card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .plan-card h3 {
+      font-size: 0.9rem;
+      color: #333;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .plan-card img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 4px;
     }
 
     /* SECTION INFOS + CONFIG EN BAS - PLUS COMPACTE */
@@ -383,6 +423,11 @@
         padding: 0;
       }
       
+      /* MASQUER LA SECTION TOP SUR MOBILE */
+      .top-section {
+        display: none;
+      }
+      
       /* MODÈLE 3D EN PLEINE LARGEUR EN HAUT - HAUTEUR TRÈS RÉDUITE */
       .viewer-card {
         border-radius: 0;
@@ -479,7 +524,7 @@
         height: 6px;
         padding: 0 3px;
         color: white;
-        opacity: 0.6;
+        opacity: 0.7;
         font-size: 0.4rem;
         clip-path: polygon(0 0, calc(100% - 3px) 0, 100% 50%, calc(100% - 3px) 100%, 0 100%);
         width: 50px; /* Réduit pour mieux voir l'effet */
@@ -719,21 +764,36 @@
   </div>
 
   <div id="configurator">
-    <!-- MODÈLE 3D EN HAUT PLEINE LARGEUR -->
-    <div class="viewer-card">
-      <model-viewer
-        id="mv"
-        src="./TRADIHOME28.glb"
-        alt="Maison Tradi'home"
-        exposure="1"
-        shadow-intensity="2.5"
-        shadow-softness="1"
-        camera-controls
-        min-camera-orbit="-Infinity 0deg auto"
-        max-camera-orbit="Infinity 90deg auto"
-        camera-target="0m 1m 0m"
-        interaction-prompt="none">
-      </model-viewer>
+    <!-- SECTION TOP : MODÈLE 3D + PLANS (DESKTOP UNIQUEMENT) -->
+    <div class="top-section">
+      <!-- MODÈLE 3D À GAUCHE -->
+      <div class="viewer-card">
+        <model-viewer
+          id="mv"
+          src="./TRADIHOME28.glb"
+          alt="Maison Tradi'home"
+          exposure="1"
+          shadow-intensity="2.5"
+          shadow-softness="1"
+          camera-controls
+          min-camera-orbit="-Infinity 0deg auto"
+          max-camera-orbit="Infinity 90deg auto"
+          camera-target="0m 1m 0m"
+          interaction-prompt="none">
+        </model-viewer>
+      </div>
+
+      <!-- PLANS À DROITE -->
+      <div class="plans-section">
+        <div class="plan-card">
+          <h3>Plan schématique</h3>
+          <img src="./PLAN SCHÉMATIQUE TRADI_HOME.png" alt="Plan schématique de la maison" />
+        </div>
+        <div class="plan-card">
+          <h3>Étiquette énergétique</h3>
+          <img src="./ETIQUETTE TRADI'HOMES P4.png" alt="Étiquette énergétique" />
+        </div>
+      </div>
     </div>
 
     <!-- SECTION DESKTOP - INFOS + CONFIG EN BAS -->
@@ -982,6 +1042,23 @@
           <button class="btn-quote">Demander un devis</button>
         </div>
       </div>
+    </div>
+
+    <!-- MODÈLE 3D MOBILE (AFFICHÉ UNIQUEMENT SUR MOBILE) -->
+    <div class="viewer-card">
+      <model-viewer
+        id="mv-mobile"
+        src="./TRADIHOME28.glb"
+        alt="Maison Tradi'home"
+        exposure="1"
+        shadow-intensity="2.5"
+        shadow-softness="1"
+        camera-controls
+        min-camera-orbit="-Infinity 0deg auto"
+        max-camera-orbit="Infinity 90deg auto"
+        camera-target="0m 1m 0m"
+        interaction-prompt="none">
+      </model-viewer>
     </div>
 
     <!-- TITRE ET PRIX MOBILE -->
@@ -1253,6 +1330,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       const mv = document.getElementById('mv');
+      const mvMobile = document.getElementById('mv-mobile');
       const totalEl = document.getElementById('total-price');
       const fixedPriceEl = document.getElementById('fixed-price-amount');
       const fixedPrice = document.getElementById('fixed-price');
@@ -1429,16 +1507,21 @@
               updatePriceBreakdown();
               
               const rgba = hex2rgba(sw.dataset.color);
-              if (mv.model && mv.model.materials) {
-                mv.model.materials.forEach(m => {
-                  const name = m.name.toLowerCase();
-                  if(frags.some(f => name.includes(f))) {
-                    m.pbrMetallicRoughness.setBaseColorFactor(rgba);
-                    m.pbrMetallicRoughness.setMetallicFactor(1);
-                    m.pbrMetallicRoughness.setRoughnessFactor(1);
-                  }
-                });
-              }
+              
+              // Update both desktop and mobile model viewers
+              [mv, mvMobile].forEach(modelViewer => {
+                if (modelViewer && modelViewer.model && modelViewer.model.materials) {
+                  modelViewer.model.materials.forEach(m => {
+                    const name = m.name.toLowerCase();
+                    if(frags.some(f => name.includes(f))) {
+                      m.pbrMetallicRoughness.setBaseColorFactor(rgba);
+                      m.pbrMetallicRoughness.setMetallicFactor(1);
+                      m.pbrMetallicRoughness.setRoughnessFactor(1);
+                    }
+                  });
+                }
+              });
+              
               updateEnergy();
             });
           });
@@ -1449,10 +1532,18 @@
         });
       }
 
-      mv.addEventListener('load', () => {
-        setupSwatchHandlers();
-        updateEnergy();
-      });
+      // Setup for both model viewers
+      const setupModelViewer = (modelViewer) => {
+        if (modelViewer) {
+          modelViewer.addEventListener('load', () => {
+            setupSwatchHandlers();
+            updateEnergy();
+          });
+        }
+      };
+
+      setupModelViewer(mv);
+      setupModelViewer(mvMobile);
     });
   </script>
 </body>
