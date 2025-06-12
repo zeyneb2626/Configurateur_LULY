@@ -53,7 +53,7 @@
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      height: 45vh; /* Réduit de 60vh à 45vh */
+      height: 35vh; /* Encore plus réduit pour desktop */
       margin-bottom: 1rem;
     }
 
@@ -66,36 +66,34 @@
       touch-action: none;
     }
 
-    /* SECTION INFOS + CONFIG EN BAS */
+    /* SECTION INFOS + CONFIG EN BAS - PLUS COMPACTE */
     .bottom-section {
       display: grid;
       grid-template-columns: 1fr 1.2fr;
-      gap: 1rem;
+      gap: 0.75rem; /* Réduit de 1rem à 0.75rem */
       background: #fff;
-      padding: 1.5rem;
+      padding: 1rem; /* Réduit de 1.5rem à 1rem */
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      flex: 1; /* Prend l'espace restant */
-      min-height: 0; /* Permet la compression */
     }
 
     /* TITRE ET PRIX */
     .config-header {
       grid-column: 1 / -1;
       text-align: center;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem; /* Réduit de 1.5rem à 1rem */
       border-bottom: 1px solid #eee;
-      padding-bottom: 1rem;
+      padding-bottom: 0.75rem; /* Réduit de 1rem à 0.75rem */
     }
 
     .config-header h2 {
-      font-size: 2rem;
+      font-size: 1.5rem; /* Réduit de 2rem à 1.5rem */
       color: #222;
       margin-bottom: 0.5rem;
     }
 
     .config-header .current-price {
-      font-size: 2.5rem;
+      font-size: 2rem; /* Réduit de 2.5rem à 2rem */
       font-weight: bold;
       color: #1a202c;
     }
@@ -104,32 +102,32 @@
     .desktop-left {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1rem; /* Réduit de 1.5rem à 1rem */
     }
 
     .desktop-energy {
       background: #f8fafc;
       border-radius: 8px;
-      padding: 1.5rem;
+      padding: 1rem; /* Réduit de 1.5rem à 1rem */
       border: 1px solid #e2e8f0;
     }
 
     .desktop-energy h3 {
-      font-size: 1.2rem;
+      font-size: 1rem; /* Réduit de 1.2rem à 1rem */
       color: #222;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem; /* Réduit de 1rem à 0.75rem */
     }
 
     .desktop-energy-visual {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
-      margin-bottom: 1rem;
+      gap: 1rem; /* Réduit de 1.5rem à 1rem */
+      margin-bottom: 0.75rem; /* Réduit de 1rem à 0.75rem */
     }
 
     .desktop-house {
-      width: 60px;
-      height: 60px;
+      width: 40px; /* Réduit de 60px à 40px */
+      height: 40px; /* Réduit de 60px à 40px */
       flex-shrink: 0;
     }
 
@@ -137,32 +135,32 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px; /* Réduit de 3px à 2px */
     }
 
     .desktop-rating-bar {
       display: flex;
       align-items: center;
-      height: 20px;
-      padding: 0 12px;
+      height: 16px; /* Réduit de 20px à 16px */
+      padding: 0 8px; /* Réduit de 12px à 8px */
       color: white;
       opacity: 0.7;
-      font-size: 0.9rem;
+      font-size: 0.75rem; /* Réduit de 0.9rem à 0.75rem */
       transition: all 0.3s ease;
-      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%);
-      width: 180px;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
+      width: 120px; /* Réduit de 180px à 120px */
     }
 
     .desktop-rating-bar.active {
       opacity: 1;
-      width: 200px;
-      transform: translateX(8px);
+      width: 140px; /* Réduit de 200px à 140px */
+      transform: translateX(6px); /* Réduit de 8px à 6px */
     }
 
     .desktop-rating-label {
       font-weight: bold;
-      margin-right: 8px;
-      min-width: 20px;
+      margin-right: 6px; /* Réduit de 8px à 6px */
+      min-width: 16px; /* Réduit de 20px à 16px */
     }
 
     .rating-A-plus { background-color: #1B5E20; }
@@ -177,62 +175,62 @@
     .desktop-energy-info {
       display: flex;
       justify-content: space-between;
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
+      font-size: 0.85rem; /* Réduit de 1rem à 0.85rem */
+      margin-bottom: 0.25rem; /* Réduit de 0.5rem à 0.25rem */
     }
 
     .desktop-energy-bar {
       width: 100%;
-      height: 6px;
+      height: 4px; /* Réduit de 6px à 4px */
       background: #eee;
-      border-radius: 3px;
+      border-radius: 2px; /* Réduit de 3px à 2px */
       overflow: hidden;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem; /* Réduit de 0.75rem à 0.5rem */
     }
 
     .desktop-energy-details {
-      font-size: 0.9rem;
+      font-size: 0.75rem; /* Réduit de 0.9rem à 0.75rem */
       color: #555;
-      line-height: 1.4;
+      line-height: 1.3;
     }
 
     /* INFOS MAISON DESKTOP */
     .desktop-dimensions {
       background: #f8fafc;
       border-radius: 8px;
-      padding: 1.5rem;
+      padding: 1rem; /* Réduit de 1.5rem à 1rem */
       border: 1px solid #e2e8f0;
     }
 
     .desktop-dimensions h3 {
-      font-size: 1.2rem;
+      font-size: 1rem; /* Réduit de 1.2rem à 1rem */
       color: #222;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem; /* Réduit de 1rem à 0.75rem */
     }
 
     .desktop-dim-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 0.75rem;
+      gap: 0.5rem; /* Réduit de 0.75rem à 0.5rem */
     }
 
     .desktop-dim-card {
       background: #fff;
       border: 1px solid #e2e8f0;
       border-radius: 6px;
-      padding: 1rem;
+      padding: 0.75rem; /* Réduit de 1rem à 0.75rem */
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .desktop-dim-card strong {
-      font-size: 1.3rem;
+      font-size: 1rem; /* Réduit de 1.3rem à 1rem */
       color: #222;
     }
 
     .desktop-dim-card span {
-      font-size: 1rem;
+      font-size: 0.8rem; /* Réduit de 1rem à 0.8rem */
       color: #666;
     }
 
@@ -240,7 +238,7 @@
     .desktop-config {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.75rem; /* Réduit de 1rem à 0.75rem */
     }
 
     /* GRILLE 3x2 POUR LES CONFIGURATIONS DESKTOP */
@@ -248,8 +246,8 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(2, 1fr);
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+      gap: 0.75rem; /* Réduit de 1rem à 0.75rem */
+      margin-bottom: 1rem; /* Réduit de 1.5rem à 1rem */
     }
 
     .desktop-config .config-group {
@@ -257,28 +255,28 @@
     }
 
     .desktop-config .config-group h3 {
-      font-size: 1rem;
-      margin-bottom: 0.75rem;
+      font-size: 0.85rem; /* Réduit de 1rem à 0.85rem */
+      margin-bottom: 0.5rem; /* Réduit de 0.75rem à 0.5rem */
       color: #333;
       font-weight: 600;
     }
 
     .desktop-config .config-options {
       display: flex;
-      gap: 0.75rem;
+      gap: 0.5rem; /* Réduit de 0.75rem à 0.5rem */
       flex-wrap: wrap;
     }
 
     .desktop-config .config-option {
       text-align: center;
-      width: 70px;
+      width: 50px; /* Réduit de 70px à 50px */
     }
 
     .desktop-config .config-swatch {
-      width: 70px;
-      height: 70px;
+      width: 50px; /* Réduit de 70px à 50px */
+      height: 50px; /* Réduit de 70px à 50px */
       border: 2px solid #ccc;
-      border-radius: 8px;
+      border-radius: 6px; /* Réduit de 8px à 6px */
       cursor: pointer;
       position: relative;
       transition: border-color .2s;
@@ -295,21 +293,21 @@
     .desktop-config .config-swatch.selected::after {
       content: '✔';
       position: absolute;
-      top: 4px;
-      right: 6px;
+      top: 2px; /* Réduit de 4px à 2px */
+      right: 4px; /* Réduit de 6px à 4px */
       color: #006aff;
-      font-size: 1.2rem;
+      font-size: 0.9rem; /* Réduit de 1.2rem à 0.9rem */
     }
 
     .desktop-config .config-option-label {
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
-      line-height: 1.2;
+      font-size: 0.7rem; /* Réduit de 0.85rem à 0.7rem */
+      margin-top: 0.25rem; /* Réduit de 0.5rem à 0.25rem */
+      line-height: 1.1; /* Réduit de 1.2 à 1.1 */
       color: #444;
     }
 
     .desktop-config .config-option-price {
-      font-size: 0.8rem;
+      font-size: 0.65rem; /* Réduit de 0.8rem à 0.65rem */
       color: #666;
     }
 
@@ -317,46 +315,46 @@
     .desktop-price {
       background: #f8fafc;
       border-radius: 8px;
-      padding: 1.5rem;
+      padding: 1rem; /* Réduit de 1.5rem à 1rem */
       border: 1px solid #e2e8f0;
-      margin-top: 1rem;
+      margin-top: 0.75rem; /* Réduit de 1rem à 0.75rem */
     }
 
     .desktop-price h3 {
-      font-size: 1.3rem;
-      margin-bottom: 1rem;
+      font-size: 1rem; /* Réduit de 1.3rem à 1rem */
+      margin-bottom: 0.75rem; /* Réduit de 1rem à 0.75rem */
     }
 
     .desktop-price-item {
       display: flex;
       justify-content: space-between;
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-      padding: 0.5rem 0;
+      font-size: 0.8rem; /* Réduit de 1rem à 0.8rem */
+      margin-bottom: 0.25rem; /* Réduit de 0.5rem à 0.25rem */
+      padding: 0.25rem 0; /* Réduit de 0.5rem à 0.25rem */
       border-bottom: 1px solid #e2e8f0;
     }
 
     .desktop-price-item:last-child {
       border-bottom: none;
       font-weight: bold;
-      font-size: 1.1rem;
-      margin-top: 0.75rem;
-      padding-top: 0.75rem;
+      font-size: 0.9rem; /* Réduit de 1.1rem à 0.9rem */
+      margin-top: 0.5rem; /* Réduit de 0.75rem à 0.5rem */
+      padding-top: 0.5rem; /* Réduit de 0.75rem à 0.5rem */
       border-top: 2px solid #ccc;
     }
 
     .desktop-buttons {
       display: flex;
-      gap: 1rem;
-      margin-top: 1rem;
+      gap: 0.75rem; /* Réduit de 1rem à 0.75rem */
+      margin-top: 0.75rem; /* Réduit de 1rem à 0.75rem */
     }
 
     .desktop-buttons button {
       flex: 1;
-      padding: 1rem;
-      font-size: 1rem;
+      padding: 0.75rem; /* Réduit de 1rem à 0.75rem */
+      font-size: 0.85rem; /* Réduit de 1rem à 0.85rem */
       border: none;
-      border-radius: 8px;
+      border-radius: 6px; /* Réduit de 8px à 6px */
       cursor: pointer;
     }
 
@@ -385,11 +383,11 @@
         padding: 0;
       }
       
-      /* MODÈLE 3D EN PLEINE LARGEUR EN HAUT - HAUTEUR RÉDUITE */
+      /* MODÈLE 3D EN PLEINE LARGEUR EN HAUT - HAUTEUR TRÈS RÉDUITE */
       .viewer-card {
         border-radius: 0;
-        height: 35vh; /* Réduit de 40vh à 35vh */
-        min-height: 200px; /* Réduit de 250px à 200px */
+        height: 25vh; /* Très réduit de 35vh à 25vh */
+        min-height: 180px; /* Très réduit de 200px à 180px */
         margin-bottom: 0;
         order: 1;
       }
@@ -484,15 +482,15 @@
         opacity: 0.6;
         font-size: 0.4rem;
         clip-path: polygon(0 0, calc(100% - 3px) 0, 100% 50%, calc(100% - 3px) 100%, 0 100%);
-        width: 50px;
+        width: 50px; /* Réduit pour mieux voir l'effet */
         transition: all 0.3s ease;
       }
       
       .mobile-rating-bar.active {
         opacity: 1;
-        width: 65px;
+        width: 65px; /* Plus de différence visible */
         transform: translateX(5px);
-        box-shadow: 0 0 8px rgba(0, 106, 255, 0.3);
+        box-shadow: 0 0 8px rgba(0, 106, 255, 0.3); /* Effet lumineux */
       }
       
       .mobile-rating-label {
@@ -774,7 +772,7 @@
                     stroke="#999"
                     stroke-width="1"
                     stroke-linecap="round"/>
-                </g>
+                  </g>
               </svg>
             </div>
             <div class="desktop-rating-scale">
@@ -824,7 +822,7 @@
             <div id="desktop-energy-bar-fill" style="width: 20%; background: #4caf50; height: 100%;"></div>
           </div>
           <div class="desktop-energy-details">
-            <span id="desktop-energy-details">Configuration de base</span>
+            <span id="desktop-energy-details"></span>
           </div>
         </div>
         
@@ -1058,7 +1056,7 @@
             <div id="mobile-energy-bar-fill" style="width: 20%; background: #4caf50; height: 100%;"></div>
           </div>
           <div class="mobile-energy-details">
-            <span id="mobile-energy-details">Configuration de base</span>
+            <span id="mobile-energy-details"></span>
           </div>
         </div>
         
@@ -1353,10 +1351,10 @@
         if (houseSvg) houseSvg.style.color = ratingColors[cls];
         
         if (desktopEnergyDetails) {
-          desktopEnergyDetails.textContent = lines.length ? lines.join(', ') : 'Configuration de base';
+          desktopEnergyDetails.textContent = lines.length ? lines.join(', ') : '';
         }
         if (mobileEnergyDetails) {
-          mobileEnergyDetails.textContent = lines.length ? lines.join(', ') : 'Configuration de base';
+          mobileEnergyDetails.textContent = lines.length ? lines.join(', ') : '';
         }
       }
 
