@@ -48,15 +48,15 @@
       padding: 1rem;
     }
 
-    /* TOP SECTION - MODÈLE 3D + PLANS - HAUTEUR RÉDUITE */
+    /* TOP SECTION - MODÈLE 3D + PLAN - HAUTEUR TRÈS RÉDUITE */
     .top-section {
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 2.5fr 1fr; /* Plus d'espace pour le modèle 3D */
       gap: 1rem;
-      height: 50vh; /* Réduit de 60vh à 50vh */
+      height: 40vh; /* Réduit de 45vh à 40vh */
     }
 
-    /* MODÈLE 3D */
+    /* MODÈLE 3D - TAILLE OPTIMISÉE */
     .viewer-card {
       background: #fff;
       border-radius: 8px;
@@ -72,27 +72,20 @@
       touch-action: none;
     }
 
-    /* PLANS SECTION */
-    .plans-section {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .plan-card {
+    /* PLAN SECTION - TAILLE TRÈS RÉDUITE */
+    .plan-section {
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      padding: 1rem;
-      flex: 1;
+      padding: 0.5rem; /* Très réduit */
       display: flex;
       flex-direction: column;
     }
 
-    .plan-card h3 {
-      font-size: 1.1rem;
+    .plan-section h3 {
+      font-size: 0.85rem; /* Très réduit */
       color: #222;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       text-align: center;
     }
 
@@ -101,11 +94,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 0.5rem;
     }
 
     .plan-content img {
-      max-width: 100%;
-      max-height: 100%;
+      max-width: 80%; /* RÉDUIT LA TAILLE DE L'IMAGE À 80% */
+      max-height: 80%; /* RÉDUIT LA TAILLE DE L'IMAGE À 80% */
       object-fit: contain;
     }
 
@@ -115,41 +109,41 @@
     }
 
     .plan-fallback-box {
-      width: 120px;
-      height: 80px;
+      width: 80px; /* Très réduit */
+      height: 60px; /* Très réduit */
       background: #f0f0f0;
       border-radius: 4px;
-      margin: 0 auto 0.5rem;
+      margin: 0 auto 0.25rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
+      font-size: 0.65rem;
     }
 
-    /* BOTTOM SECTION - CONFIGURATION - HAUTEUR RÉDUITE */
+    /* BOTTOM SECTION - CONFIGURATION - PLUS D'ESPACE */
     .bottom-section {
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      padding: 1rem; /* Réduit de 1.5rem à 1rem */
-      flex: 1; /* Prend l'espace restant */
+      padding: 1rem;
+      flex: 1; /* Prend tout l'espace restant */
     }
 
     .config-header {
       text-align: center;
-      margin-bottom: 1rem; /* Réduit de 1.5rem à 1rem */
+      margin-bottom: 1rem;
       border-bottom: 1px solid #eee;
-      padding-bottom: 0.75rem; /* Réduit de 1rem à 0.75rem */
+      padding-bottom: 0.75rem;
     }
 
     .config-header h2 {
-      font-size: 1.5rem; /* Réduit de 2rem à 1.5rem */
+      font-size: 1.5rem;
       color: #222;
       margin-bottom: 0.5rem;
     }
 
     .config-header .current-price {
-      font-size: 2rem; /* Réduit de 2.5rem à 2rem */
+      font-size: 2rem;
       font-weight: bold;
       color: #1a202c;
     }
@@ -157,39 +151,39 @@
     .config-content {
       display: grid;
       grid-template-columns: 1fr 1.2fr;
-      gap: 1.5rem; /* Réduit de 2rem à 1.5rem */
+      gap: 1.5rem;
     }
 
     /* COLONNE GAUCHE - ÉNERGIE + INFOS MAISON */
     .left-column {
       display: flex;
       flex-direction: column;
-      gap: 1rem; /* Réduit de 1.5rem à 1rem */
+      gap: 1rem;
     }
 
     .energy-section {
       background: #f8fafc;
       border-radius: 8px;
-      padding: 1rem; /* Réduit de 1.5rem à 1rem */
+      padding: 1rem;
       border: 1px solid #e2e8f0;
     }
 
     .energy-section h3 {
-      font-size: 1rem; /* Réduit de 1.2rem à 1rem */
+      font-size: 1rem;
       color: #222;
-      margin-bottom: 0.75rem; /* Réduit de 1rem à 0.75rem */
+      margin-bottom: 0.75rem;
     }
 
     .energy-visual {
       display: flex;
       align-items: center;
-      gap: 1rem; /* Réduit de 1.5rem à 1rem */
-      margin-bottom: 0.75rem; /* Réduit de 1rem à 0.75rem */
+      gap: 1rem;
+      margin-bottom: 0.75rem;
     }
 
     .house-icon {
-      width: 40px; /* Réduit de 60px à 40px */
-      height: 40px; /* Réduit de 60px à 40px */
+      width: 40px;
+      height: 40px;
       flex-shrink: 0;
     }
 
@@ -197,33 +191,33 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 2px; /* Réduit de 3px à 2px */
+      gap: 2px;
     }
 
     .rating-bar {
       display: flex;
       align-items: center;
-      height: 16px; /* Réduit de 20px à 16px */
-      padding: 0 8px; /* Réduit de 12px à 8px */
+      height: 16px;
+      padding: 0 8px;
       color: white;
       opacity: 0.7;
-      font-size: 0.75rem; /* Réduit de 0.9rem à 0.75rem */
+      font-size: 0.75rem;
       transition: all 0.3s ease;
       clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
-      width: 140px; /* Réduit de 180px à 140px */
+      width: 140px;
     }
 
     .rating-bar.active {
       opacity: 1;
-      width: 160px; /* Réduit de 200px à 160px */
-      transform: translateX(6px); /* Réduit de 8px à 6px */
+      width: 160px;
+      transform: translateX(6px);
       box-shadow: 0 0 12px rgba(0, 106, 255, 0.4);
     }
 
     .rating-label {
       font-weight: bold;
-      margin-right: 6px; /* Réduit de 8px à 6px */
-      min-width: 16px; /* Réduit de 20px à 16px */
+      margin-right: 6px;
+      min-width: 16px;
     }
 
     .rating-A-plus { background-color: #1B5E20; }
@@ -238,21 +232,21 @@
     .energy-info {
       display: flex;
       justify-content: space-between;
-      font-size: 0.85rem; /* Réduit de 1rem à 0.85rem */
-      margin-bottom: 0.25rem; /* Réduit de 0.5rem à 0.25rem */
+      font-size: 0.85rem;
+      margin-bottom: 0.25rem;
     }
 
     .energy-bar {
       width: 100%;
-      height: 4px; /* Réduit de 6px à 4px */
+      height: 4px;
       background: #eee;
-      border-radius: 2px; /* Réduit de 3px à 2px */
+      border-radius: 2px;
       overflow: hidden;
-      margin-bottom: 0.5rem; /* Réduit de 0.75rem à 0.5rem */
+      margin-bottom: 0.5rem;
     }
 
     .energy-details {
-      font-size: 0.75rem; /* Réduit de 0.9rem à 0.75rem */
+      font-size: 0.75rem;
       color: #555;
       line-height: 1.3;
     }
@@ -261,39 +255,39 @@
     .dimensions-section {
       background: #f8fafc;
       border-radius: 8px;
-      padding: 1rem; /* Réduit de 1.5rem à 1rem */
+      padding: 1rem;
       border: 1px solid #e2e8f0;
     }
 
     .dimensions-section h3 {
-      font-size: 1rem; /* Réduit de 1.2rem à 1rem */
+      font-size: 1rem;
       color: #222;
-      margin-bottom: 0.75rem; /* Réduit de 1rem à 0.75rem */
+      margin-bottom: 0.75rem;
     }
 
     .dim-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 0.5rem; /* Réduit de 0.75rem à 0.5rem */
+      gap: 0.5rem;
     }
 
     .dim-card {
       background: #fff;
       border: 1px solid #e2e8f0;
       border-radius: 6px;
-      padding: 0.75rem; /* Réduit de 1rem à 0.75rem */
+      padding: 0.75rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .dim-card strong {
-      font-size: 1.1rem; /* Réduit de 1.3rem à 1.1rem */
+      font-size: 1.1rem;
       color: #222;
     }
 
     .dim-card span {
-      font-size: 0.85rem; /* Réduit de 1rem à 0.85rem */
+      font-size: 0.85rem;
       color: #666;
     }
 
@@ -301,7 +295,7 @@
     .right-column {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem; /* Réduit de 1rem à 0.75rem */
+      gap: 0.75rem;
     }
 
     /* GRILLE 3x2 POUR LES CONFIGURATIONS */
@@ -309,8 +303,8 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(2, 1fr);
-      gap: 0.75rem; /* Réduit de 1rem à 0.75rem */
-      margin-bottom: 1rem; /* Réduit de 1.5rem à 1rem */
+      gap: 0.75rem;
+      margin-bottom: 1rem;
     }
 
     .config-group {
@@ -318,28 +312,28 @@
     }
 
     .config-group h3 {
-      font-size: 0.85rem; /* Réduit de 1rem à 0.85rem */
-      margin-bottom: 0.5rem; /* Réduit de 0.75rem à 0.5rem */
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
       color: #333;
       font-weight: 600;
     }
 
     .config-options {
       display: flex;
-      gap: 0.5rem; /* Réduit de 0.75rem à 0.5rem */
+      gap: 0.5rem;
       flex-wrap: wrap;
     }
 
     .config-option {
       text-align: center;
-      width: 50px; /* Réduit de 70px à 50px */
+      width: 50px;
     }
 
     .config-swatch {
-      width: 50px; /* Réduit de 70px à 50px */
-      height: 50px; /* Réduit de 70px à 50px */
+      width: 50px;
+      height: 50px;
       border: 2px solid #ccc;
-      border-radius: 6px; /* Réduit de 8px à 6px */
+      border-radius: 6px;
       cursor: pointer;
       position: relative;
       transition: all 0.3s ease;
@@ -361,21 +355,21 @@
     .config-swatch.selected::after {
       content: '✔';
       position: absolute;
-      top: 2px; /* Réduit de 4px à 2px */
-      right: 4px; /* Réduit de 6px à 4px */
+      top: 2px;
+      right: 4px;
       color: #006aff;
-      font-size: 1rem; /* Réduit de 1.2rem à 1rem */
+      font-size: 1rem;
     }
 
     .config-option-label {
-      font-size: 0.7rem; /* Réduit de 0.85rem à 0.7rem */
-      margin-top: 0.25rem; /* Réduit de 0.5rem à 0.25rem */
-      line-height: 1.1; /* Réduit de 1.2 à 1.1 */
+      font-size: 0.7rem;
+      margin-top: 0.25rem;
+      line-height: 1.1;
       color: #444;
     }
 
     .config-option-price {
-      font-size: 0.65rem; /* Réduit de 0.8rem à 0.65rem */
+      font-size: 0.65rem;
       color: #666;
     }
 
@@ -383,46 +377,46 @@
     .price-section {
       background: #f8fafc;
       border-radius: 8px;
-      padding: 1rem; /* Réduit de 1.5rem à 1rem */
+      padding: 1rem;
       border: 1px solid #e2e8f0;
-      margin-top: 0.75rem; /* Réduit de 1rem à 0.75rem */
+      margin-top: 0.75rem;
     }
 
     .price-section h3 {
-      font-size: 1.1rem; /* Réduit de 1.3rem à 1.1rem */
-      margin-bottom: 0.75rem; /* Réduit de 1rem à 0.75rem */
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
     }
 
     .price-item {
       display: flex;
       justify-content: space-between;
-      font-size: 0.85rem; /* Réduit de 1rem à 0.85rem */
-      margin-bottom: 0.25rem; /* Réduit de 0.5rem à 0.25rem */
-      padding: 0.25rem 0; /* Réduit de 0.5rem à 0.25rem */
+      font-size: 0.85rem;
+      margin-bottom: 0.25rem;
+      padding: 0.25rem 0;
       border-bottom: 1px solid #e2e8f0;
     }
 
     .price-item:last-child {
       border-bottom: none;
       font-weight: bold;
-      font-size: 0.9rem; /* Réduit de 1.1rem à 0.9rem */
-      margin-top: 0.5rem; /* Réduit de 0.75rem à 0.5rem */
-      padding-top: 0.5rem; /* Réduit de 0.75rem à 0.5rem */
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
       border-top: 2px solid #ccc;
     }
 
     .action-buttons {
       display: flex;
-      gap: 0.75rem; /* Réduit de 1rem à 0.75rem */
-      margin-top: 0.75rem; /* Réduit de 1rem à 0.75rem */
+      gap: 0.75rem;
+      margin-top: 0.75rem;
     }
 
     .action-buttons button {
       flex: 1;
-      padding: 0.75rem; /* Réduit de 1rem à 0.75rem */
-      font-size: 0.85rem; /* Réduit de 1rem à 0.85rem */
+      padding: 0.75rem;
+      font-size: 0.85rem;
       border: none;
-      border-radius: 6px; /* Réduit de 8px à 6px */
+      border-radius: 6px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
@@ -478,8 +472,8 @@
         min-height: 250px;
       }
       
-      /* MASQUER LES PLANS SUR MOBILE */
-      .plans-section {
+      /* MASQUER LE PLAN SUR MOBILE */
+      .plan-section {
         display: none;
       }
       
@@ -697,7 +691,7 @@
   </div>
 
   <div id="configurator">
-    <!-- TOP SECTION - MODÈLE 3D + PLANS -->
+    <!-- TOP SECTION - MODÈLE 3D + PLAN UNIQUEMENT -->
     <div class="top-section">
       <!-- MODÈLE 3D -->
       <div class="viewer-card">
@@ -716,37 +710,18 @@
         </model-viewer>
       </div>
 
-      <!-- PLANS SECTION -->
-      <div class="plans-section">
-        <!-- Plan schématique -->
-        <div class="plan-card">
-          <h3>Plan schématique</h3>
-          <div class="plan-content">
-            <img 
-              src="./PLAN.png" 
-              alt="Plan schématique de la maison"
-              onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-            />
-            <div class="plan-fallback" style="display: none;">
-              <div class="plan-fallback-box">Plan</div>
-              <span>Plan schématique</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Étiquette énergétique -->
-        <div class="plan-card">
-          <h3>Étiquette énergétique</h3>
-          <div class="plan-content">
-            <img 
-              src="./ETIQUETTE TRADI'HOMES P4.png" 
-              alt="Étiquette énergétique"
-              onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-            />
-            <div class="plan-fallback" style="display: none;">
-              <div class="plan-fallback-box">Étiquette</div>
-              <span>Étiquette énergétique</span>
-            </div>
+      <!-- PLAN SECTION - UNIQUEMENT LE PLAN SCHÉMATIQUE -->
+      <div class="plan-section">
+        <h3>Plan schématique</h3>
+        <div class="plan-content">
+          <img 
+            src="./PLAN.png" 
+            alt="Plan schématique de la maison"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+          />
+          <div class="plan-fallback" style="display: none;">
+            <div class="plan-fallback-box">Plan</div>
+            <span>Plan schématique</span>
           </div>
         </div>
       </div>
