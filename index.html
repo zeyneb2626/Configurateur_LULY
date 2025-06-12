@@ -323,11 +323,6 @@
     .btn-save { background: #f0f0f0; color: #333; }
     .btn-quote { background: #006aff; color: #fff; }
 
-    /* Section mobile cachée par défaut */
-    .mobile-info {
-      display: none;
-    }
-
     /* RESPONSIVE MOBILE - LAYOUT VERTICAL */
     @media (max-width: 768px) {
       #configurator { 
@@ -419,9 +414,9 @@
         font-size: 0.9rem;
       }
       
-      /* SECTION ÉNERGIE ET DIMENSIONS EN BAS - 2 COLONNES */
+      /* SECTION MOBILE EN 2 COLONNES */
       .mobile-info {
-        display: grid !important;
+        display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
         background: #fff;
@@ -549,6 +544,17 @@
       }
     }
 
+    /* Section mobile cachée par défaut */
+    .mobile-info {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .mobile-info {
+        display: grid !important;
+      }
+    }
+
     @keyframes drift {
       0% { transform: translateY(0) translateX(0); opacity: 0.6; }
       50% { transform: translateY(-2px) translateX(2px); opacity: 0.3; }
@@ -574,17 +580,17 @@
     <div class="viewer-card">
       <model-viewer
         id="mv"
-         src="./TRADIHOME28.glb"
+        src="./TRADIHOME28.glb"
         alt="Maison Tradi'home"
         exposure="1"
         shadow-intensity="2.5"
         shadow-softness="1"
-         camera-controls
-min-camera-orbit="-Infinity 0deg auto"
-max-camera-orbit="Infinity 90deg auto"
-camera-target="0m 1m 0m"
-interaction-prompt="none">
-        </model-viewer>
+        camera-controls
+        min-camera-orbit="-Infinity 0deg auto"
+        max-camera-orbit="Infinity 90deg auto"
+        camera-target="0m 1m 0m"
+        interaction-prompt="none">
+      </model-viewer>
 
       <div id="energy-summary">
         <h3>Performance énergétique estimée</h3>
@@ -676,8 +682,9 @@ interaction-prompt="none">
 
     <div class="controls">
       <h2>Configuration Modern'home</h2>
-      <div class="current-price" id="total-price">139 000 €</div>
-   <!-- Bardage -->
+      <div class="current-price" id="total-price">170 000 €</div>
+   
+      <!-- Bardage -->
       <div class="group" data-cat="Bardage">
         <h3>Bardage extérieur</h3>
         <div class="options">
@@ -789,7 +796,7 @@ interaction-prompt="none">
         <div id="price-breakdown">
           <div class="price-item">
             <span class="price-label">Prix de base</span>
-            <span class="price-value">139 000 €</span>
+            <span class="price-value">170 000 €</span>
           </div>
         </div>
       </div>
@@ -890,11 +897,11 @@ interaction-prompt="none">
 
   <script>
     const energyImpact = {
-      Bardage: {'#C19A6B':120,'#8B5A2B':150,'#3D4C5C':180},
-      Toit: {'#1A2E3F':120,'#A6A6A6':150,'#C0392B':180},
-      Pergola: {'#FFFFFF':120,'#000000':150},
+      Bardage: {'#D4B285':120,'#8B4513':150,'#3D4C5C':180},
+      Toit: {'#1A2E3F':120,'#9BA1A9':150,'#C0392B':180},
+      Pergola: {'#FFFFFF':120,'#2C2C2C':150},
       Murs: {'#FFFFFF':120,'#D4C4A3':150,'#E6C7B1':180},
-      Menuiserie: {'#FFFFFF':120,'#000000':150},
+      Menuiserie: {'#FFFFFF':120,'#2C2C2C':150},
       Gouttiere: {'#FFFFFF':120}
     };
 
@@ -949,7 +956,7 @@ interaction-prompt="none">
         }
       });
 
-       const targets = {
+      const targets = {
         Bardage:    ['poutrine01'],
         Menuiserie: ['porte','cadre porte fenetre','volets','encadrement'],
         Gouttiere:  ['goutieres'],
