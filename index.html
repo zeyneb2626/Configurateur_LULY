@@ -48,12 +48,12 @@
       padding: 1rem;
     }
 
-    /* MODÈLE 3D EN HAUT PLEINE LARGEUR */
+    /* MODÈLE 3D EN HAUT - HAUTEUR RÉDUITE POUR DESKTOP */
     .viewer-card {
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      height: 60vh;
+      height: 45vh; /* Réduit de 60vh à 45vh */
       margin-bottom: 1rem;
     }
 
@@ -75,6 +75,8 @@
       padding: 1.5rem;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      flex: 1; /* Prend l'espace restant */
+      min-height: 0; /* Permet la compression */
     }
 
     /* TITRE ET PRIX */
@@ -383,11 +385,11 @@
         padding: 0;
       }
       
-      /* MODÈLE 3D EN PLEINE LARGEUR EN HAUT */
+      /* MODÈLE 3D EN PLEINE LARGEUR EN HAUT - HAUTEUR RÉDUITE */
       .viewer-card {
         border-radius: 0;
-        height: 40vh;
-        min-height: 250px;
+        height: 35vh; /* Réduit de 40vh à 35vh */
+        min-height: 200px; /* Réduit de 250px à 200px */
         margin-bottom: 0;
         order: 1;
       }
