@@ -48,15 +48,15 @@
       padding: 1rem;
     }
 
-    /* TOP SECTION - MODÈLE 3D + PLAN UNIQUEMENT */
+    /* TOP SECTION - MODÈLE 3D + PLAN UNIQUEMENT - HAUTEUR RÉDUITE */
     .top-section {
       display: grid;
       grid-template-columns: 2fr 1fr;
       gap: 1rem;
-      height: 50vh;
+      height: 45vh; /* Réduit de 50vh à 45vh */
     }
 
-    /* MODÈLE 3D */
+    /* MODÈLE 3D - TAILLE RÉDUITE */
     .viewer-card {
       background: #fff;
       border-radius: 8px;
@@ -72,20 +72,20 @@
       touch-action: none;
     }
 
-    /* PLAN SECTION - UNIQUEMENT LE PLAN SCHÉMATIQUE */
+    /* PLAN SECTION - UNIQUEMENT LE PLAN SCHÉMATIQUE - TAILLE RÉDUITE */
     .plan-section {
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      padding: 1rem;
+      padding: 0.75rem; /* Réduit de 1rem à 0.75rem */
       display: flex;
       flex-direction: column;
     }
 
     .plan-section h3 {
-      font-size: 1.1rem;
+      font-size: 1rem; /* Réduit de 1.1rem à 1rem */
       color: #222;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem; /* Réduit de 1rem à 0.75rem */
       text-align: center;
     }
 
@@ -108,15 +108,15 @@
     }
 
     .plan-fallback-box {
-      width: 120px;
-      height: 80px;
+      width: 100px; /* Réduit de 120px à 100px */
+      height: 70px; /* Réduit de 80px à 70px */
       background: #f0f0f0;
       border-radius: 4px;
       margin: 0 auto 0.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.8rem;
+      font-size: 0.75rem; /* Réduit de 0.8rem à 0.75rem */
     }
 
     /* BOTTOM SECTION - CONFIGURATION */
@@ -993,7 +993,7 @@
       'Aplus': '#1B5E20',
       'A': '#2E7D32',
       'B': '#388E3C',
-      'C': '#8BC34A',
+      'C': '#8BC4A',
       'D': '#FFEB3B',
       'E': '#FFC107',
       'F': '#FF9800',
