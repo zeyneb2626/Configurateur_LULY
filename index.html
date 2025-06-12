@@ -323,205 +323,205 @@
     .btn-save { background: #f0f0f0; color: #333; }
     .btn-quote { background: #006aff; color: #fff; }
 
-    /* MODIFICATIONS RESPONSIVES - GARDER LA GRILLE 2 COLONNES */
-    @media (max-width: 1024px) {
-      #configurator { 
-        grid-template-columns: 1.5fr 1fr; /* Réduire légèrement la première colonne */
-        gap: 0.5rem;
-        padding: 0.5rem;
-      }
-      
-      .viewer-card {
-        min-height: 0; /* Permettre une hauteur flexible */
-      }
-      
-      model-viewer { 
-        min-height: 250px; /* Hauteur minimum plus raisonnable */
-      }
-      
-      #energy-summary {
-        padding: 0.75rem; /* Réduire le padding */
-      }
-      
-      .controls {
-        padding: 1rem; /* Réduire le padding */
-      }
-      
-      .controls h2 {
-        font-size: 1.2rem; /* Réduire la taille du titre */
-      }
-      
-      .current-price {
-        font-size: 1.4rem; /* Réduire la taille du prix */
-        margin-bottom: 1rem;
-      }
-    }
-
+    /* RESPONSIVE MOBILE - LAYOUT VERTICAL */
     @media (max-width: 768px) {
       #configurator { 
-        grid-template-columns: 1fr 1fr; /* Colonnes égales sur petit écran */
-        height: 100vh;
-        gap: 0.25rem;
-        padding: 0.25rem;
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        gap: 0;
+        padding: 0;
       }
       
-      /* MODÈLE 3D TRÈS COMPACT */
+      /* MODÈLE 3D EN PLEINE LARGEUR EN HAUT */
+      .viewer-card {
+        border-radius: 0;
+        order: 1;
+      }
+      
       model-viewer { 
-        min-height: 120px !important;
-        max-height: 150px !important;
+        height: 40vh;
+        min-height: 250px;
       }
       
-      /* SECTION ÉNERGIE ULTRA-COMPACTE */
-      #energy-summary {
-        padding: 0.3rem;
-        font-size: 0.75rem;
-      }
-      
-      #energy-summary h3 {
-        font-size: 0.8rem;
-        margin-bottom: 0.3rem;
-      }
-      
-      #energy-visual {
-        flex-direction: row;
-        gap: 0.3rem;
-        margin-bottom: 0.3rem;
-      }
-      
-      .house-container {
-        width: 30px;
-        height: 30px;
-        flex-shrink: 0;
-      }
-      
-      .energy-rating-scale {
-        flex: 1;
-      }
-      
-      .rating-bar {
-        width: 100%;
-        height: 8px;
-        font-size: 0.5rem;
-        padding: 0 3px;
-        margin-bottom: 1px;
-      }
-      
-      .rating-bar.active {
-        width: 100%;
-        transform: none;
-      }
-      
-      .rating-label {
-        min-width: 10px;
-        margin-right: 2px;
-      }
-      
-      .energy-line {
-        font-size: 0.65rem;
-        margin-bottom: 0.1rem;
-      }
-      
-      .energy-bar {
-        height: 3px;
-        margin-top: 0.2rem;
-      }
-      
-      #energy-details {
-        font-size: 0.6rem;
-        max-height: 40px;
-        margin-top: 0.2rem;
-      }
-      
-      /* DIMENSIONS TRÈS COMPACTES ET RACCOURCIES */
+      /* MASQUER LA SECTION ÉNERGIE ET DIMENSIONS SUR MOBILE */
+      #energy-summary,
       .dimensions {
-        grid-template-columns: 1fr 1fr 1fr;
-        padding: 0.2rem;
-        gap: 0.2rem;
+        display: none;
       }
       
-      .dim-card {
-        padding: 0.2rem 0.1rem;
-        min-height: auto;
-      }
-      
-      .dim-card strong {
-        font-size: 0.7rem;
-        line-height: 1;
-      }
-      
-      .dim-card span {
-        font-size: 0.55rem;
-        line-height: 1;
-      }
-      
-      /* CONTRÔLES ULTRA-COMPACTS */
+      /* CONTRÔLES EN DESSOUS EN PLEINE LARGEUR */
       .controls {
-        padding: 0.4rem;
-        font-size: 0.8rem;
+        border-radius: 0;
+        padding: 1rem;
+        order: 2;
       }
       
       .controls h2 {
-        font-size: 0.85rem;
-        margin-bottom: 0.2rem;
-      }
-      
-      .current-price {
-        font-size: 0.9rem;
-        margin-bottom: 0.4rem;
-      }
-      
-      .group {
+        font-size: 1.2rem;
         margin-bottom: 0.5rem;
       }
       
+      .current-price {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+      }
+      
+      .group {
+        margin-bottom: 1rem;
+      }
+      
       .group h3 {
-        font-size: 0.7rem;
-        margin-bottom: 0.2rem;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
       }
       
       .options {
-        gap: 0.3rem;
+        gap: 0.5rem;
       }
       
       .option {
-        width: 28px;
+        width: 60px;
       }
       
       .option-label {
-        font-size: 0.5rem;
-        margin-top: 0.1rem;
-        line-height: 1;
+        font-size: 0.7rem;
+        margin-top: 0.2rem;
       }
       
       .option-price {
-        font-size: 0.45rem;
-        line-height: 1;
+        font-size: 0.65rem;
       }
       
       .price-display {
-        padding: 0.4rem;
-        margin-top: 0.5rem;
-        font-size: 0.7rem;
+        margin-top: 1rem;
+        padding: 1rem;
       }
       
       .price-display h3 {
-        font-size: 0.8rem;
-        margin-bottom: 0.3rem;
-      }
-      
-      .price-item {
-        padding: 0.15rem 0;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
       }
       
       .action-buttons {
-        flex-direction: row;
-        margin-top: 0.5rem;
-        gap: 0.3rem;
+        margin-top: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
       }
       
       .action-buttons button {
-        padding: 0.3rem;
-        font-size: 0.6rem;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+      }
+      
+      /* SECTION ÉNERGIE ET DIMENSIONS EN BAS */
+      .mobile-info {
+        display: none;
+      }
+    }
+
+    /* Afficher les infos mobiles uniquement sur mobile */
+    @media (max-width: 768px) {
+      .mobile-info {
+        display: block !important;
+        background: #fff;
+        padding: 1rem;
+        border-top: 1px solid #eee;
+        order: 3;
+      }
+      
+      .mobile-energy {
+        margin-bottom: 1rem;
+      }
+      
+      .mobile-energy h3 {
+        font-size: 1rem;
+        color: #222;
+        margin-bottom: 0.5rem;
+      }
+      
+      .mobile-energy-visual {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .mobile-house {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+      }
+      
+      .mobile-rating-scale {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      
+      .mobile-rating-bar {
+        display: flex;
+        align-items: center;
+        height: 16px;
+        padding: 0 8px;
+        color: white;
+        opacity: 0.7;
+        font-size: 0.7rem;
+        clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%);
+      }
+      
+      .mobile-rating-bar.active {
+        opacity: 1;
+        transform: translateX(4px);
+      }
+      
+      .mobile-rating-label {
+        font-weight: bold;
+        margin-right: 4px;
+        min-width: 15px;
+      }
+      
+      .mobile-energy-info {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        margin-bottom: 0.25rem;
+      }
+      
+      .mobile-energy-bar {
+        width: 100%;
+        height: 4px;
+        background: #eee;
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+      }
+      
+      .mobile-dimensions {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 0.5rem;
+      }
+      
+      .mobile-dim-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 0.75rem;
+        text-align: center;
+      }
+      
+      .mobile-dim-card strong {
+        display: block;
+        font-size: 1rem;
+        color: #222;
+        margin-bottom: 0.25rem;
+      }
+      
+      .mobile-dim-card span {
+        font-size: 0.75rem;
+        color: #666;
       }
     }
 
@@ -775,6 +775,87 @@ interaction-prompt="none">
         <button class="btn-quote">Demander un devis</button>
       </div>
     </div>
+
+    <!-- Section mobile pour les infos énergétiques et dimensions -->
+    <div class="mobile-info">
+      <div class="mobile-energy">
+        <h3>Performance énergétique</h3>
+        <div class="mobile-energy-visual">
+          <div class="mobile-house">
+            <svg class="house-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <path
+                class="house-body"
+                d="M20,70 L20,40 L50,15 L80,40 L80,70"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="6"
+                stroke-linejoin="round"
+                stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="mobile-rating-scale">
+            <div class="mobile-rating-bar rating-A-plus" data-rating="A+">
+              <span class="mobile-rating-label">A+</span>
+              <span>≤50</span>
+            </div>
+            <div class="mobile-rating-bar rating-A" data-rating="A">
+              <span class="mobile-rating-label">A</span>
+              <span>51-90</span>
+            </div>
+            <div class="mobile-rating-bar rating-B" data-rating="B">
+              <span class="mobile-rating-label">B</span>
+              <span>91-150</span>
+            </div>
+            <div class="mobile-rating-bar rating-C" data-rating="C">
+              <span class="mobile-rating-label">C</span>
+              <span>151-230</span>
+            </div>
+            <div class="mobile-rating-bar rating-D" data-rating="D">
+              <span class="mobile-rating-label">D</span>
+              <span>231-330</span>
+            </div>
+            <div class="mobile-rating-bar rating-E" data-rating="E">
+              <span class="mobile-rating-label">E</span>
+              <span>331-450</span>
+            </div>
+            <div class="mobile-rating-bar rating-F" data-rating="F">
+              <span class="mobile-rating-label">F</span>
+              <span>451-590</span>
+            </div>
+            <div class="mobile-rating-bar rating-G" data-rating="G">
+              <span class="mobile-rating-label">G</span>
+              <span>>590</span>
+            </div>
+          </div>
+        </div>
+        <div class="mobile-energy-info">
+          <span>Consommation :</span>
+          <span id="mobile-energy-value">120 kWh/an</span>
+        </div>
+        <div class="mobile-energy-info">
+          <span>Classe :</span>
+          <span id="mobile-energy-class">B</span>
+        </div>
+        <div class="mobile-energy-bar">
+          <div id="mobile-energy-bar-fill" style="width: 20%; background: #4caf50; height: 100%;"></div>
+        </div>
+      </div>
+      
+      <div class="mobile-dimensions">
+        <div class="mobile-dim-card">
+          <strong>85 m²</strong>
+          <span>Surface</span>
+        </div>
+        <div class="mobile-dim-card">
+          <strong>3 Ch</strong>
+          <span>Chambres</span>
+        </div>
+        <div class="mobile-dim-card">
+          <strong>2 SdE</strong>
+          <span>Salles d'eau</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -819,6 +900,13 @@ interaction-prompt="none">
       const ratingBars = document.querySelectorAll('.rating-bar');
       const houseSvg = document.querySelector('.house-svg');
       const fixedPrice = document.getElementById('fixed-price');
+      
+      // Éléments mobiles
+      const mobileEnergyEl = document.getElementById('mobile-energy-value');
+      const mobileClassEl = document.getElementById('mobile-energy-class');
+      const mobileBarFill = document.getElementById('mobile-energy-bar-fill');
+      const mobileRatingBars = document.querySelectorAll('.mobile-rating-bar');
+      
       const basePrice = 170000;
       let selection = {};
 
@@ -862,20 +950,39 @@ interaction-prompt="none">
           }
         });
 
-        energyEl.textContent = `${sum} kWh/an`;
+        // Mise à jour desktop
+        if (energyEl) energyEl.textContent = `${sum} kWh/an`;
+        if (mobileEnergyEl) mobileEnergyEl.textContent = `${sum} kWh/an`;
+        
         const cls = getEnergyClass(sum);
-        classEl.textContent = cls === 'Aplus' ? 'A+' : cls;
-        barFill.style.width = `${Math.min(100, Math.round(sum/590*100))}%`;
+        const displayClass = cls === 'Aplus' ? 'A+' : cls;
+        
+        if (classEl) classEl.textContent = displayClass;
+        if (mobileClassEl) mobileClassEl.textContent = displayClass;
+        
+        const percentage = Math.min(100, Math.round(sum/590*100));
+        if (barFill) barFill.style.width = `${percentage}%`;
+        if (mobileBarFill) mobileBarFill.style.width = `${percentage}%`;
 
+        // Mise à jour des barres de notation desktop
         ratingBars.forEach(bar => {
           const rating = bar.dataset.rating;
           bar.classList.toggle('active',
             (rating === 'A+' && cls === 'Aplus') || rating === cls);
         });
 
-        houseSvg.style.color = ratingColors[cls];
-        document.getElementById('energy-details').innerHTML =
-          lines.length ? lines.join('<br>') : '<i>Configuration de base</i>';
+        // Mise à jour des barres de notation mobile
+        mobileRatingBars.forEach(bar => {
+          const rating = bar.dataset.rating;
+          bar.classList.toggle('active',
+            (rating === 'A+' && cls === 'Aplus') || rating === cls);
+        });
+
+        if (houseSvg) houseSvg.style.color = ratingColors[cls];
+        const detailsEl = document.getElementById('energy-details');
+        if (detailsEl) {
+          detailsEl.innerHTML = lines.length ? lines.join('<br>') : '<i>Configuration de base</i>';
+        }
       }
 
       function updatePriceBreakdown() {
@@ -909,11 +1016,12 @@ interaction-prompt="none">
           </div>
         `);
 
-        document.getElementById('price-breakdown').innerHTML = items.join('');
-        document.getElementById('fixed-price-amount').textContent = 
-          `${(basePrice + totalOptions).toLocaleString('fr-FR')} €`;
-        document.getElementById('total-price').textContent = 
-          `${(basePrice + totalOptions).toLocaleString('fr-FR')} €`;
+        const breakdownEl = document.getElementById('price-breakdown');
+        if (breakdownEl) breakdownEl.innerHTML = items.join('');
+        
+        const totalPrice = `${(basePrice + totalOptions).toLocaleString('fr-FR')} €`;
+        if (fixedPriceEl) fixedPriceEl.textContent = totalPrice;
+        if (totalEl) totalEl.textContent = totalPrice;
       }
 
       mv.addEventListener('load', () => {
