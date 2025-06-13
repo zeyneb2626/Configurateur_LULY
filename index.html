@@ -697,7 +697,7 @@
 <body>
   <div class="fixed-price" id="fixed-price">
     <span class="fixed-price-label">Prix TTC</span>
-    <span class="fixed-price-amount" id="fixed-price-amount">170 000 €</span>
+    <span class="fixed-price-amount" id="fixed-price-amount">139 000 €</span>
   </div>
 
   <div id="configurator">
@@ -860,11 +860,6 @@
               <h3>Bardage</h3>
               <div class="config-options">
                 <div class="config-option">
-                  <div class="config-swatch" style="background-color:#FFFFFF" data-color="#FFFFFF" data-cost="0"></div>
-                  <div class="config-option-label">Blanc</div>
-                  <div class="config-option-price">+0€</div>
-                </div>
-                <div class="config-option">
                   <div class="config-swatch" style="background-color:#D4B285" data-color="#D4B285" data-cost="520"></div>
                   <div class="config-option-label">Chêne clair</div>
                   <div class="config-option-price">+520€</div>
@@ -955,18 +950,18 @@
               <h3>Tôle</h3>
               <div class="config-options">
                 <div class="config-option">
-                  <div class="config-swatch" style="background-color:#1A2E3F" data-color="#1A2E3F" data-cost="0"></div>
-                  <div class="config-option-label">Bleu ardoise</div>
-                  <div class="config-option-price">+0€</div>
-                </div>
-                <div class="config-option">
                   <div class="config-swatch" style="background-color:#9BA1A9" data-color="#9BA1A9" data-cost="0"></div>
                   <div class="config-option-label">Gris</div>
                   <div class="config-option-price">+0€</div>
                 </div>
                 <div class="config-option">
+                  <div class="config-swatch" style="background-color:#1A2E3F" data-color="#1A2E3F" data-cost="0"></div>
+                  <div class="config-option-label">Bleu</div>
+                  <div class="config-option-price">+0€</div>
+                </div>
+                <div class="config-option">
                   <div class="config-swatch" style="background-color:#C0392B" data-color="#C0392B" data-cost="1800"></div>
-                  <div class="config-option-label">Rouge Hibiscus</div>
+                  <div class="config-option-label">Rouge</div>
                   <div class="config-option-price">+1800€</div>
                 </div>
               </div>
@@ -1001,8 +996,8 @@
     // Configuration des impacts énergétiques par matériau et couleur
     // Plus la valeur est élevée, plus la consommation énergétique est importante
     const energyImpact = {
-      Bardage: {'#FFFFFF':100, '#D4B285':120, '#8B4513':150, '#3D4C5C':180},
-      Toit: {'#1A2E3F':120, '#9BA1A9':150, '#C0392B':180},
+      Bardage: {'#D4B285':120, '#8B4513':150, '#3D4C5C':180},
+      Toit: {'#9BA1A9':120, '#1A2E3F':150, '#C0392B':180},
       Pergola: {'#FFFFFF':120, '#2C2C2C':150},
       Murs: {'#FFFFFF':120, '#D4C4A3':150, '#E6C7B1':180},
       Menuiserie: {'#FFFFFF':120, '#2C2C2C':150},
