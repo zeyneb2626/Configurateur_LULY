@@ -1150,13 +1150,34 @@
     
     // Configuration des impacts énergétiques par matériau et couleur
     // Ajustés pour avoir config de base en A+ (~45 kWh/an) et pire cas en B (~140 kWh/an max)
+    // Plus les couleurs sont foncées, plus l'impact énergétique est élevé
     const energyImpact = {
-      Bardage: {'#D4B285': 45, '#8B4513': 70, '#3D4C5C': 90},
-      Toit: {'#9BA1A9': 45, '#1A2E3F': 65, '#C0392B': 85},
-      Pergola: {'#FFFFFF': 45, '#2C2C2C': 75},
-      Murs: {'#FFFFFF': 45, '#D4C4A3': 65, '#E6C7B1': 85},
-      Menuiserie: {'#FFFFFF': 45, '#2C2C2C': 70},
-      Gouttiere: {'#FFFFFF': 45}
+      Bardage: {
+        '#D4B285': 45,  // Chêne clair (base A+)
+        '#8B4513': 80,  // Chêne foncé (plus foncé = plus énergivore)
+        '#3D4C5C': 120  // Gris oragé (très foncé = très énergivore)
+      },
+      Toit: {
+        '#9BA1A9': 45,  // Gris clair (base A+)
+        '#1A2E3F': 100, // Bleu foncé (plus énergivore)
+        '#C0392B': 90   // Rouge (moyennement énergivore)
+      },
+      Pergola: {
+        '#FFFFFF': 45,  // Blanc (base A+)
+        '#2C2C2C': 110  // Anthracite très foncé (très énergivore)
+      },
+      Murs: {
+        '#FFFFFF': 45,  // Blanc (base A+)
+        '#D4C4A3': 70,  // Beige (moyennement énergivore)
+        '#E6C7B1': 85   // Ocre (plus énergivore)
+      },
+      Menuiserie: {
+        '#FFFFFF': 45,  // Blanc (base A+)
+        '#2C2C2C': 95   // Anthracite foncé (énergivore)
+      },
+      Gouttiere: {
+        '#FFFFFF': 45   // Blanc uniquement (base A+)
+      }
     };
 
     // Couleurs pour les classes énergétiques
