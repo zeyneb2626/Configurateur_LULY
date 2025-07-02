@@ -1153,30 +1153,30 @@
     // Plus les couleurs sont foncées, plus l'impact énergétique est élevé
     const energyImpact = {
       Bardage: {
-        '#D4B285': 45,  // Chêne clair (base A+)
-        '#8B4513': 80,  // Chêne foncé (plus foncé = plus énergivore)
-        '#3D4C5C': 120  // Gris oragé (très foncé = très énergivore)
+        '#D4B285': 0,   // Chêne clair (base A+) - pas d'impact
+        '#8B4513': 25,  // Chêne foncé (plus foncé = plus énergivore)
+        '#3D4C5C': 45   // Gris oragé (très foncé = très énergivore)
       },
       Toit: {
-        '#9BA1A9': 45,  // Gris clair (base A+)
-        '#1A2E3F': 100, // Bleu foncé (plus énergivore)
-        '#C0392B': 90   // Rouge (moyennement énergivore)
+        '#9BA1A9': 0,   // Gris clair (base A+) - pas d'impact
+        '#1A2E3F': 35,  // Bleu foncé (plus énergivore)
+        '#C0392B': 30   // Rouge (moyennement énergivore)
       },
       Pergola: {
-        '#FFFFFF': 45,  // Blanc (base A+)
-        '#2C2C2C': 110  // Anthracite très foncé (très énergivore)
+        '#FFFFFF': 0,   // Blanc (base A+) - pas d'impact
+        '#2C2C2C': 40   // Anthracite très foncé (très énergivore)
       },
       Murs: {
-        '#FFFFFF': 45,  // Blanc (base A+)
-        '#D4C4A3': 70,  // Beige (moyennement énergivore)
-        '#E6C7B1': 85   // Ocre (plus énergivore)
+        '#FFFFFF': 0,   // Blanc (base A+) - pas d'impact
+        '#D4C4A3': 15,  // Beige (moyennement énergivore)
+        '#E6C7B1': 25   // Ocre (plus énergivore)
       },
       Menuiserie: {
-        '#FFFFFF': 45,  // Blanc (base A+)
-        '#2C2C2C': 95   // Anthracite foncé (énergivore)
+        '#FFFFFF': 0,   // Blanc (base A+) - pas d'impact
+        '#2C2C2C': 30   // Anthracite foncé (énergivore)
       },
       Gouttiere: {
-        '#FFFFFF': 45   // Blanc uniquement (base A+)
+        '#FFFFFF': 0    // Blanc uniquement (base A+) - pas d'impact
       }
     };
 
@@ -1499,39 +1499,31 @@
 
       // Mise à jour de la performance énergétique
       function updateEnergy() {
-        let sum = 0, lines = [];
-        let totalComponents = 0;
+        let totalImpact = 45; // Base A+ = 45 kWh/an
+        let lines = [];
         
         Object.entries(selection).forEach(([cat]) => {
           const sw = document.querySelector(`.config-group[data-cat="${cat}"] .config-swatch.selected`);
           if(!sw) return;
           const col = sw.dataset.color;
-          const imp = energyImpact[cat][col] || 45;
-          sum += imp;
-          totalComponents++;
+          const impact = energyImpact[cat][col] || 0;
+          totalImpact += impact;
           
-          if (imp !== 45) {
+          if (impact > 0) {
             const label = sw.nextElementSibling?.textContent || '';
-            lines.push(`• ${cat} – ${label}: ${imp>45?'+':''}${imp-45} kWh/an`);
+            lines.push(`• ${cat} – ${label}: +${impact} kWh/an`);
           }
         });
 
-        // Calculer la moyenne si plusieurs composants
-        if (totalComponents > 0) {
-          sum = Math.round(sum / totalComponents);
-        } else {
-          sum = 45; // Valeur par défaut A+
-        }
-
         // Mise à jour de l'affichage énergétique
-        if (energyEl) energyEl.textContent = `${sum} kWh/an`;
+        if (energyEl) energyEl.textContent = `${totalImpact} kWh/an`;
         
-        const cls = getEnergyClass(sum);
+        const cls = getEnergyClass(totalImpact);
         const displayClass = cls === 'Aplus' ? 'A+' : cls;
         
         if (classEl) classEl.textContent = displayClass;
         
-        const percentage = Math.min(100, Math.round(sum/590*100));
+        const percentage = Math.min(100, Math.round(totalImpact/590*100));
         if (barFill) {
           barFill.style.width = `${percentage}%`;
           barFill.style.background = ratingColors[cls];
