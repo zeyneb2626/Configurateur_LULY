@@ -991,11 +991,11 @@
                 <span>Surface</span>
               </div>
               <div class="dim-card">
-                <strong>3 Ch</strong>
+                <strong>2 Ch</strong>
                 <span>Chambres</span>
               </div>
               <div class="dim-card">
-                <strong>2 SdE</strong>
+                <strong>1 SdE</strong>
                 <span>Salle d'eau</span>
               </div>
             </div>
@@ -1161,8 +1161,8 @@
   </div>
 
   <script>
-    // ⚙️ CONFIGURATION WEBHOOK
-    const WEBHOOK_URL = 'https://votre-webhook.com/api/devis';
+    // ⚙️ CONFIGURATION WEBHOOK - REMPLACEZ PAR VOTRE VRAIE URL D'API
+    const WEBHOOK_URL = 'https://api.luly-homes.com/devis'; // ← Remplacez par votre vraie URL d'API
     
     // Configuration des impacts énergétiques par matériau et couleur
     // Ajustés pour avoir config de base en A+ (~45 kWh/an) et pire cas en B (~140 kWh/an max)
@@ -1364,7 +1364,7 @@
         
       } catch (error) {
         console.error('Erreur lors de l\'envoi du devis:', error);
-        alert(`❌ Erreur lors de l'envoi du devis.\n\nVeuillez réessayer ou nous contacter directement.\n\nDétails: ${error.message}`);
+        alert(`❌ Erreur lors de l'envoi du devis.\n\nVeuillez réessayer ou nous contacter directement à hello@luly-homes.com\n\nDétails: ${error.message}`);
       } finally {
         quoteBtn.disabled = false;
         quoteBtn.classList.remove('loading');
