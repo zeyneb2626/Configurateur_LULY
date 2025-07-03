@@ -503,7 +503,30 @@
       border-color: #006aff;
       box-shadow: 0 0 0 3px rgba(0, 106, 255, 0.1);
     }
+.contact-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
 
+.contact-input {
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  transition: border-color 0.3s ease;
+}
+
+.contact-input:focus {
+  outline: none;
+  border-color: #006aff;
+  box-shadow: 0 0 0 3px rgba(0, 106, 255, 0.1);
+}
+
+.contact-input::placeholder {
+  color: #9ca3af;
+}
     .action-buttons {
       display: flex;
       gap: 0.75rem;
@@ -791,22 +814,16 @@
       }
       
       /* EMAIL + BOUTONS MOBILE */
-      .email-section {
-        padding: 0.5rem;
-        margin-top: 0.3rem;
-      }
-      
-      .email-input-group {
-        flex-direction: column;
-        gap: 0.25rem;
-        margin-bottom: 0.4rem;
-      }
-      
-      .email-input {
-        padding: 0.4rem;
-        font-size: 0.6rem;
-      }
-      
+     .contact-input-group {
+  gap: 0.25rem;
+  margin-bottom: 0.4rem;
+}
+
+.contact-input {
+  padding: 0.4rem;
+  font-size: 0.6rem;
+}
+    
       .action-buttons {
         flex-direction: column;
         gap: 0.25rem;
@@ -1139,22 +1156,37 @@
             </div>
           </div>
 
-          <!-- Section Email + Boutons -->
-          <div class="email-section">
-            <div class="email-input-group">
-              <input 
-                type="email" 
-                id="user-email" 
-                class="email-input" 
-                placeholder="Votre email pour recevoir le devis"
-                required
-              />
-            </div>
-            <div class="action-buttons">
-              <button class="btn-save" onclick="saveConfiguration()">Enregistrer PDF</button>
-              <button class="btn-quote" id="quote-btn" onclick="requestQuote()">Demander un devis</button>
-            </div>
-          </div>
+         
+          <!-- Section Contact + Boutons -->
+<div class="email-section">
+  <div class="contact-input-group">
+    <input 
+      type="text" 
+      id="user-name" 
+      class="contact-input" 
+      placeholder="Votre nom et prénom"
+      required
+    />
+    <input 
+      type="tel" 
+      id="user-phone" 
+      class="contact-input" 
+      placeholder="Votre numéro de téléphone"
+      required
+    />
+    <input 
+      type="email" 
+      id="user-email" 
+      class="contact-input" 
+      placeholder="Votre email pour recevoir le devis"
+      required
+    />
+  </div>
+  <div class="action-buttons">
+    <button class="btn-save" onclick="saveConfiguration()">Enregistrer PDF</button>
+    <button class="btn-quote" id="quote-btn" onclick="requestQuote()">Demander un devis</button>
+  </div>
+</div>
         </div>
       </div>
     </div>
@@ -1162,7 +1194,7 @@
 
   <script>
     // ⚙️ CONFIGURATION WEBHOOK - URL N8N
-const WEBHOOK_URL = 'https://naiom.app.n8n.cloud/webhook-test/submit-config'; // ← Remplacez par votre vraie URL d'API
+const WEBHOOK_URL = 'https://naiom.app.n8n.cloud/webhook-test/submit-config'; 
     
     // Configuration des impacts énergétiques par matériau et couleur
     // Ajustés pour avoir config de base en A+ (~45 kWh/an) et pire cas en B (~140 kWh/an max)
@@ -1294,7 +1326,8 @@ const WEBHOOK_URL = 'https://naiom.app.n8n.cloud/webhook-test/submit-config'; //
   const emailInput = document.getElementById('user-email');
   const energyValue = document.getElementById('energy-value').textContent;
   const energyClass = document.getElementById('energy-class').textContent;
-  
+  const nameInput = document.getElementById('user-name');
+const phoneInput = document.getElementById('user-phone');
   const selectedOptions = {};
   let totalOptions = 0;
   
@@ -1334,7 +1367,8 @@ const WEBHOOK_URL = 'https://naiom.app.n8n.cloud/webhook-test/submit-config'; //
       hour: '2-digit',
       minute: '2-digit'
     }),
-    
+    name: nameInput.value.trim(),
+phone: phoneInput.value.trim(),
     // Infos maison
     houseModel: 'Tradi\'home',
     surface: '85 m²',
@@ -1384,18 +1418,42 @@ const WEBHOOK_URL = 'https://naiom.app.n8n.cloud/webhook-test/submit-config'; //
   const quoteBtn = document.getElementById('quote-btn');
   const email = emailInput.value.trim();
   
-  // Validation de l'email
-  if (!email) {
-    alert('Veuillez saisir votre email pour recevoir le devis.');
-    emailInput.focus();
-    return;
-  }
-  
-  if (!isValidEmail(email)) {
-    alert('Veuillez saisir un email valide.');
-    emailInput.focus();
-    return;
-  }
+  // Validation des champs
+const nameInput = document.getElementById('user-name');
+const phoneInput = document.getElementById('user-phone');
+const name = nameInput.value.trim();
+const phone = phoneInput.value.trim();
+
+if (!name) {
+  alert('Veuillez saisir votre nom et prénom.');
+  nameInput.focus();
+  return;
+}
+
+if (!phone) {
+  alert('Veuillez saisir votre numéro de téléphone.');
+  phoneInput.focus();
+  return;
+}
+
+if (!isValidPhone(phone)) {
+  alert('Veuillez saisir un numéro de téléphone valide.');
+  phoneInput.focus();
+  return;
+}
+
+if (!email) {
+  alert('Veuillez saisir votre email pour recevoir le devis.');
+  emailInput.focus();
+  return;
+}
+
+if (!isValidEmail(email)) {
+  alert('Veuillez saisir un email valide.');
+  emailInput.focus();
+  return;
+}
+     
   
   // Interface utilisateur pendant l'envoi
   quoteBtn.disabled = true;
@@ -1414,10 +1472,12 @@ const WEBHOOK_URL = 'https://naiom.app.n8n.cloud/webhook-test/submit-config'; //
     
     if (result.success) {
       console.log('Devis envoyé avec succès!');
-      alert(`✅ Devis envoyé avec succès à ${email}!\n\nVous recevrez votre devis personnalisé dans quelques minutes.\n\nMerci pour votre intérêt pour nos maisons Tradi'home!`);
-      
-      // Optionnel : vider le champ email après envoi réussi
-      emailInput.value = '';
+      alert(`✅ Devis envoyé avec succès à ${email}!\n\nVous recevrez votre devis personnalisé dans quelques minutes.\n\nMerci ${name} pour votre intérêt pour nos maisons Tradi'home!`);
+
+// Vider tous les champs après envoi réussi
+nameInput.value = '';
+phoneInput.value = '';
+emailInput.value = '';
       
     } else {
       throw new Error(result.error || 'Erreur inconnue lors de l\'envoi');
@@ -1434,11 +1494,21 @@ const WEBHOOK_URL = 'https://naiom.app.n8n.cloud/webhook-test/submit-config'; //
   }
 }
     // Fonction de validation email
-    function isValidEmail(email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    }
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
 
+// Fonction de validation téléphone
+function isValidPhone(phone) {
+  // Regex pour numéros français (mobile et fixe)
+  const phoneRegex = /^(?:(?:\+33|0)[1-9](?:[0-9]{8}))$/;
+  // Nettoie le numéro (supprime espaces, points, tirets)
+  const cleanPhone = phone.replace(/[\s\.\-]/g, '');
+  return phoneRegex.test(cleanPhone);
+}
+    
+ 
     // Fonction pour enregistrer la configuration en PDF
     function saveConfiguration() {
       try {
