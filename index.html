@@ -1162,7 +1162,7 @@
 
   <script>
     // ⚙️ CONFIGURATION WEBHOOK - REMPLACEZ PAR VOTRE VRAIE URL D'API
-    const WEBHOOK_URL = 'https://api.luly-homes.com/devis'; // ← Remplacez par votre vraie URL d'API
+    const WEBHOOK_URL = 'https://naiom.app.n8n.cloud/webhook-test/submit-config'; // ← Remplacez par votre vraie URL d'API
     
     // Configuration des impacts énergétiques par matériau et couleur
     // Ajustés pour avoir config de base en A+ (~45 kWh/an) et pire cas en B (~140 kWh/an max)
@@ -1247,131 +1247,188 @@
 
     // 📧 FONCTION POUR ENVOYER LE DEVIS VIA WEBHOOK
     async function sendQuoteToWebhook(quoteData) {
-      try {
-        const response = await fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(quoteData)
-        });
+  try {
+    console.log('Envoi des données vers n8n:', quoteData);
+    
+    const response = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(quoteData)
+    });
 
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP: ${response.status}`);
-        }
+    console.log('Réponse du webhook:', response.status);
 
-        const result = await response.json();
-        return { success: true, data: result };
-      } catch (error) {
-        console.error('Erreur lors de l\'envoi du webhook:', error);
-        return { success: false, error: error.message };
-      }
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Erreur réponse webhook:', errorText);
+      throw new Error(`Erreur ${response.status}: ${errorText}`);
     }
+
+    // Tentative de lecture de la réponse JSON
+    let result;
+    try {
+      result = await response.json();
+    } catch (parseError) {
+      // Si pas de JSON, on lit le texte
+      result = await response.text();
+    }
+
+    console.log('Données envoyées avec succès:', result);
+    return { success: true, data: result };
+    
+  } catch (error) {
+    console.error('Erreur lors de l\'envoi du webhook:', error);
+    return { success: false, error: error.message };
+  }
+}
 
     // 📋 FONCTION POUR COLLECTER TOUTES LES DONNÉES DE CONFIGURATION
     function getConfigurationData() {
-      const emailInput = document.getElementById('user-email');
-      const energyValue = document.getElementById('energy-value').textContent;
-      const energyClass = document.getElementById('energy-class').textContent;
+  const emailInput = document.getElementById('user-email');
+  const energyValue = document.getElementById('energy-value').textContent;
+  const energyClass = document.getElementById('energy-class').textContent;
+  
+  const selectedOptions = {};
+  let totalOptions = 0;
+  
+  // Récupération de toutes les options sélectionnées
+  document.querySelectorAll('.config-group').forEach(group => {
+    const category = group.dataset.cat;
+    const selectedSwatch = group.querySelector('.config-swatch.selected');
+    
+    if (selectedSwatch) {
+      const label = selectedSwatch.nextElementSibling.textContent;
+      const cost = parseInt(selectedSwatch.dataset.cost) || 0;
+      const color = selectedSwatch.dataset.color;
+      const isBase = selectedSwatch.dataset.base === 'true';
       
-      const selectedOptions = {};
-      let totalOptions = 0;
-      
-      document.querySelectorAll('.config-group').forEach(group => {
-        const category = group.dataset.cat;
-        const selectedSwatch = group.querySelector('.config-swatch.selected');
-        
-        if (selectedSwatch) {
-          const label = selectedSwatch.nextElementSibling.textContent;
-          const cost = parseInt(selectedSwatch.dataset.cost);
-          const color = selectedSwatch.dataset.color;
-          const isBase = selectedSwatch.dataset.base === 'true';
-          
-          selectedOptions[category] = {
-            label: label,
-            cost: cost,
-            color: color,
-            isBase: isBase
-          };
-          
-          if (cost > 0) {
-            totalOptions += cost;
-          }
-        }
-      });
-
-      return {
-        email: emailInput.value.trim(),
-        timestamp: new Date().toISOString(),
-        houseInfo: {
-          surface: '85 m²',
-          bedrooms: 2,
-          bathrooms: 1,
-          model: 'Tradi\'home'
-        },
-        configuration: selectedOptions,
-        energyPerformance: {
-          consumption: energyValue,
-          class: energyClass,
-          details: document.getElementById('energy-details').textContent
-        },
-        pricing: {
-          basePrice: basePrice,
-          optionsTotal: totalOptions,
-          totalPrice: basePrice + totalOptions,
-          currency: 'EUR'
-        },
-        metadata: {
-          source: 'Configurateur Tradi\'home',
-          userAgent: navigator.userAgent,
-          url: window.location.href
-        }
+      selectedOptions[category] = {
+        label: label,
+        cost: cost,
+        color: color,
+        isBase: isBase
       };
+      
+      if (cost > 0) {
+        totalOptions += cost;
+      }
     }
+  });
 
+  // Structure des données à envoyer vers n8n
+  const configData = {
+    // Infos client
+    email: emailInput.value.trim(),
+    timestamp: new Date().toISOString(),
+    dateFormatted: new Date().toLocaleDateString('fr-FR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    }),
+    
+    // Infos maison
+    houseModel: 'Tradi\'home',
+    surface: '85 m²',
+    bedrooms: 2,
+    bathrooms: 1,
+    
+    // Configuration sélectionnée
+    configuration: selectedOptions,
+    
+    // Performance énergétique
+    energyConsumption: energyValue,
+    energyClass: energyClass,
+    energyDetails: document.getElementById('energy-details').textContent,
+    
+    // Tarification
+    basePrice: basePrice,
+    optionsTotal: totalOptions,
+    totalPrice: basePrice + totalOptions,
+    totalPriceFormatted: (basePrice + totalOptions).toLocaleString('fr-FR') + ' €',
+    
+    // Métadonnées
+    source: 'Configurateur Tradi\'home',
+    userAgent: navigator.userAgent,
+    url: window.location.href,
+    
+    // Détail des options (pour Google Sheets)
+    bardage: selectedOptions.Bardage?.label || 'Non défini',
+    bardagePrix: selectedOptions.Bardage?.cost || 0,
+    menuiserie: selectedOptions.Menuiserie?.label || 'Non défini',
+    menuiseriePrix: selectedOptions.Menuiserie?.cost || 0,
+    gouttiere: selectedOptions.Gouttiere?.label || 'Non défini',
+    gouttierePrix: selectedOptions.Gouttiere?.cost || 0,
+    pergola: selectedOptions.Pergola?.label || 'Non défini',
+    pergolaPrix: selectedOptions.Pergola?.cost || 0,
+    peinture: selectedOptions.Murs?.label || 'Non défini',
+    peinturePrix: selectedOptions.Murs?.cost || 0,
+    tole: selectedOptions.Toit?.label || 'Non défini',
+    tolePrix: selectedOptions.Toit?.cost || 0
+  };
+
+  return configData;
+}
+    
     // 🚀 FONCTION POUR DEMANDER UN DEVIS
     async function requestQuote() {
-      const emailInput = document.getElementById('user-email');
-      const quoteBtn = document.getElementById('quote-btn');
-      const email = emailInput.value.trim();
+  const emailInput = document.getElementById('user-email');
+  const quoteBtn = document.getElementById('quote-btn');
+  const email = emailInput.value.trim();
+  
+  // Validation de l'email
+  if (!email) {
+    alert('Veuillez saisir votre email pour recevoir le devis.');
+    emailInput.focus();
+    return;
+  }
+  
+  if (!isValidEmail(email)) {
+    alert('Veuillez saisir un email valide.');
+    emailInput.focus();
+    return;
+  }
+  
+  // Interface utilisateur pendant l'envoi
+  quoteBtn.disabled = true;
+  quoteBtn.classList.add('loading');
+  quoteBtn.textContent = 'Envoi en cours...';
+  
+  try {
+    console.log('Début de l\'envoi du devis...');
+    
+    // Récupération des données de configuration
+    const configData = getConfigurationData();
+    console.log('Données à envoyer:', configData);
+    
+    // Envoi vers n8n
+    const result = await sendQuoteToWebhook(configData);
+    
+    if (result.success) {
+      console.log('Devis envoyé avec succès!');
+      alert(`✅ Devis envoyé avec succès à ${email}!\n\nVous recevrez votre devis personnalisé dans quelques minutes.\n\nMerci pour votre intérêt pour nos maisons Tradi'home!`);
       
-      if (!email) {
-        alert('Veuillez saisir votre email pour recevoir le devis.');
-        emailInput.focus();
-        return;
-      }
+      // Optionnel : vider le champ email après envoi réussi
+      emailInput.value = '';
       
-      if (!isValidEmail(email)) {
-        alert('Veuillez saisir un email valide.');
-        emailInput.focus();
-        return;
-      }
-      
-      quoteBtn.disabled = true;
-      quoteBtn.classList.add('loading');
-      quoteBtn.textContent = 'Envoi en cours...';
-      
-      try {
-        const configData = getConfigurationData();
-        const result = await sendQuoteToWebhook(configData);
-        
-        if (result.success) {
-          alert(`✅ Devis envoyé avec succès à ${email} !\n\nVous recevrez votre devis personnalisé dans quelques minutes.`);
-        } else {
-          throw new Error(result.error || 'Erreur inconnue');
-        }
-        
-      } catch (error) {
-        console.error('Erreur lors de l\'envoi du devis:', error);
-        alert(`❌ Erreur lors de l'envoi du devis.\n\nVeuillez réessayer ou nous contacter directement à hello@luly-homes.com\n\nDétails: ${error.message}`);
-      } finally {
-        quoteBtn.disabled = false;
-        quoteBtn.classList.remove('loading');
-        quoteBtn.textContent = 'Demander un devis';
-      }
+    } else {
+      throw new Error(result.error || 'Erreur inconnue lors de l\'envoi');
     }
-
+    
+  } catch (error) {
+    console.error('Erreur lors de l\'envoi du devis:', error);
+    alert(`❌ Erreur lors de l'envoi du devis.\n\nVeuillez réessayer dans quelques instants.\n\nSi le problème persiste, contactez-nous directement.\n\nDétails: ${error.message}`);
+  } finally {
+    // Restauration de l'interface
+    quoteBtn.disabled = false;
+    quoteBtn.classList.remove('loading');
+    quoteBtn.textContent = 'Demander un devis';
+  }
+}
     // Fonction de validation email
     function isValidEmail(email) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
