@@ -11,7 +11,26 @@
   <style>
     * { box-sizing:border-box; margin:0; padding:0 }
     html, body { min-height:100%; font-family:sans-serif; background:#f0f2f5 }
+/* Masquer la notification Chrome dans l'iframe */
+html {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
 
+body {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Forcer le positionnement */
+* {
+  position: relative !important;
+}
+
+/* Masquer les éléments système */
+body > *:first-child:not(.fixed-price):not(#configurator) {
+  display: none !important;
+}
     .fixed-price {
       position: fixed;
       top: 0;
