@@ -1184,7 +1184,7 @@
   </form>
   <div class="action-buttons">
     <button class="btn-save" onclick="saveConfiguration()">Enregistrer PDF</button>
-   <button class="btn-quote" id="quote-btn" onclick="return requestQuote(event)">Demander un devis</button>
+   <button class="btn-quote" id="quote-btn" onclick="event.preventDefault(); requestQuote(); return false;">Demander un devis</button>
   </div>
 </div>
 </div>
@@ -1448,11 +1448,7 @@
     
     // 🚀 FONCTION POUR DEMANDER UN DEVIS - CORRIGÉE POUR CHROME MOBILE
     async function requestQuote(event) {
-      // EMPÊCHER TOUT COMPORTEMENT PAR DÉFAUT
-      if (event) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
+      
 
       const emailInput = document.getElementById('user-email');
       const nameInput = document.getElementById('user-name');
