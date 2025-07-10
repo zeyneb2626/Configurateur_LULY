@@ -1,5 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
+  <script>
+// Force la désactivation de la validation HTML5 dès le chargement
+document.addEventListener('DOMContentLoaded', function() {
+  // Désactive la validation sur tous les inputs
+  document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('invalid', function(e) {
+      e.preventDefault();
+      return false;
+    });
+  });
+});
+</script>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
@@ -1158,37 +1170,31 @@
 
          
          
-<!-- Section Contact + Boutons -->
-<!-- Section Contact + Boutons -->
-<div class="email-section">
-  <div class="contact-input-group">
-    <input 
-      type="text" 
-      id="user-name" 
-      class="contact-input" 
-      placeholder="Votre nom et prénom"
-      autocomplete="off"
-    />
-    <input 
-      type="text" 
-      id="user-phone" 
-      class="contact-input" 
-      placeholder="Votre numéro de téléphone"
-      autocomplete="off"
-    />
-    <input 
-      type="text" 
-      id="user-email" 
-      class="contact-input" 
-      placeholder="Votre email pour recevoir le devis"
-      autocomplete="off"
-    />
-  </div>
-  <div class="action-buttons">
-    <button class="btn-save" onclick="saveConfiguration()">Enregistrer PDF</button>
-    <button class="btn-quote" id="quote-btn" type="button" onclick="requestQuote()">Demander un devis</button>
-  </div>
-</div>
+
+<input 
+  type="text" 
+  id="user-name" 
+  class="contact-input" 
+  placeholder="Votre nom et prénom"
+  autocomplete="off"
+  data-validate="false"
+/>
+<input 
+  type="text" 
+  id="user-phone" 
+  class="contact-input" 
+  placeholder="Votre numéro de téléphone"
+  autocomplete="off"
+  data-validate="false"
+/>
+<input 
+  type="text" 
+  id="user-email" 
+  class="contact-input" 
+  placeholder="Votre email pour recevoir le devis"
+  autocomplete="off"
+  data-validate="false"
+/>
 </div>
         </div>
       </div>
@@ -1449,9 +1455,21 @@
     }
     
     // 🚀 FONCTION POUR DEMANDER UN DEVIS - CORRIGÉE POUR CHROME MOBILE
-    async function requestQuote(event) {
-      
+   async function requestQuote() {
+  // FORCE L'ARRÊT DE LA VALIDATION HTML5
+  document.querySelectorAll('input').forEach(input => {
+    input.setCustomValidity('');
+    if (input.checkValidity) {
+      input.checkValidity = () => true;
+    }
+  });
 
+  const emailInput = document.getElementById('user-email');
+  const nameInput = document.getElementById('user-name');
+  const phoneInput = document.getElementById('user-phone');
+  const quoteBtn = document.getElementById('quote-btn');
+  
+  // ... reste du code identique
       const emailInput = document.getElementById('user-email');
       const nameInput = document.getElementById('user-name');
       const phoneInput = document.getElementById('user-phone');
