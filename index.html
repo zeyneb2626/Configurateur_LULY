@@ -1158,33 +1158,35 @@
 
          
           <!-- Section Contact + Boutons -->
-<div class="contact-input-group">
-  <input 
-    type="text" 
-    id="user-name" 
-    class="contact-input" 
-    placeholder="Votre nom et prénom"
-    novalidate
-  />
-  <input 
-    type="text" 
-    id="user-phone" 
-    class="contact-input" 
-    placeholder="Votre numéro de téléphone"
-    novalidate
-  />
-  <input 
-    type="text" 
-    id="user-email" 
-    class="contact-input" 
-    placeholder="Votre email pour recevoir le devis"
-    novalidate
-  />
-</div>
+<!-- Section Contact + Boutons -->
+<div class="email-section">
+  <form novalidate onsubmit="return false;">
+    <div class="contact-input-group">
+      <input 
+        type="text" 
+        id="user-name" 
+        class="contact-input" 
+        placeholder="Votre nom et prénom"
+      />
+      <input 
+        type="text" 
+        id="user-phone" 
+        class="contact-input" 
+        placeholder="Votre numéro de téléphone"
+      />
+      <input 
+        type="text" 
+        id="user-email" 
+        class="contact-input" 
+        placeholder="Votre email pour recevoir le devis"
+      />
+    </div>
+  </form>
   <div class="action-buttons">
     <button class="btn-save" onclick="saveConfiguration()">Enregistrer PDF</button>
     <button class="btn-quote" id="quote-btn" onclick="requestQuote()">Demander un devis</button>
   </div>
+</div>
 </div>
         </div>
       </div>
