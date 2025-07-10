@@ -1,17 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <script>
-// Force la désactivation de la validation HTML5 dès le chargement
-document.addEventListener('DOMContentLoaded', function() {
-  // Désactive la validation sur tous les inputs
-  document.querySelectorAll('input').forEach(input => {
-    input.addEventListener('invalid', function(e) {
-      e.preventDefault();
-      return false;
-    });
-  });
-});
-</script>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
@@ -1169,32 +1157,35 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
 
          
-         
-
-<input 
-  type="text" 
-  id="user-name" 
-  class="contact-input" 
-  placeholder="Votre nom et prénom"
-  autocomplete="off"
-  data-validate="false"
-/>
-<input 
-  type="text" 
-  id="user-phone" 
-  class="contact-input" 
-  placeholder="Votre numéro de téléphone"
-  autocomplete="off"
-  data-validate="false"
-/>
-<input 
-  type="text" 
-  id="user-email" 
-  class="contact-input" 
-  placeholder="Votre email pour recevoir le devis"
-  autocomplete="off"
-  data-validate="false"
-/>
+          <!-- Section Contact + Boutons -->
+<div class="email-section">
+  <div class="contact-input-group">
+    <input 
+      type="text" 
+      id="user-name" 
+      class="contact-input" 
+      placeholder="Votre nom et prénom"
+      required
+    />
+    <input 
+      type="tel" 
+      id="user-phone" 
+      class="contact-input" 
+      placeholder="Votre numéro de téléphone"
+      required
+    />
+    <input 
+      type="email" 
+      id="user-email" 
+      class="contact-input" 
+      placeholder="Votre email pour recevoir le devis"
+      required
+    />
+  </div>
+  <div class="action-buttons">
+    <button class="btn-save" onclick="saveConfiguration()">Enregistrer PDF</button>
+    <button class="btn-quote" id="quote-btn" onclick="requestQuote()">Demander un devis</button>
+  </div>
 </div>
         </div>
       </div>
@@ -1454,22 +1445,8 @@ document.addEventListener('DOMContentLoaded', function() {
       return configData;
     }
     
-    // 🚀 FONCTION POUR DEMANDER UN DEVIS - CORRIGÉE POUR CHROME MOBILE
-   async function requestQuote() {
-  // FORCE L'ARRÊT DE LA VALIDATION HTML5
-  document.querySelectorAll('input').forEach(input => {
-    input.setCustomValidity('');
-    if (input.checkValidity) {
-      input.checkValidity = () => true;
-    }
-  });
-
-  const emailInput = document.getElementById('user-email');
-  const nameInput = document.getElementById('user-name');
-  const phoneInput = document.getElementById('user-phone');
-  const quoteBtn = document.getElementById('quote-btn');
-  
-  // ... reste du code identique
+    // 🚀 FONCTION POUR DEMANDER UN DEVIS - CORRIGÉE
+    async function requestQuote() {
       const emailInput = document.getElementById('user-email');
       const nameInput = document.getElementById('user-name');
       const phoneInput = document.getElementById('user-phone');
@@ -1479,7 +1456,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!emailInput || !nameInput || !phoneInput || !quoteBtn) {
         console.error('Éléments manquants dans le DOM');
         alert('Erreur: Éléments de formulaire manquants');
-        return false;
+        return;
       }
       
       const email = emailInput.value.trim();
@@ -1490,31 +1467,31 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!name) {
         alert('Veuillez saisir votre nom et prénom.');
         nameInput.focus();
-        return false;
+        return;
       }
 
       if (!phone) {
         alert('Veuillez saisir votre numéro de téléphone.');
         phoneInput.focus();
-        return false;
+        return;
       }
 
       if (!isValidPhone(phone)) {
         alert('Veuillez saisir un numéro de téléphone valide.');
         phoneInput.focus();
-        return false;
+        return;
       }
 
       if (!email) {
         alert('Veuillez saisir votre email pour recevoir le devis.');
         emailInput.focus();
-        return false;
+        return;
       }
 
       if (!isValidEmail(email)) {
         alert('Veuillez saisir un email valide.');
         emailInput.focus();
-        return false;
+        return;
       }
       
       // Interface utilisateur pendant l'envoi
@@ -1560,8 +1537,6 @@ document.addEventListener('DOMContentLoaded', function() {
         quoteBtn.classList.remove('loading');
         quoteBtn.textContent = originalText;
       }
-      
-      return false;
     }
 
     // Fonction de validation email
@@ -1682,6 +1657,16 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('Erreur lors de la génération du PDF. Veuillez réessayer.');
       }
     }
+
+    // Gestionnaires d'erreurs globaux - AJOUTÉS
+    window.addEventListener('error', function(event) {
+      console.error('Erreur JavaScript:', event.error);
+    });
+
+    window.addEventListener('unhandledrejection', function(event) {
+      console.error('Promise rejetée:', event.reason);
+      event.preventDefault();
+    });
 
     // Initialisation au chargement de la page
     window.addEventListener('DOMContentLoaded', () => {
@@ -1849,6 +1834,6 @@ document.addEventListener('DOMContentLoaded', function() {
         updateEnergy();
       });
     });
-</script>
+  </script>
 </body>
 </html>
