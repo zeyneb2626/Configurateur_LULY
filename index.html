@@ -848,6 +848,17 @@
     .house-body {
       transition: fill 0.6s ease-in-out, stroke 0.6s ease-in-out;
     }
+    /* Masquer la notification Chrome GitHub */
+body::before {
+  display: none !important;
+}
+
+.github-notification,
+.chrome-notification,
+[data-testid*="github"],
+[class*="github-notification"] {
+  display: none !important;
+}
   </style>
 </head>
 <body>
@@ -1193,18 +1204,7 @@
   </div>
 
   <script>
-    // Masquer la notification GitHub de Chrome
-window.addEventListener('load', function() {
-  // Cherche et supprime les notifications GitHub
-  setTimeout(function() {
-    const notifications = document.querySelectorAll('[class*="github"], [class*="notification"], [data-testid*="github"]');
-    notifications.forEach(notif => {
-      if (notif.textContent.includes('github.io') || notif.textContent.includes('zeyneb2626')) {
-        notif.style.display = 'none';
-      }
-    });
-  }, 100);
-});
+   
     // ⚙️ CONFIGURATION WEBHOOK - URL N8N
     const WEBHOOK_URL = 'https://naiom.app.n8n.cloud/webhook/submit-config'; 
     
